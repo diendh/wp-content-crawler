@@ -12,6 +12,7 @@ namespace WPCCrawler\Objects\Transformation\Spinning\Clients;
 
 
 use Exception;
+use Illuminate\Support\Str;
 use WPCCrawler\Objects\Chunk\Enum\ChunkType;
 use WPCCrawler\Objects\Chunk\TransformationChunker;
 use WPCCrawler\Objects\Settings\Enums\SettingKey;
@@ -448,6 +449,6 @@ class SpinRewriterClient extends AbstractSpinningAPIClient {
      * @since 1.9.0
      */
     public static function getAffiliateLink($url) {
-        return $url . (str_contains($url, '?') ? '&' : '?') . static::AFFILIATE_PARAM;
+        return $url . (Str::contains($url, '?') ? '&' : '?') . static::AFFILIATE_PARAM;
     }
 }

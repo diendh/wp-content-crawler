@@ -12,7 +12,10 @@ namespace WPCCrawler\Objects\Crawling\Bot;
 use Exception;
 use GuzzleHttp\Psr7\Uri;
 use Symfony\Component\DomCrawler\Crawler;
+use WPCCrawler\Environment;
 use WPCCrawler\Objects\Crawling\Data\PostData;
+use WPCCrawler\Objects\Crawling\Data\PostSaverData;
+use WPCCrawler\Objects\Crawling\Interfaces\MakesCrawlRequest;
 use WPCCrawler\Objects\Crawling\Preparers\BotConvenienceFindReplacePreparer;
 use WPCCrawler\Objects\Crawling\Preparers\Post\Base\AbstractPostBotPreparer;
 use WPCCrawler\Objects\Crawling\Preparers\Post\PostCategoryPreparer;
@@ -32,13 +35,20 @@ use WPCCrawler\Objects\Crawling\Preparers\Post\PostSpinningPreparer;
 use WPCCrawler\Objects\Crawling\Preparers\Post\PostTemplatePreparer;
 use WPCCrawler\Objects\Crawling\Preparers\Post\PostTitlePreparer;
 use WPCCrawler\Objects\Crawling\Preparers\Post\PostTranslationPreparer;
+use WPCCrawler\Objects\Events\Events\AfterPostCrawlerReadyEvent;
+use WPCCrawler\Objects\Events\Events\AfterPostRequestEvent;
+use WPCCrawler\Objects\Events\Events\AfterSpinningEvent;
+use WPCCrawler\Objects\Events\Events\AfterTranslationEvent;
+use WPCCrawler\Objects\Events\Events\PostDataReadyEvent;
+use WPCCrawler\Objects\Filtering\FilterDependencyProvider\FilterDependencyProvider;
+use WPCCrawler\Objects\Filtering\FilterDependencyProvider\Page\PostPageFilterDependencyProvider;
 use WPCCrawler\Objects\Settings\Enums\SettingKey;
 use WPCCrawler\Objects\Traits\ErrorTrait;
 use WPCCrawler\PostDetail\PostDetailsService;
 use WPCCrawler\Utils;
 use WPCCrawler\WPCCrawler;
 
-class PostBot extends AbstractBot {
+class PostBot extends AbstractBot implements MakesCrawlRequest {
 
     use ErrorTrait;
 
@@ -58,8 +68,14 @@ class PostBot extends AbstractBot {
     /** @var string */
     private $postUrl = '';
 
+    /** @var int|null HTTP status code of the response of the crawling request */
+    private $responseHttpStatusCode = null;
+
     /** @var null|Uri */
     private $postUri = null;
+
+    /** @var null|PostSaverData Data to be used to make certain choices, e.g. by filters, when crawling the URL */
+    private $postSaverData = null;
 
     /*
      *
@@ -71,16 +87,21 @@ class PostBot extends AbstractBot {
     private $keyLastEmptySelectorEmailDate = '_last_post_empty_selector_email_sent';
 
     /**
-     * @noinspection PhpDocMissingThrowsInspection
      * Crawls a post and prepares the data as {@link PostData}. This method does not save the post to the database.
      *
-     * @param string $postUrl A full URL
+     * @param string|null        $postUrl       A full URL
+     * @param PostSaverData|null $postSaverData See {@link postSaverData}
      * @return PostData|null
+     * @throws Exception See {@link triggerEvent()}
+     * @since 1.11.0 $postSaverData parameter is added
      */
-    public function crawlPost($postUrl) {
+    public function crawlPost(?string $postUrl, ?PostSaverData $postSaverData): ?PostData {
+        if (!$postUrl) return null;
+
         $this->clearErrors();
 
         $this->setPostUrl($postUrl);
+        $this->postSaverData = $postSaverData;
         $this->postData = new PostData();
 
         $findAndReplacesForRawHtml          = $this->getSetting(SettingKey::POST_FIND_REPLACE_RAW_HTML);
@@ -89,23 +110,35 @@ class PostBot extends AbstractBot {
         $this->doActionBeforeRetrieve();
 
         $this->crawler = $this->request($postUrl, "GET", $findAndReplacesForRawHtml);
+
+        $this->responseHttpStatusCode = $this->getLatestResponse() ? $this->getLatestResponse()->getStatusCode() : null;
+        $this
+            ->initializeFilters(SettingKey::POST_REQUEST_FILTERS, AfterPostRequestEvent::class, false, _wpcc('Post request filters'))
+            ->triggerEvent(AfterPostRequestEvent::class);
+
         if(!$this->crawler) return null;
 
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this
             ->doActionAfterRetrieve()
             ->applyFilterCrawlerRaw()
-            ->prepareCrawler()                                       // Prepare the crawler by applying HTML manipulations and resolving relative URLs
+            ->prepareCrawler()                                      // Prepare the crawler by applying HTML manipulations and resolving relative URLs
             ->applyPreparer(PostPaginationInfoPreparer::class)  // Prepare pagination info
         ;
 
         // Clear the crawler from unnecessary post elements
         $this->removeElementsFromCrawler($this->crawler, $postUnnecessaryElementSelectors);
 
+        $this->initializeFilters(SettingKey::POST_PAGE_FILTERS, AfterPostCrawlerReadyEvent::class, false, _wpcc('Post page filters'));
+        $this->triggerEvent(AfterPostCrawlerReadyEvent::class);
+
         $this->applyFilterCrawlerPrepared();
 
         /*
          * PREPARE
          */
+
+        $this->initializeFilters(SettingKey::POST_DATA_FILTERS, PostDataReadyEvent::class, true, _wpcc('Post data filters'));
 
         /** @noinspection PhpUnhandledExceptionInspection */
         $this
@@ -121,11 +154,17 @@ class PostBot extends AbstractBot {
             ->applyPreparer(PostCustomPostMetaPreparer::class)      // Post meta
             ->applyPreparer(PostCustomTaxonomyPreparer::class)      // Post taxonomies
             ->applyPreparer(PostMediaPreparer::class)               // Post media. This removes gallery images from the source code.
-            ->preparePostDetails()                                       // Prepare the registered post details
+            ->preparePostDetails()                                      // Prepare the registered post details
             ->applyPreparer(PostTemplatePreparer::class)            // Post templates. Insert main data into template
+
             ->applyPreparer(PostDataPreparer::class)                // Changes that should be made to all parts of the post, such as removing empty HTML tags.
+            ->triggerEvent(PostDataReadyEvent::class)
+
             ->applyPreparer(PostTranslationPreparer::class)         // Translate
+            ->triggerEvent(AfterTranslationEvent::class)
+
             ->applyPreparer(PostSpinningPreparer::class)            // Spin
+            ->triggerEvent(AfterSpinningEvent::class)
         ;
 
         /* END PREPARATION */
@@ -144,14 +183,60 @@ class PostBot extends AbstractBot {
      */
 
     /**
+     * See {@link initializeFilterSetting()}
+     *
+     * @param string      $settingKey               See {@link initializeFilterSetting()}
+     * @param string      $defaultConditionEventCls See {@link initializeFilterSetting()}
+     * @param bool        $withSourceMap            True if the source map should be included
+     * @param string|null $name                     See {@link initializeFilterSetting()}
+     * @return PostBot
+     * @since 1.11.0
+     * @uses  initializeFilterSetting()
+     */
+    private function initializeFilters(string $settingKey, string $defaultConditionEventCls, bool $withSourceMap = true,
+                                       ?string $name = null): self {
+        $dataSourceMap = $withSourceMap ? $this->getDataSourceMap() : [];
+        $this->initializeFilterSetting(
+            $settingKey,
+            $defaultConditionEventCls,
+            new PostPageFilterDependencyProvider($this, $dataSourceMap),
+            $name
+        );
+
+        return $this;
+    }
+
+    /**
+     * Get data source map containing post data and post detail data
+     *
+     * @return array In the same structure as {@link FilterDependencyProvider::dataSourceMap}
+     * @since 1.11.0
+     */
+    private function getDataSourceMap(): array {
+        // Create the data source map. Initialize it with the post data.
+        $dataSourceMap = [
+            Environment::defaultPostIdentifier() => $this->getPostData(),
+        ];
+
+        // Add the post detail factories' data as well
+        $factories = PostDetailsService::getInstance()->getTransformableFactories($this->getSettingsImpl());
+        foreach($factories as $factory) {
+            $dataSourceMap[$factory->getIdentifier()] = $factory->getDetailData();
+        }
+
+        return $dataSourceMap;
+    }
+
+    /**
      * @param string $cls Name of a class that extends {@link AbstractPostBotPreparer}.
-     * @return $this
+     * @return PostBot
      *
      * @since 1.9.0
+     * @since 1.11.0 Type declaration of $cls parameter is added
      * @throws Exception If $cls is not a child of {@link AbstractPostBotPreparer}.
      */
-    private function applyPreparer($cls) {
-        $instance = new $cls($this);
+    private function applyPreparer(string $cls) {
+        $instance = $this->createPreparer($cls);
         if (!is_a($instance, AbstractPostBotPreparer::class)) {
             throw new Exception(sprintf('%1$s must be a child of %2$s', $cls, AbstractPostBotPreparer::class));
         }
@@ -160,6 +245,17 @@ class PostBot extends AbstractBot {
         $instance->prepare();
 
         return $this;
+    }
+
+    /**
+     * Create a new preparer instance with its class name
+     *
+     * @param string $cls Name of a class that extends {@link AbstractPostBotPreparer}.
+     * @return AbstractPostBotPreparer|object New instance of the preparer with the specified class
+     * @since 1.11.0
+     */
+    protected function createPreparer(string $cls) {
+        return new $cls($this);
     }
 
     /**
@@ -201,8 +297,9 @@ class PostBot extends AbstractBot {
      *
      * @param string $postUrl
      * @since 1.8.0
+     * @since 1.11.0 Type declaration of $postUrl parameter is added
      */
-    private function setPostUrl($postUrl) {
+    private function setPostUrl(string $postUrl) {
         $this->postUrl = $postUrl;
         $this->postUri = null;
     }
@@ -216,7 +313,7 @@ class PostBot extends AbstractBot {
      */
     private function maybeNotify() {
         // Do not notify if this is a test.
-        if (WPCCrawler::isDoingTest()) return $this;
+        if (WPCCrawler::isDoingGeneralTest()) return $this;
 
         $notifyWhenEmptySelectors = $this->getSetting(SettingKey::POST_NOTIFY_EMPTY_VALUE_SELECTORS);
         if (!$notifyWhenEmptySelectors) return $this;
@@ -261,6 +358,10 @@ class PostBot extends AbstractBot {
         return $this->crawler;
     }
 
+    public function setCrawler($crawler): void {
+        $this->crawler = $crawler;
+    }
+
     /**
      * @return PostData
      */
@@ -270,8 +371,9 @@ class PostBot extends AbstractBot {
 
     /**
      * @param PostData $postData
+     * @since 1.11.0 Type declaration of $postData is added.
      */
-    public function setPostData($postData) {
+    public function setPostData(PostData $postData) {
         $this->postData = $postData;
     }
 
@@ -282,6 +384,22 @@ class PostBot extends AbstractBot {
      */
     public function getPostUrl() {
         return $this->postUrl;
+    }
+
+    public function getCrawlingUrl(): ?string {
+        return $this->getPostUrl();
+    }
+
+    public function getResponseHttpStatusCode(): ?int {
+        return $this->responseHttpStatusCode;
+    }
+
+    /**
+     * @return PostSaverData|null See {@link postSaverData}
+     * @since 1.11.0
+     */
+    public function getPostSaverData(): ?PostSaverData {
+        return $this->postSaverData;
     }
 
     /**
@@ -306,7 +424,6 @@ class PostBot extends AbstractBot {
 
         return Utils::resolveUrl($this->postUri, $relativeUrl);
     }
-
 
     /*
      * ACTIONS AND FILTERS

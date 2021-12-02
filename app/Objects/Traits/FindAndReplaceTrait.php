@@ -10,6 +10,7 @@ namespace WPCCrawler\Objects\Traits;
 
 
 use Exception;
+use Illuminate\Support\Str;
 use WPCCrawler\Objects\Enums\InformationType;
 use WPCCrawler\Objects\Informing\Information;
 use WPCCrawler\Objects\Informing\Informer;
@@ -51,7 +52,7 @@ trait FindAndReplaceTrait {
                 try {
                     // If the regular expressions starts with a '/', then treat it as it has delimiters. Otherwise,
                     // surround it with delimiters, treat it as it does not have delimiters.
-                    $r = preg_replace(!starts_with($fr[SettingInnerKey::FIND], '/') ? '/' . $fr[SettingInnerKey::FIND] . '/' : $fr[SettingInnerKey::FIND], $fr[SettingInnerKey::REPLACE], $subject);
+                    $r = preg_replace(!Str::startsWith($fr[SettingInnerKey::FIND], '/') ? '/' . $fr[SettingInnerKey::FIND] . '/' : $fr[SettingInnerKey::FIND], $fr[SettingInnerKey::REPLACE], $subject);
 
                     // If the result is null, throw an exception to show the user a message about the error. Actually,
                     // if there was an error, this line is not even reached since the defined error handler throws an

@@ -11,6 +11,8 @@ namespace WPCCrawler\Objects\Traits;
 
 use WPCCrawler\Factory;
 use WPCCrawler\Objects\Settings\Enums\SettingKey;
+use WPCCrawler\Objects\Enums\ValueType;
+use WPCCrawler\Objects\Settings\SettingRegistryService;
 use WPCCrawler\Objects\Settings\SettingsImpl;
 use WPCCrawler\Objects\Settings\SettingService;
 use WPCCrawler\Utils;
@@ -191,6 +193,18 @@ trait SettingsTrait {
         if(isset($array[$key])) {
             if($allowEmpty || $array[$key] !== "") {
                 return $this->_prepareSettingValue($key, $array[$key]);
+            }
+
+        } else {
+            // Keys of the checkbox settings are not in the array when they are unchecked, since the submitted form data
+            // do not contain the key. Hence, in that case, instead of returning the default, false should be returned.
+            // Since this statement is reached only if the setting key is not in the array, let's check if this is a
+            // checkbox setting.
+            $settingData = SettingRegistryService::getInstance()->getSettingData($key);
+            if ($settingData && $settingData->getValueType() === ValueType::T_BOOLEAN) {
+                // This is a checkbox setting and its key is not in the array. This means the user did not check the
+                // checkbox. So, the value of the setting is false.
+                return false;
             }
         }
 

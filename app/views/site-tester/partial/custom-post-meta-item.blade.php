@@ -1,7 +1,7 @@
 <?php
 
-/** @var array $item */
-$content = array_get($item, "data");
+/** @var \WPCCrawler\Objects\Crawling\Data\Meta\PostMeta $item */
+$content = $item->getData();
 
 ?>
 
@@ -9,13 +9,13 @@ $content = array_get($item, "data");
     {{-- META KEY --}}
     <div class="post-meta-key">
         <span class="name">{{ _wpcc("Meta key") }}</span>
-        <span>{{ array_get($item, "meta_key") }}</span>
+        <span>{{ $item->getKey() }}</span>
     </div>
 
     {{-- MULTIPLE --}}
     <div class="post-meta-multiple">
         <span class="name">{{ _wpcc("Multiple") }}</span>
-        <span class="dashicons dashicons-{{ array_get($item, "multiple") ? 'yes' : 'no' }}"></span>
+        <span class="dashicons dashicons-{{ $item->isMultiple() ? 'yes' : 'no' }}"></span>
     </div>
 
     {{-- META CONTENT --}}

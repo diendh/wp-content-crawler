@@ -91,6 +91,21 @@ class ProductAttribute {
     }
 
     /**
+     * This method exists just to be able to use "keyRelaxed" via {@link ValueSetter}. {@link setKey()} method does not
+     * allow modifications of the keys defined as taxonomy so that the key is not transformed via the transformation
+     * services. However, the users should be able to change it via the filters. So, we simply need to use a different
+     * method to set the key. But, according to the requirements of {@link ValueSetter}, if we define "keyRelaxed",
+     * both "getKeyRelaxed()" and "setKeyRelaxed()" method must exist. This method is added to fulfill that requirement
+     * only.
+     *
+     * @return string Returns the value returned by {@link getKey()}
+     * @since 1.11.0
+     */
+    public function getKeyRelaxed(): string {
+        return $this->getKey();
+    }
+
+    /**
      * Set key of the product attribute. The key will not be changed if the attribute is set as taxonomy. This is to
      * prevent the key from being changed by {@link TranslationSetter} when it is a taxonomy, since the taxonomy key
      * is an already-defined value. If it is changed by a translation service, it will be useless. If you want to change
@@ -104,6 +119,21 @@ class ProductAttribute {
         if (!$addAnyway && $this->isTaxonomy()) return;
 
         $this->key = $key;
+    }
+
+    /**
+     * This method sets the key even if the attribute's key is a taxonomy. It is named as "relaxed", because it relaxes
+     * (or removes) the constraint that does not allow the key to be set if it is a taxonomy. This method exists,
+     * because we want to be able to change the key via the filters. The action commands use {@link ValueSetter} to set
+     * the value. So, when a {@link ValueSetter} calls this method, the key will be definitely set, as opposed to
+     * {@link setKey()} method. This actually calls {@link setKey()} by providing <code>true</code> to $addAnyway
+     * parameter. Also see {@link getKeyRelaxed()}.
+     *
+     * @param string $key New key. See {@link setKey()}.
+     * @since 1.11.0
+     */
+    public function setKeyRelaxed($key) {
+        $this->setKey($key, true);
     }
 
     /**

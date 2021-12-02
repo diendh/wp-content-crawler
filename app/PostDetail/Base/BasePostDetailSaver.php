@@ -10,7 +10,7 @@ namespace WPCCrawler\PostDetail\Base;
 
 
 use WPCCrawler\Exceptions\DuplicatePostException;
-use WPCCrawler\PostDetail\PostSaverData;
+use WPCCrawler\Objects\Crawling\Data\PostSaverData;
 use WPCCrawler\Utils;
 
 abstract class BasePostDetailSaver {

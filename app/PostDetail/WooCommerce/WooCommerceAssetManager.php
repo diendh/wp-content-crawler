@@ -11,7 +11,6 @@
 namespace WPCCrawler\PostDetail\WooCommerce;
 
 
-use WPCCrawler\Environment;
 use WPCCrawler\Objects\AssetManager\BaseAssetManager;
 
 /**
@@ -29,6 +28,6 @@ class WooCommerceAssetManager extends BaseAssetManager {
      * @since 1.8.0
      */
     public function addTester() {
-        $this->addStyle($this->styleSiteTester, Environment::appDir() . '/public/dist/css/post-detail/woocommerce/wc-site-tester.css', false);
+        $this->addStyle($this->styleSiteTester, $this->stylePath('post-detail/woocommerce/wc-site-tester.css'), false);
     }
 }

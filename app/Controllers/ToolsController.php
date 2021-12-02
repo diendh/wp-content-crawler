@@ -156,9 +156,9 @@ class ToolsController extends AbstractMenuPage {
         $results = [];
         if ($categoryData) {
             // Prepare the response
-            foreach($categoryData->getPostUrls() as $postUrlData) {
-                $item = ["url" => $postUrlData["data"]];
-                if ($thumbnail = Utils::array_get($postUrlData, "thumbnail")) {
+            foreach($categoryData->getPostUrlList()->getItems() as $postUrl) {
+                $item = ["url" => $postUrl->getUrl()];
+                if ($thumbnail = $postUrl->getThumbnailUrl()) {
                     $item["thumbnail"] = $thumbnail;
                 }
 
@@ -419,13 +419,11 @@ class ToolsController extends AbstractMenuPage {
             $data = $bot->collectUrls(Utils::prepareUrl($bot->getSiteUrl(), $categoryUrl));
             if (!$data) continue;
 
-            foreach($data->getPostUrls() as $key => $item) {
-                if(!$item["data"]) continue;
+            foreach($data->getPostUrlList()->getItems() as $item) {
+                $postUrl = $item->getUrl();
+                if(!$postUrl) continue;
 
-                $thumbnailUrl = isset($item["thumbnail"]) ? $item["thumbnail"] : null;
-                $postUrl = $item["data"];
-
-                if(Factory::databaseService()->addUrl($siteId, $postUrl, $thumbnailUrl, $categoryId)) {
+                if(Factory::databaseService()->addUrl($siteId, $postUrl, $item->getThumbnailUrl(), $categoryId)) {
                     $results[] = $postUrl;
                 }
             }

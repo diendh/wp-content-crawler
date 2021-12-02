@@ -6,6 +6,9 @@
  * Time: 20:49
  */
 
+use WPCCrawler\Environment;
+use WPCCrawler\Objects\Enums\ShortCodeName;
+
 /**
  * A replacement function for translatable texts
  *
@@ -13,7 +16,7 @@
  * @return string Translated text
  */
 function _wpcc($string) {
-    return __($string, \WPCCrawler\Environment::appDomain());
+    return __($string, Environment::appDomain());
 }
 
 /**
@@ -22,9 +25,17 @@ function _wpcc($string) {
  * @return string
  */
 function _wpcc_trans_regex() {
-    return _wpcc('You can write plain text or regular expressions. If you want to use delimiters, you can use "/".
-        If the expression does not start with "/", it is considered as it does not have delimiters. In that case, forward 
-        slashes will be automatically added. You can test your regex <a href="https://regex101.com/" target="_blank">here</a>.');
+    return _wpcc('You can write plain text or regular expressions.') . ' ' . _wpcc_trans_regex_base();
+}
+
+/**
+ * @return string A translated string that explains how the regular expression should be structured and can be tested.
+ * @since 1.11.0
+ */
+function _wpcc_trans_regex_base() {
+    return _wpcc('If you want to use delimiters, you can use "/". If the expression does not start with "/", it 
+        is considered as it does not have delimiters. In that case, forward slashes will be automatically added. You 
+        can test your regex <a href="https://regex101.com/" target="_blank">here</a>.');
 }
 
 /**
@@ -90,7 +101,7 @@ function _wpcc_wcc_item_short_code_dot_key_for_json() {
             will be replaced by <b>%3$s</b>. In case of array values, you can use the target value\'s index as well. For example,
             in <i>%5$s</i>, you can get <b>%6$s</b> with <b>[%1$s %7$s]</b>.'
         ),
-        \WPCCrawler\Objects\Enums\ShortCodeName::WCC_ITEM,
+        ShortCodeName::WCC_ITEM,
         '{"item": {"inner": "value"}}',
         'value',
         'item.inner',
@@ -134,5 +145,49 @@ function _wpcc_domain_wildcard_info() {
         '<b>subdomain.domain.com</b>',
         '<b>*.domain.com</b>',
         '<b>*domain.com</b>'
+    );
+}
+
+/**
+ * @param bool $withLineBreaks True if two line breaks (<code><br><br></code>) must be added at the beginning of the
+ *                             text.
+ * @return string Explanation of a filter
+ * @since 1.11.0
+ */
+function _wpcc_filter(bool $withLineBreaks = false): string {
+    $result = $withLineBreaks ? "<br><br>" : "";
+    $result .= _wpcc('A filter is composed of "if" and "then" parts that contain commands. The "if" part defines the 
+        conditions that should be met. If those conditions are met, the commands defined in the "then" part will be 
+        executed. With a filter, you basically say "if this condition is met, then do this". You can define many 
+        commands for both the "if" and "then" parts to create very complex rules to achieve your goal. The commands 
+        defined in the "if" part are condition commands, while the ones defined in the "then" part are action commands. 
+        The condition commands check if something is true, while the action commands perform some action. If you do not
+        define a condition, the action command will be executed no matter what.');
+
+    return $result;
+}
+
+/**
+ * @return string Explains how the date should be entered, i.e. in what format, into an input that stores a date. Also,
+ *                explains acceptable date formats by referring to the constructor of DateTime class.
+ * @since 1.11.0
+ */
+function _wpcc_enter_date_with_format() {
+    return sprintf(
+        _wpcc('Enter a date formatted as "%1$s" (without quotes), i.e. "%2$s". For example: %3$s. You can also 
+            enter any time value supported by %4$s. If the date is not a fixed date, then the time of your server is 
+            used as now, not the time of WordPress. It is recommended to enter a fixed date for reliability.'),
+        '<b>' . Environment::mysqlDateFormat() . '</b>',
+        sprintf(
+            '<b>(%1$s)-(%2$s)-(%3$s) (%4$s):(%5$s):(%6$s)</b>',
+            _wpcc('year'),
+            _wpcc('month'),
+            _wpcc('day'),
+            _wpcc('hour'),
+            _wpcc('minute'),
+            _wpcc('second')
+        ),
+        '<span class="highlight date">2020-05-27 13:37:15</span>',
+        '<a href="https://www.php.net/manual/en/datetime.construct.php" target="_blank">DateTime</a>'
     );
 }

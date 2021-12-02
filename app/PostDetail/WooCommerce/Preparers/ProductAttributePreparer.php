@@ -11,6 +11,7 @@
 namespace WPCCrawler\PostDetail\WooCommerce\Preparers;
 
 
+use Illuminate\Support\Arr;
 use WPCCrawler\PostDetail\Base\BasePostDetailPreparer;
 use WPCCrawler\PostDetail\WooCommerce\Data\ProductAttribute;
 use WPCCrawler\PostDetail\WooCommerce\Enums\ProductAttributeKeyType;
@@ -99,7 +100,7 @@ class ProductAttributePreparer extends BasePostDetailPreparer {
         // Combine the names array and the values array.
         // Values retrieved from getValuesForSelectorSetting() are array of arrays. We do not need the first level. We
         // need the 2nd-level arrays. Hence, flatten the arrays with a depth of 1.
-        $attributes = array_merge(array_flatten($attributeNames, 1), array_flatten($attributeValues, 1));
+        $attributes = array_merge(Arr::flatten($attributeNames, 1), Arr::flatten($attributeValues, 1));
 
         // If there is no attribute, stop.
         if (!$attributes) return [];
@@ -179,7 +180,7 @@ class ProductAttributePreparer extends BasePostDetailPreparer {
             if (!is_array($values)) $values = [$values];
 
             // Make sure the values array is flat.
-            $values = array_flatten($values);
+            $values = Arr::flatten($values);
 
             $attribute = new ProductAttribute($name, $values);
             $this->maybeSetAsTaxonomy($attribute, $selectorData);

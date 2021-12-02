@@ -11,11 +11,14 @@ namespace WPCCrawler\Test\Base;
 
 use Exception;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use Symfony\Component\DomCrawler\Crawler;
 use WPCCrawler\Factory;
 use WPCCrawler\Objects\Crawling\Bot\AbstractBot;
 use WPCCrawler\Objects\Crawling\Bot\DummyBot;
+use WPCCrawler\Objects\Crawling\Interfaces\MakesCrawlRequest;
 use WPCCrawler\Objects\Enums\InformationType;
+use WPCCrawler\Objects\Filtering\FilterDependencyProvider\Page\PageFilterDependencyProvider;
 use WPCCrawler\Objects\Informing\Information;
 use WPCCrawler\Objects\Informing\Informer;
 use WPCCrawler\Objects\OptionsBox\Boxes\Base\BaseOptionsBoxApplier;
@@ -24,6 +27,7 @@ use WPCCrawler\Objects\Settings\Factory\HtmlManip\CategoryHtmlManipKeyFactory;
 use WPCCrawler\Objects\Settings\Factory\HtmlManip\PostHtmlManipKeyFactory;
 use WPCCrawler\Test\Data\TestData;
 use WPCCrawler\Utils;
+use WPCCrawler\WPCCrawler;
 
 abstract class AbstractTest {
 
@@ -96,13 +100,23 @@ abstract class AbstractTest {
      * @return $this
      */
     public function run() {
+        WPCCrawler::setDoingUnitTest(true);
+
         // Mark the start time and initial memory usage so that we can calculate elapsed time and memory usage later.
         $this->startTime = microtime(true);
         $this->memoryInitial = memory_get_usage();
 
-        $this->results = $this->createResults($this->data);
-        $this->isRun = true;
+        try {
+            $this->results = $this->createResults($this->data);
 
+        } catch (Exception $e) {
+            $this->results = [];
+
+            Informer::addInfo($e->getMessage() ?: _wpcc('An error occurred during the test.'))
+                ->setException($e)->addAsLog();
+        }
+
+        $this->isRun = true;
         return $this;
     }
 
@@ -195,16 +209,25 @@ abstract class AbstractTest {
      */
 
     /**
-     * @param Crawler     $crawler
-     * @param null|int    $lastStep        One of the constants of this class whose name starts with MANIPULATION_STEP,
-     *                                     e.g.
-     *                                     {@link MANIPULATION_STEP_REMOVE_ELEMENT_ATTRIBUTES}. If this is null, all
-     *                                     manipulation steps will be applied.
-     * @param null|string $fallbackBaseUrl See {@link AbstractBot::resolveRelativeUrls()}
+     * @param AbstractBot|null $bot             A bot. The data required for filters will be retrieved from this bot.
+     *                                          Hence, this must be the bot that makes the requests for the test, if
+     *                                          any.
+     * @param Crawler          $crawler
+     * @param null|int         $lastStep        One of the constants of this class whose name starts with MANIPULATION_STEP,
+     *                                          e.g.
+     *                                          {@link MANIPULATION_STEP_REMOVE_ELEMENT_ATTRIBUTES}. If this is null, all
+     *                                          manipulation steps will be applied.
+     * @param null|string      $fallbackBaseUrl See {@link AbstractBot::resolveRelativeUrls()}
      */
-    protected function applyHtmlManipulationOptions(&$crawler, $lastStep = null, $fallbackBaseUrl = null) {
+    protected function applyHtmlManipulationOptions(?AbstractBot $bot, &$crawler, $lastStep = null, $fallbackBaseUrl = null) {
         // Create a bot by adding the manipulation options
         $dummyBot = new DummyBot($this->data->getManipulationOptions(), null, $this->data->getUseUtf8(), $this->data->getConvertEncodingToUtf8());
+
+        if ($bot instanceof MakesCrawlRequest) {
+            $dummyBot
+                ->setResponseHttpStatusCode($bot->getResponseHttpStatusCode())
+                ->setCrawlingUrl($bot->getCrawlingUrl());
+        }
 
         // Apply manipulation steps and stop at the last manipulation step
         $this->applyHtmlManipulationSteps($dummyBot, $crawler, $fallbackBaseUrl, $lastStep);
@@ -225,7 +248,7 @@ abstract class AbstractTest {
         if (!$optionKeys) return null;
 
         // Find out if this is for post or category
-        $isForPost = starts_with($optionKeys[0], '_post');
+        $isForPost = Str::startsWith($optionKeys[0], '_post');
         return $isForPost;
     }
 
@@ -321,14 +344,20 @@ abstract class AbstractTest {
      *                                         all manipulation steps will be applied.
      */
     private function applyHtmlManipulationSteps($bot, &$crawler, $fallbackBaseUrl = null, $lastStep = null) {
-        if ($lastStep === static::MANIPULATION_STEP_NONE) return;
-
         $isForPost = $this->isManipulationOptionsForPost();
         $keyFactory = $isForPost ? PostHtmlManipKeyFactory::getInstance() : CategoryHtmlManipKeyFactory::getInstance();
+
+        if ($this->getData()->get('fromRequestFilter') === '1') return;
+        $provider = new PageFilterDependencyProvider($bot, null);
+        $bot->applyFilterSetting($keyFactory->getRequestFiltersKey(), $provider);
+
+        if ($lastStep === static::MANIPULATION_STEP_NONE) return;
+
         $manipulationOptions = $this->data->getManipulationOptions();
 
         // Make initial replacements
         $crawler = $bot->makeInitialReplacements($crawler, Utils::array_get($manipulationOptions, $keyFactory->getFindReplaceFirstLoadKey()), $isForPost);
+        $bot->setCrawler($crawler);
         if ($lastStep === static::MANIPULATION_STEP_INITIAL_REPLACEMENTS) return;
 
         // Apply HTML manipulations
@@ -350,6 +379,9 @@ abstract class AbstractTest {
 
         // Resolve relative URLs
         $bot->resolveRelativeUrls($crawler, $fallbackBaseUrl);
+
+        if ($this->getData()->get('fromPageFilter') === '1') return;
+        $bot->applyFilterSetting($keyFactory->getPageFiltersKey(), $provider);
     }
 
     /**

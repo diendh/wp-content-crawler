@@ -11,6 +11,7 @@
 namespace WPCCrawler\Objects\Crawling\Preparers\Post;
 
 
+use Illuminate\Support\Arr;
 use WPCCrawler\Objects\Crawling\Preparers\Post\Base\AbstractPostBotPreparer;
 use WPCCrawler\Objects\Settings\Enums\SettingKey;
 use WPCCrawler\Utils;
@@ -62,7 +63,7 @@ class PostCategoryPreparer extends AbstractPostBotPreparer {
 
             } else {
                 // Otherwise, add them as different items.
-                $postCategories = array_merge($postCategories, array_flatten($catArr));
+                $postCategories = array_merge($postCategories, Arr::flatten($catArr));
             }
         }
 

@@ -15,6 +15,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use Illuminate\Filesystem\Filesystem;
 use WPCCrawler\Environment;
+use WPCCrawler\Factory;
 use WPCCrawler\Objects\Informing\Informer;
 use WPCCrawler\Utils;
 
@@ -24,12 +25,9 @@ class Docs {
     private static $instance = null;
 
     /** @var string */
-    private $relativeLocalIndexFilePath;
-
-    /** @var string */
     private $absoluteLocalIndexFilePath;
 
-    /** @var string */
+    /** @var string|null */
     private $localLabelIndexFileUrl;
 
     /** @var string */
@@ -59,21 +57,10 @@ class Docs {
      * @since 1.9.0
      */
     protected function __construct() {
-        $this->relativeLocalIndexFilePath = ltrim(implode(DIRECTORY_SEPARATOR, [
-            ltrim(Environment::appDir(), '/' . DIRECTORY_SEPARATOR),
-            ltrim(Environment::relativeStorageDir(), '/' . DIRECTORY_SEPARATOR),
-            'label-index.json',
-        ]), '/' . DIRECTORY_SEPARATOR);
+        $this->absoluteLocalIndexFilePath = Factory::assetManager()
+            ->appPath(Environment::relativeStorageDir() . DIRECTORY_SEPARATOR . 'label-index.json');
 
-        $this->absoluteLocalIndexFilePath = implode(DIRECTORY_SEPARATOR, [
-            rtrim(ABSPATH, DIRECTORY_SEPARATOR),
-            $this->relativeLocalIndexFilePath
-        ]);
-
-        $this->localLabelIndexFileUrl = get_site_url(
-            null,
-            str_replace(DIRECTORY_SEPARATOR, '/', $this->relativeLocalIndexFilePath)
-        );
+        $this->localLabelIndexFileUrl = Factory::assetManager()->getPluginFileUrl($this->absoluteLocalIndexFilePath);
 
         $this->fileSystem = new Filesystem();
     }

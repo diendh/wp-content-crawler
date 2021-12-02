@@ -14,7 +14,7 @@ namespace WPCCrawler\PostDetail\WooCommerce;
 use WPCCrawler\Objects\Settings\SettingsImpl;
 use WPCCrawler\PostDetail\Base\BasePostDetailData;
 use WPCCrawler\PostDetail\Base\BasePostDetailDeleter;
-use WPCCrawler\PostDetail\PostSaverData;
+use WPCCrawler\Objects\Crawling\Data\PostSaverData;
 
 class WooCommerceDeleter extends BasePostDetailDeleter {
 

@@ -31,6 +31,7 @@ class UrlSaver extends AbstractSaver {
      * @param int  $siteIdToCheck Site ID for which the URLs will be collected
      */
     public function executeUrlSave($siteIdToCheck) {
+        // TODO: WTF? Simplify this method to about 20 lines.
         $this->setRequestMade(false);
 
         // Get site ID to check
@@ -180,45 +181,45 @@ class UrlSaver extends AbstractSaver {
             return;
         }
 
-        if(!$data->getPostUrls()) {
+        if($data->getPostUrlList()->isEmpty()) {
             $this->updateLastChecked($siteIdToCheck, $categoryUrlToCheck, false);
             return;
         }
 
         // Insert the URLs into db.
         $insertCount = 0;
-        foreach($data->getPostUrls() as $key => $item) {
+        foreach($data->getPostUrlList()->getItems() as $item) {
 //                if(static::$DEBUG) var_dump($item);
-            if($item["data"]) {
-                $thumbnailUrl = isset($item["thumbnail"]) ? $item["thumbnail"] : null;
-                $postUrl = $item["data"];
+            if(!$item->getUrl()) continue;
+
+            $postUrl      = $item->getUrl();
+            $thumbnailUrl = $item->getThumbnailUrl();
+
+            /**
+             * Fires just before a post URL is inserted to the database table storing the URLs.
+             *
+             * @param UrlSaver $this          The UrlSaver itself
+             * @param int      $siteIdToCheck ID of the site that this URL belongs to
+             * @param string   $postUrl       Post URL for which a new entry in the db will be created
+             * @param array    $item          An array containing the data about to-be-inserted URL
+             * @since 1.6.3
+             */
+            do_action('wpcc/category/url/before_insert_url', $this, $siteIdToCheck, $postUrl, $item->toArray());
+
+            if($urlId = Factory::databaseService()->addUrl($siteIdToCheck, $postUrl, $thumbnailUrl, $targetCategoryId)) {
+                $insertCount++;
 
                 /**
-                 * Fires just before a post URL is inserted to the database table storing the URLs.
+                 * Fires just after a post URL is inserted to the database table storing the URLs.
                  *
-                 * @param UrlSaver $this        The UrlSaver itself
-                 * @param int $siteIdToCheck    ID of the site that this URL belongs to
-                 * @param string $postUrl       Post URL for which a new entry in the db will be created
-                 * @param array $item           An array containing the data about to-be-inserted URL
+                 * @param UrlSaver $this          The UrlSaver itself
+                 * @param int      $siteIdToCheck ID of the site that this URL belongs to
+                 * @param string   $postUrl       Post URL for which a new entry in the db was created
+                 * @param array    $item          An array containing the data about to-be-inserted URL
+                 * @param int      $urlId         ID of the inserted URL
                  * @since 1.6.3
                  */
-                do_action('wpcc/category/url/before_insert_url', $this, $siteIdToCheck, $postUrl, $item);
-
-                if($urlId = Factory::databaseService()->addUrl($siteIdToCheck, $postUrl, $thumbnailUrl, $targetCategoryId)) {
-                    $insertCount++;
-
-                    /**
-                     * Fires just after a post URL is inserted to the database table storing the URLs.
-                     *
-                     * @param UrlSaver $this        The UrlSaver itself
-                     * @param int $siteIdToCheck    ID of the site that this URL belongs to
-                     * @param string $postUrl       Post URL for which a new entry in the db was created
-                     * @param array $item           An array containing the data about to-be-inserted URL
-                     * @param int $urlId            ID of the inserted URL
-                     * @since 1.6.3
-                     */
-                    do_action('wpcc/category/url/after_insert_url', $this, $siteIdToCheck, $postUrl, $item, $urlId);
-                }
+                do_action('wpcc/category/url/after_insert_url', $this, $siteIdToCheck, $postUrl, $item->toArray(), $urlId);
             }
         }
 

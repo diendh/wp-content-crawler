@@ -9,9 +9,11 @@
 namespace WPCCrawler\Test\General;
 
 
+use Exception;
 use Illuminate\Contracts\View\View;
 use WPCCrawler\Objects\Crawling\Bot\PostBot;
 use WPCCrawler\Objects\Crawling\Data\PostData;
+use WPCCrawler\Objects\Crawling\Data\PostSaverData;
 use WPCCrawler\PostDetail\PostDetailsService;
 use WPCCrawler\Objects\File\MediaFile;
 use WPCCrawler\Test\Base\AbstractGeneralTest;
@@ -34,6 +36,7 @@ class GeneralPostTest extends AbstractGeneralTest {
      * Conduct the test and return an array of results.
      *
      * @param GeneralTestData $data
+     * @throws Exception
      */
     protected function createResults($data) {
         $postData = new PostData();
@@ -43,7 +46,9 @@ class GeneralPostTest extends AbstractGeneralTest {
         if (!empty($data->getTestUrl())) {
             $bot = new PostBot($data->getSettings(), $data->getSiteId());
 
-            if ($postData = $bot->crawlPost(Utils::prepareUrl($bot->getSiteUrl(), $data->getTestUrl()))) {
+            $preparedUrl = Utils::prepareUrl($bot->getSiteUrl(), $data->getTestUrl());
+            $saverData = new PostSaverData($bot, false, true);
+            if ($postData = $bot->crawlPost($preparedUrl, $saverData)) {
                 $template = $postData->getTemplate();
 
                 // If there are errors, add them to info.
@@ -101,7 +106,7 @@ class GeneralPostTest extends AbstractGeneralTest {
 
         $this->addInfo(_wpcc('Categories'), $this->getCategoryNames(),      true);
 
-        if ($date = $this->postData->getDateCreated()) {
+        if ($date = $this->postData->getDateCreated(true)) {
             $this->addInfo(_wpcc("Date"), Utils::getDateFormatted($date) . " ({$date})");
         }
 

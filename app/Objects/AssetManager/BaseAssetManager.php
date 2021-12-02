@@ -11,6 +11,8 @@
 namespace WPCCrawler\Objects\AssetManager;
 
 use WPCCrawler\Environment;
+use WPCCrawler\Factory;
+use WPCCrawler\Objects\Informing\Informer;
 
 /**
  * Class BaseAssetManager
@@ -45,27 +47,116 @@ abstract class BaseAssetManager {
     final protected function __clone() {}
 
     /**
+     * Get the absolute path of a file in the "app" directory of the plugin.
+     *
+     * <ul>
+     *   <li>The relative path can contain forward slashes or directory separators. They are replaced with the directory
+     *     separator.</li>
+     *   <li>Repeated forward slashes or directory separators will be reduced to one. The path will be prepared.</li>
+     *   <li>The path can start with a trailing forward slash or a directory separator as well. It will be handled.</li>
+     *   <li>The path does not need to point to an existing file. This method does not check whether or not the file
+     *     exists.
+     *   </li>
+     * </ul>
+     *
+     * @param string $relativePath The relative path
+     * @return string The absolute path of the given relative path
+     * @since 1.10.2
+     */
+    public function appPath(string $relativePath): string {
+        // Create the absolute path candidate. This might contain wrong directory separator or multiple
+        // slashes/directory separators. So, this must be tidied up.
+        $candidate = WP_CONTENT_CRAWLER_PATH . DIRECTORY_SEPARATOR . Environment::appDirName() . DIRECTORY_SEPARATOR
+            . ltrim($relativePath, '/' . DIRECTORY_SEPARATOR);
+
+        // Tidy up the candidate
+        // Replace all forward slashes with the directory separator
+        $candidate = str_replace('/', DIRECTORY_SEPARATOR, $candidate);
+
+        // Remove repeated directory separators, e.g. change "a////b/c//d///e" to "a/b/c/d/e".
+        return preg_replace(
+            '/' . preg_quote(DIRECTORY_SEPARATOR, '/') . '+/',
+            DIRECTORY_SEPARATOR,
+            $candidate
+        );
+    }
+
+    /**
+     * Get the absolute path of a file in the "public" directory of the plugin
+     *
+     * @param string $relativePath See {@link appPath()}
+     * @return string See {@link appPath()}
+     * @since 1.10.2
+     */
+    public function publicPath(string $relativePath): string {
+        return $this->appPath('public/' . $relativePath);
+    }
+
+    /**
+     * Get the absolute path of a file in the "public/dist/css" directory of the plugin
+     *
+     * @param string $relativePath See {@link publicPath()}
+     * @return string See {@link publicPath()}
+     * @since 1.10.2
+     */
+    public function stylePath(string $relativePath): string {
+        return $this->publicPath('dist/css/' . $relativePath);
+    }
+
+    /**
+     * Get the absolute path of a file in the "public/dist/js" directory of the plugin
+     *
+     * @param string $relativePath See {@link publicPath()}
+     * @return string See {@link publicPath()}
+     * @since 1.10.2
+     */
+    public function scriptPath(string $relativePath): string {
+        return $this->publicPath('dist/js/' . $relativePath);
+    }
+
+    /**
+     * Get URL of a file of a plugin
+     *
+     * @param string|null $absPath Absolute path of a file of a plugin
+     * @return string|null URL of the file
+     * @since 1.10.2
+     */
+    public function getPluginFileUrl(?string $absPath): ?string {
+        if (!$absPath) return null;
+
+        $fs = Factory::fileSystem();
+        if (!$fs->exists($absPath)) return null;
+
+        return plugins_url(
+            is_dir($absPath) ? '' : $fs->basename($absPath),
+            $absPath
+        );
+    }
+
+    /**
      * Register and enqueue a style.
      *
-     * @param string      $handle Handle of the style
-     * @param string      $src    Source path of the style file relative to WordPress root directory
-     * @param array       $deps   An array of dependent styles
-     * @param bool|string $ver    Version of the file
-     * @param string      $media  See {@link wp_register_style()}
+     * @param string      $handle  Handle of the style
+     * @param string      $absPath Absolute path of the style file
+     * @param array       $deps    An array of dependent styles
+     * @param bool|string $ver     Version of the file
+     * @param string      $media   See {@link wp_register_style()}
+     * @since 1.10.2 Instead of path relative to WordPress root directory, absolute path is used.
      * @see wp_register_style()
      * @see wp_enqueue_style()
      * @see BaseAssetManager::getSourceUrl()
      */
-    protected function addStyle($handle, $src = null, $deps = [], $ver = false, $media = 'all') {
-        $src = str_replace(DIRECTORY_SEPARATOR, "/", $src);
-
+    protected function addStyle($handle, $absPath = null, $deps = [], $ver = false, $media = 'all') {
         // Register it only if it was not registered
         if(!wp_style_is($handle, 'registered')) {
-            if(!$src) return;
-            $src = $this->getSourceUrl($src);
+            $url = $this->getSourceUrl($absPath);
+            if(!$url) {
+                Informer::addError("URL of the style handle '{$handle}' is not found. Path: {$absPath}")->addAsLog();
+                return;
+            }
 
-            if(!$ver) $ver = $this->getLastModifiedTime($src);
-            wp_register_style($handle, $src, $deps, $ver, $media);
+            if(!$ver) $ver = $this->getLastModifiedTime($absPath);
+            wp_register_style($handle, $url, $deps, $ver, $media);
         }
 
         // Add it only if it was not enqueued
@@ -77,25 +168,27 @@ abstract class BaseAssetManager {
     /**
      * Register, enqueue and/or localize a script. Localization values will only be added once.
      *
-     * @param string      $handle Handle of the script
-     * @param string      $src    Source path of the script file relative to WordPress root directory
-     * @param array       $deps   An array of dependent styles
-     * @param bool|string $ver    Version of the file
-     * @param bool $in_footer
+     * @param string      $handle  Handle of the script
+     * @param string      $absPath Absolute path of the script file
+     * @param array       $deps    An array of dependent styles
+     * @param bool|string $ver     Version of the file
+     * @param bool        $in_footer
+     * @since 1.10.2 Instead of path relative to WordPress root directory, absolute path is used.
      * @see wp_register_script()
      * @see wp_enqueue_script()
      * @see BaseAssetManager::getSourceUrl()
      */
-    protected function addScript($handle, $src = null, $deps = [], $ver = false, $in_footer = false) {
-        $src = str_replace(DIRECTORY_SEPARATOR, "/", $src);
-
+    protected function addScript($handle, $absPath = null, $deps = [], $ver = false, $in_footer = false) {
         // Register it only if it was not registered
         if(!wp_script_is($handle, 'registered')) {
-            if(!$src) return;
-            $src = $this->getSourceUrl($src);
+            $url = $this->getSourceUrl($absPath);
+            if(!$url) {
+                Informer::addError("URL of the script handle '{$handle}' is not found. Path: {$absPath}")->addAsLog();
+                return;
+            }
 
-            if(!$ver) $ver = $this->getLastModifiedTime($src);
-            wp_register_script($handle, $src, $deps, $ver, $in_footer);
+            if(!$ver) $ver = $this->getLastModifiedTime($absPath);
+            wp_register_script($handle, $url, $deps, $ver, $in_footer);
         }
 
         // Add it only if it was not enqueued
@@ -117,16 +210,11 @@ abstract class BaseAssetManager {
     /**
      * Get last modified time of an asset.
      *
-     * @param string $relativePath Path relative to the WP installation directory
+     * @param string $absPath Absolute path of the file
      * @return false|int False if the file is not found, last modified time otherwise.
      */
-    protected function getLastModifiedTime($relativePath) {
-        $fullPath = str_replace("/", DIRECTORY_SEPARATOR, trailingslashit(ABSPATH) . ltrim($relativePath, DIRECTORY_SEPARATOR));
-        if(file_exists($fullPath)) {
-            return filemtime($fullPath);
-        }
-
-        return false;
+    protected function getLastModifiedTime($absPath) {
+        return file_exists($absPath) ? filemtime($absPath) : false;
     }
 
     /**
@@ -164,45 +252,32 @@ abstract class BaseAssetManager {
 
     /**
      * Get the source URL. This method decides what asset should be used. For example, if the development assets are
-     * wanted, it changes the given source URL with its development version, if it exists.
+     * wanted, it changes the given path to its development version, if it exists.
      *
-     * If the given source URL has a version whose name ends with "-dev", that version will be returned. For example,
-     * if source URL is "/wp-content/plugins/wp-content-crawler/app/public/dist/dev-tools.js", this method will look
+     * If the given path has a version whose name ends with "-dev", that version will be returned. For example,
+     * if the path is "/wp-content/plugins/wp-content-crawler/app/public/dist/dev-tools.js", this method will look
      * for "/wp-content/plugins/wp-content-crawler/app/public/dist/dev-tools-dev.js" when the debug mode is enabled. The
      * debug mode is enabled if $_GET has "debug". If "-dev" version of the file is available, this method returns
      * that version's URL.
      *
-     * @param string $src Relative source URL of the asset
-     * @return string|mixed If given URL is not valid, returns the given URL. Otherwise, URL of the asset.
+     * @param string|null $absPath Absolute path of the asset
+     * @return string|null If given path is not valid, returns the given value. Otherwise, URL of the asset.
      * @since 1.8.0
      */
-    private function getSourceUrl($src) {
-        // If there is no source, return the given source URL.
-        if (!$src) return $src;
+    private function getSourceUrl(?string $absPath): ?string {
+        // If there is no source, return the given value.
+        if (!$absPath) return $absPath;
 
         // Check if the dev version is required
         $isDev = isset($_GET["debug"]) || Environment::isDev();
-        if (!$isDev) return $src;
+        if (!$isDev) return $this->getPluginFileUrl($absPath);
 
-        // If ABSPATH does not exist, we cannot find the development version of the file. So, stop.
-        if (!defined('ABSPATH')) return $src;
-
-        // Create the development source URL
-        $devSrc = preg_replace('/(\.[^.]*)$/', '-dev$1', $src, 1);
-        if ($devSrc === $src) return $src;
-
-        // Get the path of the source. Make sure there are no multiple forward slashes and the directory separator of
-        // the OS is used instead of forward slashes.
-        $devSrcPath = str_replace(
-            '/',
-            DIRECTORY_SEPARATOR,
-            preg_replace('/\/{2,}/', '/', ABSPATH . DIRECTORY_SEPARATOR . $devSrc)
-        );
-
-        // If the development version of the file does not exist, return the given source URL.
-        if(!file_exists($devSrcPath)) return $src;
+        // Create the development version's path. If it is the same as the given path or it does not exist, return the
+        // given path.
+        $devAbsPath = preg_replace('/(\.[^.]*)$/', '-dev$1', $absPath, 1);
+        if ($devAbsPath === $absPath || !file_exists($devAbsPath)) return $this->getPluginFileUrl($absPath);
 
         // Return the development version
-        return $devSrc;
+        return $this->getPluginFileUrl($devAbsPath);
     }
 }

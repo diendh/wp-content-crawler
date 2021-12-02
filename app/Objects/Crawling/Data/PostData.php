@@ -9,8 +9,20 @@
 namespace WPCCrawler\Objects\Crawling\Data;
 
 
+use DateTime;
+use WPCCrawler\Environment;
+use WPCCrawler\Objects\Crawling\Data\Meta\PostMeta;
+use WPCCrawler\Objects\Crawling\Data\Taxonomy\TaxonomyItem;
+use WPCCrawler\Objects\Enums\ValueType;
+use WPCCrawler\Objects\Events\Enums\EventGroupKey;
 use WPCCrawler\Objects\File\MediaFile;
+use WPCCrawler\Objects\Filtering\Objects\FieldConfig;
 use WPCCrawler\Objects\Transformation\Interfaces\Transformable;
+use WPCCrawler\Objects\Transformation\Objects\Special\DateTimeTransformableField;
+use WPCCrawler\Objects\Transformation\Objects\Special\SpecialTransformableField;
+use WPCCrawler\Objects\Transformation\Objects\TransformableField;
+use WPCCrawler\Objects\Transformation\Objects\TransformableFieldList;
+use WPCCrawler\Objects\Value\ValueExtractorOptions;
 use WPCCrawler\Utils;
 
 class PostData implements Transformable {
@@ -27,15 +39,18 @@ class PostData implements Transformable {
     const FIELD_META_KEYWORDS           = 'metaKeywords';
     const FIELD_META_DESCRIPTION        = 'metaDescription';
     const FIELD_CUSTOM_META             = 'customMeta.data';
+    const FIELD_ATTACHMENT              = 'attachmentData';
     const FIELD_ATTACHMENT_TITLE        = 'attachmentData.mediaTitle';
     const FIELD_ATTACHMENT_DESCRIPTION  = 'attachmentData.mediaDescription';
     const FIELD_ATTACHMENT_CAPTION      = 'attachmentData.mediaCaption';
     const FIELD_ATTACHMENT_ALT          = 'attachmentData.mediaAlt';
+    const FIELD_THUMBNAIL               = 'thumbnailData';
     const FIELD_THUMBNAIL_TITLE         = 'thumbnailData.mediaTitle';
     const FIELD_THUMBNAIL_DESCRIPTION   = 'thumbnailData.mediaDescription';
     const FIELD_THUMBNAIL_CAPTION       = 'thumbnailData.mediaCaption';
     const FIELD_THUMBNAIL_ALT           = 'thumbnailData.mediaAlt';
     const FIELD_CUSTOM_TAXONOMIES       = 'customTaxonomies.data';
+    const FIELD_DATE_CREATED            = 'dateCreated';
 
     /**
      * @var null|array An array of names of the post categories. Each item is a string or array. If the item is a
@@ -67,8 +82,8 @@ class PostData implements Transformable {
     /** @var array */
     private $contents;
 
-    /** @var string */
-    private $dateCreated;
+    /** @var DateTime|null */
+    private $dateCreated = null;
 
     /** @var array */
     private $shortCodeData;
@@ -76,11 +91,17 @@ class PostData implements Transformable {
     /** @var array */
     private $tags;
 
-    /** @var array */
+    /** @var string[]|null */
     private $preparedTags;
 
     /** @var string */
     private $slug;
+
+    /** @var int|null */
+    private $authorId;
+
+    /** @var string|null */
+    private $postStatus;
 
     /*
      * LIST
@@ -125,10 +146,10 @@ class PostData implements Transformable {
      *
      */
 
-    /** @var array */
+    /** @var PostMeta[]|null */
     private $customMeta;
 
-    /** @var array */
+    /** @var TaxonomyItem[]|null */
     private $customTaxonomies;
 
     /** @var string */
@@ -140,6 +161,22 @@ class PostData implements Transformable {
 
     /** @var array WordPress post data */
     private $wpPostData = [];
+
+    /*
+     *
+     */
+
+    /** @var TransformableFieldList */
+    private $transformableFields = null;
+
+    /** @var TransformableFieldList */
+    private $interactableFields = null;
+
+    /** @var TransformableFieldList|null */
+    private $conditionCommandFields = null;
+
+    /** @var TransformableFieldList|null */
+    private $actionCommandFields = null;
 
     /*
      * GETTERS AND SETTERS
@@ -244,16 +281,23 @@ class PostData implements Transformable {
     }
 
     /**
-     * @return string
+     * @param bool $asString If this is true, the date is returned as a string in the MySQL date format. Otherwise,
+     *                       a {@link DateTime} object is returned.
+     * @return string|DateTime
      */
-    public function getDateCreated() {
-        return $this->dateCreated;
+    public function getDateCreated($asString = false) {
+        // The created date will not consider GMT offset defined in WP settings. So, the date must have been already
+        // set. Otherwise, we probably create an inaccurate date here.
+        if ($this->dateCreated === null) $this->dateCreated = new DateTime();
+        return $asString
+            ? $this->dateCreated->format(Environment::mysqlDateFormat())
+            : $this->dateCreated;
     }
 
     /**
-     * @param string $dateCreated
+     * @param DateTime|null $dateCreated The post creation date
      */
-    public function setDateCreated($dateCreated) {
+    public function setDateCreated(?DateTime $dateCreated) {
         $this->dateCreated = $dateCreated;
     }
 
@@ -279,14 +323,14 @@ class PostData implements Transformable {
     }
 
     /**
-     * @param array $tags
+     * @param string[]|null $tags
      */
     public function setTags($tags) {
         $this->tags = $tags;
     }
 
     /**
-     * @return array
+     * @return string[]|null
      */
     public function getPreparedTags() {
         return $this->preparedTags;
@@ -311,6 +355,38 @@ class PostData implements Transformable {
      */
     public function setSlug($slug) {
         $this->slug = $slug;
+    }
+
+    /**
+     * @return int|null
+     * @since 1.11.0
+     */
+    public function getAuthorId(): ?int {
+        return $this->authorId;
+    }
+
+    /**
+     * @param int|null $authorId
+     * @since 1.11.0
+     */
+    public function setAuthorId(?int $authorId) {
+        $this->authorId = $authorId;
+    }
+
+    /**
+     * @return string|null
+     * @since 1.11.0
+     */
+    public function getPostStatus(): ?string {
+        return $this->postStatus;
+    }
+
+    /**
+     * @param string|null $postStatus
+     * @since 1.11.0
+     */
+    public function setPostStatus(?string $postStatus) {
+        $this->postStatus = $postStatus;
     }
 
     /**
@@ -456,30 +532,30 @@ class PostData implements Transformable {
     }
 
     /**
-     * @return array
+     * @return PostMeta[]|null
      */
-    public function getCustomMeta() {
+    public function getCustomMeta(): ?array {
         return $this->customMeta;
     }
 
     /**
-     * @param array $customMeta See {@link customMeta}
+     * @param PostMeta[]|null $customMeta See {@link customMeta}
      */
-    public function setCustomMeta($customMeta) {
+    public function setCustomMeta(?array $customMeta) {
         $this->customMeta = $customMeta;
     }
 
     /**
-     * @return array
+     * @return TaxonomyItem[]|null
      */
-    public function getCustomTaxonomies() {
+    public function getCustomTaxonomies(): ?array {
         return $this->customTaxonomies;
     }
 
     /**
-     * @param array $customTaxonomies
+     * @param TaxonomyItem[]|null $customTaxonomies
      */
-    public function setCustomTaxonomies($customTaxonomies) {
+    public function setCustomTaxonomies(?array $customTaxonomies) {
         $this->customTaxonomies = $customTaxonomies;
     }
 
@@ -523,34 +599,75 @@ class PostData implements Transformable {
         return $mediaFiles;
     }
 
-    public function getTransformableFields() {
-        return [
-            static::FIELD_TITLE                  => _wpcc('Title'),
-            static::FIELD_EXCERPT                => _wpcc('Excerpt'),
-            static::FIELD_CATEGORY_NAMES         => _wpcc('Category Names'),
-            static::FIELD_SLUG                   => _wpcc('Slug'),
-            static::FIELD_TEMPLATE               => _wpcc('Content'),
-            static::FIELD_PREPARED_TAGS          => _wpcc('Tags'),
-            static::FIELD_META_KEYWORDS          => _wpcc('Meta Keywords'),
-            static::FIELD_META_DESCRIPTION       => _wpcc('Meta Description'),
-            static::FIELD_CUSTOM_META            => _wpcc('Custom Meta'),
-            static::FIELD_ATTACHMENT_TITLE       => _wpcc('Media Title'),
-            static::FIELD_ATTACHMENT_DESCRIPTION => _wpcc('Media Description'),
-            static::FIELD_ATTACHMENT_CAPTION     => _wpcc('Media Caption'),
-            static::FIELD_ATTACHMENT_ALT         => _wpcc('Media Alternate Text'),
-            static::FIELD_THUMBNAIL_TITLE        => _wpcc('Thumbnail Title'),
-            static::FIELD_THUMBNAIL_DESCRIPTION  => _wpcc('Thumbnail Description'),
-            static::FIELD_THUMBNAIL_CAPTION      => _wpcc('Thumbnail Caption'),
-            static::FIELD_THUMBNAIL_ALT          => _wpcc('Thumbnail Alternate Text'),
-            static::FIELD_CUSTOM_TAXONOMIES      => _wpcc('Taxonomies'),
-        ];
+    public function getTransformableFields(): TransformableFieldList {
+        if ($this->transformableFields === null) {
+            $this->transformableFields = new TransformableFieldList([
+                new TransformableField(static::FIELD_TITLE,                  _wpcc('Title'),                    ValueType::T_STRING),
+                new TransformableField(static::FIELD_EXCERPT,                _wpcc('Excerpt'),                  ValueType::T_STRING),
+                new TransformableField(static::FIELD_CATEGORY_NAMES,         _wpcc('Category Names'),           [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                new TransformableField(static::FIELD_SLUG,                   _wpcc('Slug'),                     ValueType::T_STRING),
+                new TransformableField(static::FIELD_TEMPLATE,               _wpcc('Content'),                  ValueType::T_STRING),
+                new TransformableField(static::FIELD_PREPARED_TAGS,          _wpcc('Tags'),                     [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                new TransformableField(static::FIELD_META_KEYWORDS,          _wpcc('Meta Keywords'),            ValueType::T_STRING),
+                new TransformableField(static::FIELD_META_DESCRIPTION,       _wpcc('Meta Description'),         ValueType::T_STRING),
+                new TransformableField(static::FIELD_CUSTOM_META,            _wpcc('Custom Meta'),              [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                new TransformableField(static::FIELD_ATTACHMENT_TITLE,       _wpcc('Media Title'),              [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                new TransformableField(static::FIELD_ATTACHMENT_DESCRIPTION, _wpcc('Media Description'),        [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                new TransformableField(static::FIELD_ATTACHMENT_CAPTION,     _wpcc('Media Caption'),            [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                new TransformableField(static::FIELD_ATTACHMENT_ALT,         _wpcc('Media Alternate Text'),     [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                new TransformableField(static::FIELD_THUMBNAIL_TITLE,        _wpcc('Thumbnail Title'),          ValueType::T_STRING),
+                new TransformableField(static::FIELD_THUMBNAIL_DESCRIPTION,  _wpcc('Thumbnail Description'),    ValueType::T_STRING),
+                new TransformableField(static::FIELD_THUMBNAIL_CAPTION,      _wpcc('Thumbnail Caption'),        ValueType::T_STRING),
+                new TransformableField(static::FIELD_THUMBNAIL_ALT,          _wpcc('Thumbnail Alternate Text'), ValueType::T_STRING),
+                new TransformableField(static::FIELD_CUSTOM_TAXONOMIES,      _wpcc('Taxonomies'),               [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+            ], new FieldConfig(EventGroupKey::POST_DATA));
+        }
+
+        return $this->transformableFields;
     }
 
-    public function getInteractableFields() {
-        return $this->getTransformableFields() + [
-            static::FIELD_NEXT_PAGE_URL   => _wpcc('Next Page URL'),
-            static::FIELD_ALL_PAGE_URLS   => _wpcc('All Page URLs'),
-            static::FIELD_SHORT_CODE_DATA => _wpcc('Custom Short Codes'),
-        ];
+    public function getInteractableFields(): TransformableFieldList {
+        if ($this->interactableFields === null) {
+            $this->interactableFields = (new TransformableFieldList(null, new FieldConfig(EventGroupKey::POST_DATA)))
+                ->addAllFromList($this->getTransformableFields())
+                ->addAll([
+                    new TransformableField(static::FIELD_NEXT_PAGE_URL,   _wpcc('Next Page URL'),      ValueType::T_STRING),
+                    new TransformableField(static::FIELD_ALL_PAGE_URLS,   _wpcc('All Page URLs'),      [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                    new TransformableField(static::FIELD_SHORT_CODE_DATA, _wpcc('Custom Short Codes'), [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                ]);
+        }
+
+        return $this->interactableFields;
     }
+
+    public function getConditionCommandFields(): ?TransformableFieldList {
+        if ($this->conditionCommandFields === null) {
+            $this->conditionCommandFields = (new TransformableFieldList(null, new FieldConfig(EventGroupKey::POST_DATA)))
+                ->addAll([
+                    // TODO: This is actually not useful. Either provide a full suit of conditions and actions for both
+                    //  MediaFile class and MediaFile array or remove this.
+                    (new SpecialTransformableField(static::FIELD_ATTACHMENT, _wpcc('Media Files'), ValueType::T_COUNTABLE))
+                        // Modify the extractor options. We do not want to allow everything. We want to allow objects
+                        // only. If everything is allowed, subject items contain only 1 key that has an array value. We
+                        // want as many keys as there are media files. In other words, the resultant array must contain
+                        // all media files as its direct values.
+                        ->setModifyExtractorOptionsCallback(function(ValueExtractorOptions $options) {
+                            $options
+                                ->setAllowAll(false)
+                                ->setAllowObjects(true);
+                        }),
+
+                    // TODO: Add publish date to action command fields as well and add action commands to let the user
+                    //  modify the date conditionally.
+                    (new DateTimeTransformableField(static::FIELD_DATE_CREATED, _wpcc('Publish Date'), ValueType::T_DATE))
+                ]);
+        }
+
+        return $this->conditionCommandFields;
+    }
+
+    public function getActionCommandFields(): ?TransformableFieldList {
+        return $this->actionCommandFields;
+    }
+
 }

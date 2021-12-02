@@ -18,6 +18,7 @@ use WPCCrawler\Test\Enums\TestType;
 use WPCCrawler\Test\General\GeneralCategoryTest;
 use WPCCrawler\Test\General\GeneralPostTest;
 use WPCCrawler\Test\Tests\CalculationTest;
+use WPCCrawler\Test\Tests\CommandTest;
 use WPCCrawler\Test\Tests\RefreshDocLinksTest;
 use WPCCrawler\Test\Tests\HtmlManipulation\ExchangeElementAttributesTest;
 use WPCCrawler\Test\Tests\FileCopyTest;
@@ -71,6 +72,7 @@ class Test {
     public static $TEST_TYPE_FILE_TEMPLATE                      = 'test_type_file_template';
 
     public static $TEST_TYPE_REFRESH_DOC_LINKS                  = 'test_type_refresh_doc_links';
+    public static $TEST_TYPE_COMMAND                            = 'test_type_command';
 
     /**
      * @param int $postId           The ID of the site
@@ -128,6 +130,7 @@ class Test {
             static::$TEST_TYPE_FILE_TEMPLATE                        => FileTemplateTest::class,
 
             static::$TEST_TYPE_REFRESH_DOC_LINKS                    => RefreshDocLinksTest::class,
+            static::$TEST_TYPE_COMMAND                              => CommandTest::class,
         ];
 
         $testData = new TestData($data);

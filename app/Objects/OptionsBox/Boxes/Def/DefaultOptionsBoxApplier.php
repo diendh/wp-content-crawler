@@ -71,7 +71,7 @@ class DefaultOptionsBoxApplier extends BaseOptionsBoxApplier {
      * @param mixed $value
      * @return mixed|null $modifiedValue Null, if the item should be removed. Otherwise, the modified value.
      */
-    public function apply($value) {
+    protected function onApply($value) {
         if (!$this->dataExists() || is_object($value) || is_array($value)) return $value;
 
         $this->finalValue = $value;

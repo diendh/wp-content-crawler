@@ -13,6 +13,7 @@ use WPCCrawler\Exceptions\DuplicatePostException;
 use WPCCrawler\Factory;
 use WPCCrawler\Objects\Crawling\Bot\PostBot;
 use WPCCrawler\Objects\Crawling\Data\PostData;
+use WPCCrawler\Objects\Crawling\Data\PostSaverData;
 use WPCCrawler\Objects\Crawling\Preparers\TransformablePreparer;
 use WPCCrawler\Objects\Informing\Informer;
 use WPCCrawler\Objects\Settings\Enums\SettingKey;
@@ -253,7 +254,7 @@ class PostDetailsService {
             /** @var Transformable $data */
 
             // Prepare the data
-            $preparer = new TransformablePreparer($data, array_keys($data->getInteractableFields()), $cbPrepare);
+            $preparer = new TransformablePreparer($data, array_keys($data->getInteractableFields()->toAssociativeArray()), $cbPrepare);
             $preparer->prepare();
 
         }, $postBot);
@@ -608,7 +609,7 @@ class PostDetailsService {
             if (!is_a($data, Transformable::class)) return;
 
             /** @var Transformable $data */
-            $transformableFields = $data->getTransformableFields();
+            $transformableFields = $data->getTransformableFields()->toAssociativeArray();
             if (!$transformableFields) return;
 
             // Get the name and the identifier for this factory
@@ -618,6 +619,38 @@ class PostDetailsService {
 
             // Add the options
             $result[$name] = AbstractTransformationService::prepareTransformableFieldForSelect($transformableFields, $identifier);
+        });
+
+        return $result;
+    }
+
+    /**
+     * Get factories that have {@link Transformable} data
+     *
+     * @param SettingsImpl|array|null $postSettings
+     * @return BasePostDetailFactory[] Array of factories that have {@link Transformable} data
+     * @since 1.11.0
+     */
+    public function getTransformableFactories($postSettings) {
+        // Get a valid instance from the given value
+        $postSettings = $this->getPostSettingsImplInstance($postSettings);
+
+        $result = [];
+
+        $this->walkRegisteredFactories(function($factory) use (&$postSettings, &$result) {
+            /** @var BasePostDetailFactory $factory */
+
+            // Check availability for post
+            if (!$factory->isAvailableForPost($postSettings)) return;
+
+            // Create a data object instance for the factory
+            $data = $factory->getDetailData();
+
+            // Make sure it is transformable
+            if (!is_a($data, Transformable::class)) return;
+            /** @var Transformable $data */
+
+            $result[] = $factory;
         });
 
         return $result;

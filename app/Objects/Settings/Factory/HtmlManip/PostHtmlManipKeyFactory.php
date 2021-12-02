@@ -70,4 +70,16 @@ class PostHtmlManipKeyFactory extends AbstractHtmlManipKeyFactory {
     public function getUnnecessaryElementSelectorsKey() {
         return SettingKey::POST_UNNECESSARY_ELEMENT_SELECTORS;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPageFiltersKey() {
+        return SettingKey::POST_PAGE_FILTERS;
+    }
+
+    public function getRequestFiltersKey() {
+        return SettingKey::POST_REQUEST_FILTERS;
+    }
+
 }

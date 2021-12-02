@@ -16,6 +16,7 @@ use WPCCrawler\Exceptions\MethodNotExistException;
 use WPCCrawler\Objects\Crawling\Preparers\Interfaces\Preparer;
 use WPCCrawler\Objects\Informing\Informer;
 use WPCCrawler\Objects\Transformation\Interfaces\Transformable;
+use WPCCrawler\Objects\Transformation\Objects\TransformableFieldList;
 use WPCCrawler\Objects\Value\ValueExtractor;
 use WPCCrawler\Objects\Value\ValueSetter;
 
@@ -26,8 +27,8 @@ class TransformablePreparer implements Preparer {
 
     /**
      * @var string[] Fields that should be transformed. See {@link Transformable::getTransformableFields()} for more
-     *      information about the fields. While {@link Transformable::getTransformableFields()} returns an associative
-     *      array, this must be a sequential string array of field names.
+     *      information about the fields. While {@link Transformable::getTransformableFields()} returns a
+     *      {@link TransformableFieldList} array, this must be a sequential string array of field names.
      */
     private $fields;
 

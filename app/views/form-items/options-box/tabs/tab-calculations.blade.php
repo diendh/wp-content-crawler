@@ -25,13 +25,10 @@
 <table class="wcc-settings">
     {{-- DECIMAL SEPARATOR AFTER --}}
     @include('form-items.combined.select-with-label', [
-        'name'  => \WPCCrawler\Objects\Settings\Enums\SettingKey::OPTIONS_BOX_DECIMAL_SEPARATOR_AFTER,
-        'title' =>  _wpcc('Decimal separator for result'),
-        'info'  =>  _wpcc('Define the decimal separator for the number that will be shown in your site.'),
-        'options' => [
-            'dot'   => _wpcc('Dot') . ' (.)',
-            'comma' => _wpcc('Comma') . ' (,)',
-        ]
+        'name'    => \WPCCrawler\Objects\Settings\Enums\SettingKey::OPTIONS_BOX_DECIMAL_SEPARATOR_AFTER,
+        'title'   =>  _wpcc('Decimal separator for result'),
+        'info'    =>  _wpcc('Define the decimal separator for the number that will be shown in your site.'),
+        'options' => \WPCCrawler\Utils::getDecimalSeparatorOptionsForSelect(),
     ])
 
     {{-- USE THOUSANDS SEPARATOR --}}

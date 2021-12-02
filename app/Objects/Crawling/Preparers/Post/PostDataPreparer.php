@@ -42,7 +42,7 @@ class PostDataPreparer extends AbstractPostBotPreparer {
             return $this->applyPreparations($text);
         };
 
-        $preparer = new TransformablePreparer($postData, array_keys($postData->getInteractableFields()), $cbPrepare);
+        $preparer = new TransformablePreparer($postData, array_keys($postData->getInteractableFields()->toAssociativeArray()), $cbPrepare);
         $preparer->prepare();
 
         // Prepare the post details

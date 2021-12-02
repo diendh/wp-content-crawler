@@ -9,6 +9,7 @@
 namespace WPCCrawler\Test\Data;
 
 
+use Illuminate\Support\Str;
 use WPCCrawler\Objects\OptionsBox\Boxes\Base\BaseOptionsBoxApplier;
 use WPCCrawler\Objects\OptionsBox\Boxes\Base\BaseOptionsBoxData;
 use WPCCrawler\Objects\OptionsBox\OptionsBoxService;
@@ -18,7 +19,7 @@ use WPCCrawler\Utils;
 class TestData {
 
     /** @var array|null Raw data given in the constructor. */
-    private $data = null;
+    private $data;
 
     private $testType = null;
 
@@ -266,7 +267,7 @@ class TestData {
      */
     private function prepareUseUtf8() {
         $useUtf8Val = Utils::array_get($this->data, "useUtf8");
-        $this->useUtf8 = $useUtf8Val == -1 ? null : ($useUtf8Val == 1 ? true : false);
+        $this->useUtf8 = $useUtf8Val == -1 ? null : $useUtf8Val == 1;
     }
 
     /**
@@ -274,7 +275,7 @@ class TestData {
      */
     private function prepareConvertEncodingToUtf8() {
         $convertEncodingVal = Utils::array_get($this->data, "convertEncodingToUtf8");
-        $this->convertEncodingToUtf8 = $convertEncodingVal == -1 ? null : ($convertEncodingVal == 1 ? true : false);
+        $this->convertEncodingToUtf8 = $convertEncodingVal == -1 ? null : $convertEncodingVal == 1;
     }
 
     /**
@@ -318,6 +319,14 @@ class TestData {
 
         $values = null;
         foreach($manipulationOptions as $optionName => $serializedValues) {
+            // Filter settings are provided as arrays, not as a URL-encoded string
+            if (is_array($serializedValues)) {
+                // Filter settings are assumed to be stored as JSON-encoded strings. So, JSON-encode them so that
+                // methods using this setting can work as intended.
+                $this->manipulationOptions[$optionName] = json_encode($serializedValues);
+                continue;
+            }
+
             // Unserialize the values and store them in $values
             parse_str($serializedValues, $values);
 
@@ -329,7 +338,7 @@ class TestData {
             $this->manipulationOptions[$optionName] = $values;
 
             // If this option name is for "raw HTML find and replaces", store the value in the related instance variable
-            if (!$this->rawHtmlFindReplaces && ends_with($optionName, 'find_replace_raw_html')) {
+            if (!$this->rawHtmlFindReplaces && Str::endsWith($optionName, 'find_replace_raw_html')) {
                 $this->rawHtmlFindReplaces = $values;
             }
         }

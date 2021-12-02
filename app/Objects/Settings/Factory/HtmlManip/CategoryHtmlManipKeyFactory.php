@@ -70,4 +70,16 @@ class CategoryHtmlManipKeyFactory extends AbstractHtmlManipKeyFactory {
     public function getUnnecessaryElementSelectorsKey() {
         return SettingKey::CATEGORY_UNNECESSARY_ELEMENT_SELECTORS;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPageFiltersKey() {
+        return SettingKey::CATEGORY_PAGE_FILTERS;
+    }
+
+    public function getRequestFiltersKey() {
+        return SettingKey::CATEGORY_REQUEST_FILTERS;
+    }
+
 }

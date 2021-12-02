@@ -22,7 +22,7 @@ class PostContentsPreparer extends AbstractPostBotPreparer {
      * @return void
      */
     public function prepare() {
-        $postContentSelectors = $this->bot->getSetting(SettingKey::POST_CONTENT_SELECTORS);
+        $postContentSelectors = $this->bot->getSetting(SettingKey::POST_CONTENT_SELECTORS, []);
 
         $allContents = [];
         foreach($postContentSelectors as $selectorData) {

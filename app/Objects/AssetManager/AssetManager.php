@@ -10,7 +10,6 @@ namespace WPCCrawler\Objects\AssetManager;
 
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use WPCCrawler\Environment;
 use WPCCrawler\Objects\Docs;
 use WPCCrawler\Objects\Enums\PageType;
 use WPCCrawler\Objects\File\FileService;
@@ -61,13 +60,16 @@ class AssetManager extends BaseAssetManager {
     private $styleGuides                    = 'wcc_guides_css';
     private $styleShepherd                  = 'wcc_shepherd_css';
 
+    private $styleFontAwesome               = 'wcc_fontawesome_css';
+    private $styleFontAwesomeSolid          = 'wcc_fontawesome_solid_css';
+
     /**
      * @return string A string that will be the variable name of the JavaScript localization values. E.g. if this is
      *                'wpcc', localization values defined in {@link getLocalizationValues()} will be available under
      *                'wpcc' variable in the JS window.
      * @since 1.8.0
      */
-    protected function getLocalizationName() {
+    protected function getLocalizationName(): string {
         return 'wpcc';
     }
 
@@ -76,46 +78,106 @@ class AssetManager extends BaseAssetManager {
      *
      * @return array
      */
-    protected function getLocalizationValues() {
+    protected function getLocalizationValues(): array {
         $values = [
-            'an_error_occurred'                     =>  _wpcc("An error occurred."),
-            'press_to_copy'                         =>  _wpcc("Press {0} to copy"),
-            'copied'                                =>  _wpcc("Copied!"),
-            'no_result'                             =>  _wpcc("No result."),
-            'found'                                 =>  _wpcc("Found"),
-            'required_for_test'                     =>  _wpcc("This is required to perform the test."),
-            'required'                              =>  _wpcc("This is required."),
-            'css_selector_found'                    =>  _wpcc("CSS selector found"),
-            'delete_all_test_history'               =>  _wpcc("Do you want to delete all test history?"),
-            'url_data_not_exist'                    =>  _wpcc("URL data cannot be found."),
-            'currently_crawling'                    =>  _wpcc("Currently crawling"),
-            'retrieving_urls_from'                  =>  _wpcc("Retrieving URLs from {0}"),
-            'pause'                                 =>  _wpcc('Pause'),
-            'continue'                              =>  _wpcc('Continue'),
-            'test_data_not_retrieved'               =>  _wpcc('Test data could not be retrieved.'),
-            'content_retrieval_response_not_valid'  =>  _wpcc("Response of content retrieval process is not valid."),
-            'test_data_retrieval_failed'            =>  _wpcc("Test data retrieval failed."),
-            'no_urls_found'                         =>  _wpcc("No URLs found."),
-            'this_is_not_valid'                     =>  _wpcc("This is not valid."),
-            'url_data_not_exist_for_this'           =>  _wpcc("URL data does not exist for this."),
-            'this_url_not_crawled_yet'              =>  _wpcc("This URL has not been crawled yet."),
-            'url_cannot_be_retrieved'               =>  _wpcc("The URL cannot be retrieved."),
-            'cache_invalidated'                     =>  _wpcc("The cache has been invalidated."),
-            'cache_could_not_be_invalidated'        =>  _wpcc("The cache could not be invalidated."),
-            'all_cache_invalidated'                 =>  _wpcc("All caches have been invalidated."),
-            'all_cache_could_not_be_invalidated'    =>  _wpcc("All caches could not be invalidated."),
-            'custom_short_code'                     =>  _wpcc("Custom short code"),
-            'post_id_not_found'                     =>  _wpcc("Post ID could not be found."),
-            'settings_not_retrieved'                =>  _wpcc("Settings could not be retrieved."),
-            'settings_saved'                        =>  _wpcc("The settings have been saved."),
-            'state_not_parsed'                      =>  _wpcc("The state could not be parsed."),
-            'top'                                   =>  _wpcc("Top"),
-            'x_element_selected'                    =>  _wpcc("{0} element selected"),
-            'x_elements_selected'                   =>  _wpcc("{0} elements selected"),
-            'clear'                                 =>  _wpcc("Clear"),
-            'or'                                    =>  _wpcc("or"),
-            'select_category_url'                   =>  _wpcc("Select a category URL"),
-            'see_docs_for_this_setting'             =>  _wpcc("See in docs"),
+            'an_error_occurred'                     => _wpcc("An error occurred."),
+            'press_to_copy'                         => _wpcc("Press {0} to copy"),
+            'copied'                                => _wpcc("Copied!"),
+            'no_result'                             => _wpcc("No result."),
+            'found'                                 => _wpcc("Found"),
+            'required_for_test'                     => _wpcc("This is required to perform the test."),
+            'required'                              => _wpcc("This is required."),
+            'css_selector_found'                    => _wpcc("CSS selector found"),
+            'delete_all_test_history'               => _wpcc("Do you want to delete all test history?"),
+            'url_data_not_exist'                    => _wpcc("URL data cannot be found."),
+            'currently_crawling'                    => _wpcc("Currently crawling"),
+            'retrieving_urls_from'                  => _wpcc("Retrieving URLs from {0}"),
+            'pause'                                 => _wpcc('Pause'),
+            'continue'                              => _wpcc('Continue'),
+            'test_data_not_retrieved'               => _wpcc('Test data could not be retrieved.'),
+            'content_retrieval_response_not_valid'  => _wpcc("Response of content retrieval process is not valid."),
+            'test_data_retrieval_failed'            => _wpcc("Test data retrieval failed."),
+            'no_urls_found'                         => _wpcc("No URLs found."),
+            'this_is_not_valid'                     => _wpcc("This is not valid."),
+            'url_data_not_exist_for_this'           => _wpcc("URL data does not exist for this."),
+            'this_url_not_crawled_yet'              => _wpcc("This URL has not been crawled yet."),
+            'url_cannot_be_retrieved'               => _wpcc("The URL cannot be retrieved."),
+            'cache_invalidated'                     => _wpcc("The cache has been invalidated."),
+            'cache_could_not_be_invalidated'        => _wpcc("The cache could not be invalidated."),
+            'all_cache_invalidated'                 => _wpcc("All caches have been invalidated."),
+            'all_cache_could_not_be_invalidated'    => _wpcc("All caches could not be invalidated."),
+            'custom_short_code'                     => _wpcc("Custom short code"),
+            'post_id_not_found'                     => _wpcc("Post ID could not be found."),
+            'settings_not_retrieved'                => _wpcc("Settings could not be retrieved."),
+            'settings_saved'                        => _wpcc("The settings have been saved."),
+            'state_not_parsed'                      => _wpcc("The state could not be parsed."),
+            'top'                                   => _wpcc("Top"),
+            'x_element_selected'                    => _wpcc("{0} element selected"),
+            'x_elements_selected'                   => _wpcc("{0} elements selected"),
+            'clear'                                 => _wpcc("Clear"),
+            'or'                                    => _wpcc("or"),
+            'select_category_url'                   => _wpcc("Select a category URL"),
+            'see_docs_for_this_setting'             => _wpcc("See in docs"),
+            'remove'                                => _wpcc('Remove'),
+            'subject'                               => _wpcc('Subject'),
+            'property'                              => _wpcc('Property'),
+            'command'                               => _wpcc('Command'),
+            'operator_and'                          => _wpcc('and'),
+            'operator_or'                           => _wpcc('or'),
+            'filter_if'                             => _wpcc('If'),
+            'filter_then'                           => _wpcc('Then'),
+            'add_new'                               => _wpcc('Add New'),
+            'add_command'                           => _wpcc('Add command'),
+            'remove_command'                        => _wpcc('Remove command'),
+            'add_condition_block'                   => _wpcc('Add condition block'),
+            'remove_block'                          => _wpcc('Remove block'),
+            'remove_filter'                         => _wpcc('Remove filter'),
+            'move_this'                             => _wpcc('Move this'),
+            'value'                                 => _wpcc('Value'),
+            'enter_filter_title'                    => _wpcc('Enter a title/description (optional)'),
+            'import'                                => _wpcc('Import'),
+            'export'                                => _wpcc('Export'),
+            'export_filter_description'             => _wpcc("Copy the text below and use another filter setting's import button to import it. Click the export button again to hide this. If you changed anything after this was shown, double click the export button to refresh the export text."),
+            'import_filter_description'             => _wpcc("Paste the exported filter settings below. Click the import button again to import the settings and hide this. The imported filters will be added to the top. The existing filters will not be removed."),
+            'import_filter_placeholder'             => _wpcc("Paste the exported text here to import..."),
+            'export_setting_description'            => _wpcc("Copy the text below and use another setting's import button to import it. Click the export button again to hide this. If you changed anything after this was shown, double click the export button to refresh the export text."),
+            'import_setting_description'            => _wpcc("Paste the exported settings below. Click the import button again to import the settings and hide this. The imported settings will be added to the existing ones. The existing settings will not be removed."),
+            'import_setting_placeholder'            => _wpcc("Paste the exported text here to import..."),
+            'enabled'                               => _wpcc("Enabled"),
+            'disabled'                              => _wpcc("Disabled"),
+            'filter_enabled_description'            => _wpcc("When this is checked, the filters of this setting will be applied. Otherwise, they won't be applied."),
+            'filter_disabled_explanation'           => _wpcc("This filter has been disabled in the site settings. Hence, it is not executed."),
+            'filter_setting_disabled_notification'  => _wpcc('This filter setting has been disabled in the site settings. Hence, the filters are not executed.'),
+            'stop_after_first_match'                => _wpcc('Stop after first match'),
+            'stop_after_first_match_desc'           => _wpcc('Check this if only one match is enough to say that this condition is true when multiple items exist in the selected subject. Checking this improves the performance.'),
+            'only_matched_items'                    => _wpcc('Only the items matched by conditions'),
+            'only_matched_items_desc'               => _wpcc("If there is a true condition having the same subject as this command's, check this to execute this command only for the items matched by the condition(s). When checked, if no condition has the same subject, then this command will definitely be executed without any limitations."),
+            'filter_when'                           => _wpcc('When'),
+            'filter_setting_explanations'           => _wpcc('Filter Setting Explanations'),
+            'executed'                              => _wpcc('Executed'),
+            'not_executed'                          => _wpcc('Not executed'),
+            'used_memory'                           => _wpcc('Used memory'),
+            'elapsed_time'                          => _wpcc('Elapsed time'),
+            'condition_met'                         => _wpcc('This condition is met'),
+            'condition_not_met'                     => _wpcc('This condition is not met'),
+            'messages'                              => _wpcc('Messages'),
+            'subjects'                              => _wpcc('Subjects'),
+            'modified_subjects'                     => _wpcc('Modified subjects'),
+            'denied_subjects'                       => _wpcc('Denied subjects'),
+            'settings'                              => _wpcc('Settings'),
+            'message_count'                         => _wpcc('Message count'),
+            'subject_count'                         => _wpcc('Subject count'),
+            'denied_subject_count'                  => _wpcc('Denied subject count'),
+
+            'clone'                                 => _wpcc('Clone'),
+            'move_up'                               => _wpcc('Move up'),
+            'move_down'                             => _wpcc('Move down'),
+            'move_in'                               => _wpcc('Move in'),
+            'move_out'                              => _wpcc('Move out'),
+            'toggle_expand_all'                     => _wpcc('Toggle expand all'),
+            'toggle_side_by_side'                   => _wpcc('Toggle side-by-side'),
+            'toggle_filter_enabled'                 => _wpcc('Enable/disable'),
+            'side_by_side'                          => _wpcc('Side by side'),
 
             'previous'                              => _wpcc("Previous"),
             'next'                                  => _wpcc("Next"),
@@ -134,6 +196,7 @@ class AssetManager extends BaseAssetManager {
             'no_prev_step'                          => _wpcc('There is no previous step.'),
             'prev_step_requires_x_page_type'        => _wpcc('Previous step cannot be shown in this page. Please open %s page and start the previous step there.'),
             'please_select_x'                       => _wpcc('Please select %s'),
+            'test_this_command'                     => _wpcc("Test this command. The test considers only the command's options. The options of the subject and the property are not considered. Hover over the selected command to highlight its options."),
 
             'no_name'    => _wpcc('(No name)'),
             'page_names' => [
@@ -183,7 +246,7 @@ class AssetManager extends BaseAssetManager {
     public function addApp() {
         $this->addAnimate();
         $this->addjQueryAnimationAssets();
-        $this->addScript($this->scriptApp, Environment::appDir() . '/public/dist/js/app.js', ['jquery', $this->scriptUtils], false, true);
+        $this->addScript($this->scriptApp, $this->scriptPath('app.js'), ['jquery', $this->scriptUtils], false, true);
     }
 
     /**
@@ -193,7 +256,8 @@ class AssetManager extends BaseAssetManager {
     public function addPostSettings() {
         $this->addSortable();
 
-        $this->addStyle($this->stylePostSettings, Environment::appDir() . '/public/dist/css/post-settings.css', false);
+        $this->addStyle($this->stylePostSettings, $this->stylePath('post-settings.css'), false);
+        $this->addFontAwesome();
 
         $this->addUtils();
         $this->addNotificationJs();
@@ -208,14 +272,14 @@ class AssetManager extends BaseAssetManager {
     public function addTooltip() {
         // Utils is required because it defines emulateTransitionEnd function for jQuery. This function is required for
         // tooltip to work.
-        $this->addScript($this->scriptTooltip, Environment::appDir() . '/public/scripts/tooltip.min.js', ['jquery', $this->scriptUtils], '3.3.6', true);
+        $this->addScript($this->scriptTooltip, $this->publicPath('scripts/tooltip.min.js'), ['jquery', $this->scriptUtils], '3.3.6', true);
     }
 
     /**
      * Add clipboard.js
      */
     public function addClipboard() {
-        $this->addScript($this->scriptClipboard, Environment::appDir() . '/public/scripts/clipboard.min.js', false, '1.5.9', true);
+        $this->addScript($this->scriptClipboard, $this->publicPath('scripts/clipboard.min.js'), false, '1.5.9', true);
     }
 
     /**
@@ -230,14 +294,15 @@ class AssetManager extends BaseAssetManager {
      * Add general-settings.css
      */
     public function addGeneralSettings() {
-        $this->addStyle($this->styleGeneralSettings, Environment::appDir() . '/public/dist/css/general-settings.css', false);
+        $this->addStyle($this->styleGeneralSettings, $this->stylePath('general-settings.css'), false);
     }
 
     /**
      * Add site-tester.css, app.js and utils.js, along with the site tester assets of the registered detail factories.
      */
     public function addSiteTester() {
-        $this->addStyle($this->styleSiteTester, Environment::appDir() . '/public/dist/css/site-tester.css', false);
+        $this->addStyle($this->styleSiteTester, $this->stylePath('site-tester.css'), false);
+        $this->addFontAwesome();
         $this->addUtils();
 
         $this->addApp();
@@ -250,7 +315,7 @@ class AssetManager extends BaseAssetManager {
      * Add tools.css, app.js and utils.js
      */
     public function addTools() {
-        $this->addStyle($this->styleTools, Environment::appDir() . '/public/dist/css/tools.css', false);
+        $this->addStyle($this->styleTools, $this->stylePath('tools.css'), false);
         $this->addUtils();
         $this->addTooltip();
         $this->addFormSerializer();
@@ -262,7 +327,7 @@ class AssetManager extends BaseAssetManager {
      * Add dashboard.css and app.js
      */
     public function addDashboard() {
-        $this->addStyle($this->styleDashboard, Environment::appDir() . '/public/dist/css/dashboard.css', false);
+        $this->addStyle($this->styleDashboard, $this->stylePath('dashboard.css'), false);
         $this->addApp();
     }
 
@@ -270,14 +335,14 @@ class AssetManager extends BaseAssetManager {
      * Add app.js and dev-tools.css
      */
     public function addDevTools() {
-        $this->addStyle($this->styleDevTools, Environment::appDir() . '/public/dist/css/dev-tools.css', false);
+        $this->addStyle($this->styleDevTools, $this->stylePath('dev-tools.css'), false);
 
         // Add the lightbox library after the dev-tools style so that we can override the styles of the library.
         // Also, the lib should be added before the dev-tools script so that we can refer to the lib's script.
         $this->addFeatherlight();
 
-        $this->addScript($this->scriptOptimalSelect, Environment::appDir() . '/public/node_modules/optimal-select/dist/optimal-select.js', [], false, true);
-        $this->addScript($this->scriptJSDetectElementResize, Environment::appDir() . '/public/node_modules/javascript-detect-element-resize/jquery.resize.js', ['jquery'], false, true);
+        $this->addScript($this->scriptOptimalSelect, $this->publicPath('node_modules/optimal-select/dist/optimal-select.js'), [], false, true);
+        $this->addScript($this->scriptJSDetectElementResize, $this->publicPath('node_modules/javascript-detect-element-resize/jquery.resize.js'), ['jquery'], false, true);
 
         $this->addApp();
 
@@ -287,7 +352,7 @@ class AssetManager extends BaseAssetManager {
      * Add app.js and options-box.css
      */
     public function addOptionsBox() {
-        $this->addStyle($this->styleOptionsBox, Environment::appDir() . '/public/dist/css/options-box.css', false);
+        $this->addStyle($this->styleOptionsBox, $this->stylePath('options-box.css'), false);
 
         $this->addFormSerializer();
 
@@ -298,22 +363,22 @@ class AssetManager extends BaseAssetManager {
      * Add featherlight.css and featherlight.js
      */
     public function addFeatherlight() {
-        $this->addStyle($this->styleFeatherlight, Environment::appDir() . '/public/node_modules/featherlight/release/featherlight.min.css', false);
-        $this->addScript($this->scriptFeatherlight, Environment::appDir() . '/public/node_modules/featherlight/release/featherlight.min.js', ['jquery'], false, true);
+        $this->addStyle($this->styleFeatherlight, $this->publicPath('node_modules/featherlight/release/featherlight.min.css'), false);
+        $this->addScript($this->scriptFeatherlight, $this->publicPath('node_modules/featherlight/release/featherlight.min.js'), ['jquery'], false, true);
     }
 
     /**
      * Add utils.js
      */
     public function addUtils() {
-        $this->addScript($this->scriptUtils, Environment::appDir() . '/public/scripts/utils.js', ['jquery'], false, true);
+        $this->addScript($this->scriptUtils, $this->publicPath('scripts/utils.js'), ['jquery'], false, true);
     }
 
     /**
      * Adds bootstrap-grid.css
      */
     public function addBootstrapGrid() {
-        $this->addStyle($this->styleBootstrapGrid, Environment::appDir() . '/public/styles/bootstrap-grid.css', false);
+        $this->addStyle($this->styleBootstrapGrid, $this->publicPath('styles/bootstrap-grid.css'), false);
     }
 
     /**
@@ -327,14 +392,14 @@ class AssetManager extends BaseAssetManager {
      * Adds notification library
      */
     public function addNotificationJs() {
-        $this->addScript($this->scriptNotifyJs, Environment::appDir() . '/public/node_modules/notifyjs-browser/dist/notify.js', [], false, true);
+        $this->addScript($this->scriptNotifyJs, $this->publicPath('node_modules/notifyjs-browser/dist/notify.js'), [], false, true);
     }
 
     /**
      * Adds jquery.serialize-object.min.js
      */
     public function addFormSerializer() {
-        $this->addScript($this->scriptFormSerializer, Environment::appDir() . '/public/node_modules/form-serializer/dist/jquery.serialize-object.min.js', ['jquery'], false, true);
+        $this->addScript($this->scriptFormSerializer, $this->publicPath('node_modules/form-serializer/dist/jquery.serialize-object.min.js'), ['jquery'], false, true);
     }
 
     /**
@@ -342,7 +407,7 @@ class AssetManager extends BaseAssetManager {
      * @since 1.8.0
      */
     public function addAnimate() {
-        $this->addStyle($this->styleAnimate, Environment::appDir() . '/public/node_modules/animate.css/animate.min.css');
+        $this->addStyle($this->styleAnimate, $this->publicPath('node_modules/animate.css/animate.min.css'));
     }
 
     /**
@@ -350,7 +415,7 @@ class AssetManager extends BaseAssetManager {
      * @since 1.9.0
      */
     public function addFeatureRequest() {
-        $this->addStyle($this->styleFeatureRequest, Environment::appDir() . '/public/dist/css/feature-request.css');
+        $this->addStyle($this->styleFeatureRequest, $this->stylePath('feature-request.css'));
         $this->addApp();
     }
 
@@ -359,8 +424,8 @@ class AssetManager extends BaseAssetManager {
      * @since 1.9.0
      */
     public function addSelect2() {
-        $this->addStyle($this->styleSelect2, Environment::appDir() . '/public/node_modules/select2/dist/css/select2.min.css');
-        $this->addScript($this->scriptSelect2, Environment::appDir() . '/public/node_modules/select2/dist/js/select2.min.js', ['jquery'], false, true);
+        $this->addStyle($this->styleSelect2, $this->publicPath('node_modules/select2/dist/css/select2.min.css'));
+        $this->addScript($this->scriptSelect2, $this->publicPath('node_modules/select2/dist/js/select2.min.js'), ['jquery'], false, true);
     }
 
     /**
@@ -368,9 +433,18 @@ class AssetManager extends BaseAssetManager {
      * @since 1.9.0
      */
     public function addGuides() {
-        $this->addStyle($this->styleGuides, Environment::appDir() . '/public/dist/css/guides.css');
-        $this->addStyle($this->styleShepherd, Environment::appDir() . '/public/node_modules/shepherd.js/dist/css/shepherd.css');
+        $this->addStyle($this->styleGuides, $this->stylePath('guides.css'));
+        $this->addStyle($this->styleShepherd, $this->publicPath('node_modules/shepherd.js/dist/css/shepherd.css'));
         $this->addApp();
+    }
+
+    /**
+     * Add FontAwesome CSS files
+     * @since 1.11.0
+     */
+    public function addFontAwesome() {
+        $this->addStyle($this->styleFontAwesome,      $this->publicPath('lib/fontawesome/css/fontawesome.min.css'));
+        $this->addStyle($this->styleFontAwesomeSolid, $this->publicPath('lib/fontawesome/css/solid.min.css'));
     }
 
     /*
@@ -384,7 +458,7 @@ class AssetManager extends BaseAssetManager {
      * @since 1.9.0
      */
     public function getDevToolsIframeStyle() {
-        return $this->getFileContent('/public/dist/css/dev-tools-iframe.css');
+        return $this->getFileContent($this->stylePath('dev-tools-iframe.css'));
     }
 
     /**
@@ -393,7 +467,7 @@ class AssetManager extends BaseAssetManager {
      * @return string
      */
     public function getInformationStyle() {
-        return $this->getFileContent('/public/dist/css/info.css');
+        return $this->getFileContent($this->stylePath('info.css'));
     }
 
     /*
@@ -403,21 +477,20 @@ class AssetManager extends BaseAssetManager {
     /**
      * Get contents of a file in app directory of the plugin
      *
-     * @param string $pathRelativeToAppDir A path relative to the app directory of the plugin
+     * @param string $absPath Absolute path of the file
      * @return null|string Contents of the file if the file exists. Otherwise, null.
      * @since 1.9.0
      */
-    private function getFileContent($pathRelativeToAppDir) {
-        $path = WP_CONTENT_CRAWLER_PATH . Environment::appDirName() . '/' . ltrim($pathRelativeToAppDir, '/');
+    private function getFileContent($absPath) {
         $fs = FileService::getInstance()->getFileSystem();
 
-        if (!$fs->exists($path) || !$fs->isFile($path)) {
-            Informer::addError(sprintf(_wpcc('File "%1$s" could not be found.'), $path))->addAsLog();
+        if (!$fs->exists($absPath) || !$fs->isFile($absPath)) {
+            Informer::addError(sprintf(_wpcc('File "%1$s" could not be found.'), $absPath))->addAsLog();
             return null;
         }
 
         try {
-            return $fs->get($path);
+            return $fs->get($absPath);
 
         } catch (FileNotFoundException $e) {
             Informer::addError($e->getMessage())->setException($e)->addAsLog();

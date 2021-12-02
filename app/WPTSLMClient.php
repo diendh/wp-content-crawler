@@ -240,11 +240,11 @@ class WPTSLMClient {
             if($valid !== '1' && $valid !== null) {
                 if($valid !== '0') {
                     $dt = new DateTime($valid);
-                    $msg = __('Your %1$s license is not valid or it has expired. Please get a new license until %2$s to continue using %3$s.', $this->textDomain);
+                    $msg = __('The license key entered for %1$s is not valid or it could not be checked. Please verify your license until %2$s to continue using %3$s.', $this->textDomain);
                     $msg = sprintf($msg, $this->getProductName(), '<b>' . $dt->format('d/m/Y H:i') . '</b>', $this->getProductName());
                 } else {
-                    $msg = __('Your %1$s license is not valid or it has expired. You did not provide a valid license. The features are disabled.
-                        Please get a valid/new license to continue using %2$s.', $this->textDomain);
+                    $msg = __('The license key entered for %1$s is not valid or it could not be checked. You did not verify your license. The features are disabled.
+                        Please verify your license to continue using %2$s.', $this->textDomain);
                     $msg = sprintf($msg, $this->getProductName(), $this->getProductName());
                 }
             } else {
@@ -269,10 +269,14 @@ class WPTSLMClient {
             ]);
 
             $toggleNoticeMessage = $this->isAdminNoticeHidden() ? $showNoticeMessage : $hideNoticeMessage;
+            $txtCurrentDomain = sprintf(__('Current domain: %1$s', $this->textDomain), $this->getServerName());
+            $msgCurrentDomain = "<span style='display: block; font-size: 11px'>({$txtCurrentDomain})</span>";
 
             ?>
-                <div class="update-nag">
-                    <p><?php echo $msg; ?></p>
+                <div class="update-nag" style="display: inline-block; line-height: 1.4; padding: 11px 15px;
+                    font-size: 14px; text-align: left; margin: 25px 20px 0 2px; background-color: #fff;
+                    border-left: 4px solid #ffba00; box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);">
+                    <p><?php echo $msg . $msgCurrentDomain; ?></p>
                     <?php if($errorMessage) {
                         echo "<p>" . __("Message", $this->textDomain) . ': <b style="color: #ff0000">' . __($errorMessage, $this->textDomain) . "</b></p>";
                     } ?>
@@ -612,7 +616,6 @@ class WPTSLMClient {
     }
 
     private function handleAPIResponseForInfo(&$response) {
-		
         $code = $this->getResponseCode($response);
         $body = $this->getResponseBody($response);
 
@@ -720,7 +723,8 @@ class WPTSLMClient {
     }
 
     private function getLicenseKey() {
-        return get_option($this->getLicenseKeyOptionName(), null);
+        $key = get_option($this->getLicenseKeyOptionName(), null);
+        return $key !== null ? trim($key) : null;
     }
 
     private function getValidOptionName() {

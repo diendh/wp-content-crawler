@@ -9,14 +9,15 @@
 namespace WPCCrawler\Objects\Crawling\Preparers\Post;
 
 
+use WPCCrawler\Objects\Crawling\Data\Meta\PostMeta;
+use WPCCrawler\Objects\Crawling\Data\Meta\PostMetaList;
 use WPCCrawler\Objects\Crawling\Preparers\Post\Base\AbstractPostBotPreparer;
 use WPCCrawler\Objects\Settings\Enums\SettingKey;
-use WPCCrawler\Utils;
 
 class PostCustomPostMetaPreparer extends AbstractPostBotPreparer {
 
-    /** @var array */
-    private $customMeta = [];
+    /** @var PostMetaList */
+    private $customMetaList = null;
 
     /**
      * Prepare the post bot
@@ -24,7 +25,7 @@ class PostCustomPostMetaPreparer extends AbstractPostBotPreparer {
      * @return void
      */
     public function prepare() {
-        $this->customMeta = [];
+        $this->customMetaList = new PostMetaList();
 
         // Get custom meta with selectors
         $this->prepareCustomMetaWithSelectors();
@@ -36,14 +37,15 @@ class PostCustomPostMetaPreparer extends AbstractPostBotPreparer {
         $this->applyFindReplaces();
 
         // If there is no custom meta, stop.
-        if(empty($this->customMeta)) return;
+        if($this->getCustomMetaList()->isEmpty()) return;
 
         // Store it
-        $this->bot->getPostData()->setCustomMeta($this->customMeta);
+        $this->bot->getPostData()->setCustomMeta($this->getCustomMetaList()->getAll());
     }
 
     /**
-     * Finds the custom meta whose selectors are specified and sets them to {@link $customMeta}
+     * Finds the custom meta whose selectors are specified and sets them to {@link $customMetaList}
+     *
      * @since 1.8.0
      */
     private function prepareCustomMetaWithSelectors() {
@@ -52,6 +54,7 @@ class PostCustomPostMetaPreparer extends AbstractPostBotPreparer {
         // No need to continue if there is no selector.
         if(empty($postCustomPostMetaSelectors)) return;
 
+        $list = $this->getCustomMetaList();
         foreach ($postCustomPostMetaSelectors as $selectorData) {
             // If there is no meta key, continue with the next one.
             if (!isset($selectorData["meta_key"]) || empty($selectorData["meta_key"])) continue;
@@ -63,17 +66,13 @@ class PostCustomPostMetaPreparer extends AbstractPostBotPreparer {
             if (!$results) continue;
 
             // Add the values
-            $this->customMeta[] = [
-                "data"      =>  $results,
-                "meta_key"  =>  $selectorData["meta_key"],
-                "multiple"  =>  $isMultiple ? 1 : 0,
-            ];
-
+            $list->add(new PostMeta($selectorData["meta_key"], $results, $isMultiple));
         }
     }
 
     /**
-     * Prepares the manually-entered custom meta and sets them to {@link $customMeta}
+     * Prepares the manually-entered custom meta and sets them to {@link $customMetaList}
+     *
      * @since 1.8.0
      */
     private function prepareManuallyAddedCustomMeta() {
@@ -82,15 +81,12 @@ class PostCustomPostMetaPreparer extends AbstractPostBotPreparer {
         // No need to continue if there is no custom meta.
         if(empty($customPostMetaData)) return;
 
+        $list = $this->getCustomMetaList();
         foreach($customPostMetaData as $metaData) {
             if(!isset($metaData["key"]) || !$metaData["key"] || !isset($metaData["value"])) continue;
             $isMultiple = isset($metaData["multiple"]);
 
-            $this->customMeta[] = [
-                "data"      =>  $metaData["value"],
-                "meta_key"  =>  $metaData["key"],
-                "multiple"  =>  $isMultiple ? 1 : 0,
-            ];
+            $list->add(new PostMeta($metaData["key"], $metaData["value"], $isMultiple));
         }
     }
 
@@ -100,39 +96,63 @@ class PostCustomPostMetaPreparer extends AbstractPostBotPreparer {
      */
     private function applyFindReplaces() {
         $postMetaSpecificFindAndReplaces = $this->bot->getSetting(SettingKey::POST_FIND_REPLACE_CUSTOM_META);
+        $list = $this->getCustomMetaList();
 
         // If there is no custom meta or find-replace options, stop.
-        if(!$this->customMeta || !$postMetaSpecificFindAndReplaces) return;
+        if($list->isEmpty() || !$postMetaSpecificFindAndReplaces) return;
+
+        // Collect find-replace configurations for each meta key. Each meta key can have multiple find-replace configs.
+        // So, create a map where its keys are meta keys and values are an array of find-replace configs.
+        /** @var array<string, array> $findReplaceConfigMap */
+        $findReplaceConfigMap = [];
+        foreach($postMetaSpecificFindAndReplaces as $key => $item) {
+            $metaKey = $item['meta_key'];
+            if ($metaKey === '') continue;
+
+            // If no entry for this meta key exists in the map, create one and initialize it as an empty array.
+            if (!isset($findReplaceConfigMap[$metaKey])) {
+                $findReplaceConfigMap[$metaKey] = [];
+            }
+
+            // Append this find-replace config to its entry in the map.
+            $findReplaceConfigMap[$metaKey][] = $item;
+        }
 
         // Find replace in specific custom meta
         // Loop over each custom meta created previously
-        foreach($this->customMeta as $i => &$customMetaItem) {
+        foreach($list->getAll() as $i => $customMetaItem) {
             // Get current meta item's meta key and data
-            $currentMetaKey = Utils::array_get($customMetaItem, "meta_key", null);
-            $results        = Utils::array_get($customMetaItem, "data");
+            $currentMetaKey = $customMetaItem->getKey();
+            $results        = $customMetaItem->getData();
 
             // Continue with the next one if meta key or data does not exist in the current custom meta item.
             if(!$currentMetaKey || !$results) continue;
 
-            // Get find-replaces for this meta key
-            $currentFindReplaces = [];
-            foreach($postMetaSpecificFindAndReplaces as $key => $item) {
-                // If the meta key of find-replace is not the same as the current meta key, continue with the next one.
-                if($item["meta_key"] != $currentMetaKey) continue;
-
-                // Store the find-replace
-                $currentFindReplaces[] = $item;
-
-                // Remove this find-replace since this cannot be applied to another meta key. By this way, we will not
-                // check this find-replace config unnecessarily for other meta keys.
-                unset($postMetaSpecificFindAndReplaces[$key]);
-            }
+            // Get the find-replace configs for this meta key. If there is none, continue with the next one.
+            $currentFindReplaces = $findReplaceConfigMap[$currentMetaKey] ?? null;
+            if (!$currentFindReplaces) continue;
 
             // Apply find-replaces
             $results = $this->bot->applyFindAndReplaces($currentFindReplaces, $results);
 
             // If there are results, reassign it to the current custom meta item.
-            $customMetaItem["data"] = $results;
+            $customMetaItem->setData($results);
         }
+    }
+
+    /*
+     *
+     */
+
+    /**
+     * @return PostMetaList
+     * @since 1.11.0
+     */
+    public function getCustomMetaList(): PostMetaList {
+        if ($this->customMetaList === null) {
+            $this->customMetaList = new PostMetaList();
+        }
+
+        return $this->customMetaList;
     }
 }

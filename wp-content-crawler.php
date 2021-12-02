@@ -2,21 +2,13 @@
 /*
 Plugin Name: WP Content Crawler
 Plugin URI: http://wpcontentcrawler.com
-Description: Get content from almost any site to your WordPress site. Requires PHP >= 7.2, mbstring, curl, json, dom
+Description: Get content from almost any site to your WordPress site. Requires PHP >= 7.2, mbstring, curl, json, dom, fileinfo
 Author: Turgut Sarıçam
 Text Domain: wp-content-crawler
-Version: 1.10.1
+Version: 1.11.0
 Author URI: http://turgutsaricam.com
 */
-namespace WPCCrawler;
-if(!class_exists('WPTSLMClient')) {
-class WPTSLMClient {
-public function __construct($productName, $productId, $type, $apiUrl, $pluginFilePath, $textDomain){}
-public function setUrlHowToFindLicenseKey($url){}
-public function isUserCool() {return true;}
-public function setIsProductPageCallback($callback){}
-}
-}
+
 require 'app/vendor/autoload.php';
 
 // Define a path to be able to get the plugin directory. By this way, we'll be able to get the path no matter what names

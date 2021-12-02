@@ -23,6 +23,18 @@ class WPCCrawler {
      */
     private static $instance = null;
 
+    /** @var bool True if a general test, such as post or category test, is in progress */
+    private static $doingGeneralTest = false;
+
+    /** @var bool True if a unit test, such as a CSS selector test, is in progress */
+    private static $doingUnitTest = false;
+
+    /**
+     * @var bool True if a PHPUnit test is in progress, i.e. a unit test of the plugin, not the unit tests run by
+     *      clicking a test button in the UI.
+     */
+    private static $doingPhpUnitTest = false;
+
     /**
      * @return WPCCrawler
      * @since 1.9.0
@@ -56,23 +68,51 @@ class WPCCrawler {
     }
 
     /**
-     * Set whether the script is being run for a test or not. You can get the test status from {@link WPCCrawler::isDoingTest}.
+     * Set whether the script is being run for a test or not. You can get the test status from {@link WPCCrawler::isDoingGeneralTest}.
      *
-     * @param bool $test True if doing test. Otherwise, false.
+     * @param bool $doingGeneralTest True if doing test. Otherwise, false.
      */
-    public static function setDoingTest($test) {
-        if($test) {
-            if(!defined('WPCC_DOING_TEST')) define('WPCC_DOING_TEST', true);
-        } else {
-            if(defined('WPCC_DOING_TEST')) define('WPCC_DOING_TEST', false);
-        }
+    public static function setDoingGeneralTest(bool $doingGeneralTest) {
+        static::$doingGeneralTest = $doingGeneralTest;
     }
 
     /**
-     * @return bool True if the script is run to conduct a test. False otherwise.
+     * @return bool True if the script is run to conduct a general test. False otherwise.
      */
-    public static function isDoingTest() {
-        return defined('WPCC_DOING_TEST') && WPCC_DOING_TEST ? true : false;
+    public static function isDoingGeneralTest(): bool {
+        return static::$doingGeneralTest;
+    }
+
+    /**
+     * @param bool $doingUnitTest See {@link $doingUnitTest}
+     * @since 1.11.0
+     */
+    public static function setDoingUnitTest(bool $doingUnitTest) {
+        static::$doingUnitTest = $doingUnitTest;
+    }
+
+    /**
+     * @return bool See {@link $doingUnitTest}
+     * @since 1.11.0
+     */
+    public static function isDoingUnitTest(): bool {
+        return static::$doingUnitTest;
+    }
+
+    /**
+     * @param bool $doingPhpUnitTest See {@link doingPhpUnitTest}
+     * @since 1.11.0
+     */
+    public static function setDoingPhpUnitTest(bool $doingPhpUnitTest) {
+        static::$doingPhpUnitTest = $doingPhpUnitTest;
+    }
+
+    /**
+     * @return bool See {@link doingPhpUnitTest}
+     * @since 1.11.0
+     */
+    public static function isDoingPhpUnitTest(): bool {
+        return self::$doingPhpUnitTest;
     }
 
     /*
@@ -110,8 +150,8 @@ class WPCCrawler {
     private function setDirectoryPermissionsOnActivation(): void {
         // Set chmod of storage dir when the plugin is activated
         register_activation_hook(Utils::getPluginFilePath(), function () {
-            $storagePath    = WP_CONTENT_CRAWLER_PATH . Environment::appDirName() . Environment::relativeStorageDir();
-            $cachePath      = WP_CONTENT_CRAWLER_PATH . Environment::appDirName() . Environment::relativeCacheDir();
+            $storagePath    = Factory::assetManager()->appPath(Environment::relativeStorageDir());
+            $cachePath      = Factory::assetManager()->appPath(Environment::relativeCacheDir());
 
             chmod($storagePath, 0755);
             chmod($cachePath,   0755);

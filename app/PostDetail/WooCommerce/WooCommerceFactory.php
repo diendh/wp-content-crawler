@@ -15,11 +15,12 @@ use WPCCrawler\Objects\Settings\Enums\SettingKey;
 use WPCCrawler\Objects\Settings\SettingsImpl;
 use WPCCrawler\PostDetail\Base\BasePostDetailData;
 use WPCCrawler\PostDetail\Base\BasePostDetailFactory;
-use WPCCrawler\PostDetail\PostSaverData;
+use WPCCrawler\Objects\Crawling\Data\PostSaverData;
 use WPCCrawler\PostDetail\WooCommerce\Adapter\Factory\BaseWooAdapterFactory;
 use WPCCrawler\PostDetail\WooCommerce\Adapter\Factory\Woo33AdapterFactory;
 use WPCCrawler\PostDetail\WooCommerce\Adapter\Factory\Woo34AdapterFactory;
 use WPCCrawler\PostDetail\WooCommerce\Adapter\Factory\Woo35AdapterFactory;
+use WPCCrawler\Utils;
 
 class WooCommerceFactory extends BasePostDetailFactory {
 
@@ -44,8 +45,8 @@ class WooCommerceFactory extends BasePostDetailFactory {
      * @return bool True if the detail is available to be shown and interacted with. Otherwise, false.
      */
     protected function getAvailability() {
-        $isWooCommerceActive = in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')));
-        if (!$isWooCommerceActive) return false;
+        // If WooCommerce is not currently active, this post detail is not available.
+        if (!Utils::isPluginActive('woocommerce/woocommerce.php')) return false;
 
         // Make sure 'wc' function exists, since we need it to get the version of WooCommerce installed.
         if (!function_exists('wc')) {

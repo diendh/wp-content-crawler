@@ -6,9 +6,13 @@ if (isset($optionsBox) && $optionsBox && isset($optionsBoxConfigs) && isset($opt
     // the configuration.
     $optionsBox = $optionsBoxConfigs[$name];
 }
+
+$showExport = isset($hasExportButton) && $hasExportButton;
+$showImport = isset($hasImportButton) && $hasImportButton;
+
 ?>
 
-<div class="inputs">
+<div class="inputs" data-name="{{ $name  }}">
     @if(!isset($settings[$name]) || !$settings[$name] || !$settings[$name][0])
         @include($include, [
             'name'      => $name . '[' . (isset($addKeys) ? 0 : '') . ']',
@@ -31,5 +35,18 @@ if (isset($optionsBox) && $optionsBox && isset($optionsBoxConfigs) && isset($opt
     <div style="clear: both;"></div>
     <div class="actions">
         <button class="button wcc-add-new" data-max="{{isset($max) ? $max : 0}}">{{ _wpcc('Add New') }}</button>
+
+        @if($showExport)
+            <button class="button setting-export">{{ _wpcc('Export') }}</button>
+        @endif
+
+        @if($showImport)
+            <button class="button setting-import">{{ _wpcc('Import') }}</button>
+        @endif
     </div>
+
+    @if ($showExport || $showImport)
+        <div class="setting-import-export hidden"></div>
+    @endif
+
 @endif

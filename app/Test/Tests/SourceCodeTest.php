@@ -59,7 +59,7 @@ class SourceCodeTest extends AbstractTest {
 
         // Apply manipulation options
         if ($applyManipulationOptions) {
-            $this->applyHtmlManipulationOptions($crawler, null, $url);
+            $this->applyHtmlManipulationOptions($bot, $crawler, null, $url);
         }
 
         // Get the HTML to be manipulated

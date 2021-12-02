@@ -21,10 +21,14 @@ if (!String.prototype.format) {
  * @param {object} $element Target element
  */
 function flashBackground($element) {
-    $element.stop().css("background-color", "#b8ea84")
+    $element.stop()
+        .css('transition', 'none') // Remove transition because it causes unwanted animation behaviors
+        .css("background-color", "#b8ea84")
         .animate({ backgroundColor: "#FFFFFF"}, 1000, 'swing', function() {
-            // Remove the background color style definition when the animation is done.
-            $element.css("background-color", '')
+            // Remove the background color and other changed style definitions when the animation is done.
+            $element
+                .css("background-color", '')
+                .css('transition', '')
         });
 }
 

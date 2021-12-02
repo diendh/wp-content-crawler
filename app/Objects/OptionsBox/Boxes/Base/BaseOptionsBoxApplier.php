@@ -30,11 +30,26 @@ abstract class BaseOptionsBoxApplier {
     }
 
     /**
+     * Apply the options configured in options box to the given value
+     * @param mixed $value
+     * @return mixed|null $modifiedValue Null, if the item should be removed. Otherwise, the modified value.
+     * @since 1.11.0
+     */
+    abstract protected function onApply($value);
+
+    /**
      * Applies the options configured in options box to the given value
      * @param mixed $value
      * @return mixed|null $modifiedValue Null, if the item should be removed. Otherwise, the modified value.
      */
-    public abstract function apply($value);
+    public function apply($value) {
+        // If the box should not be applied to the value, return the value without changing it.
+        if (!$this->shouldApply($value)) {
+            return $value;
+        }
+
+        return $this->onApply($value);
+    }
 
     /**
      * @param array $arr        An array of items.
@@ -114,6 +129,18 @@ abstract class BaseOptionsBoxApplier {
     public function setFromOptionsBox($isFromOptionsBox) {
         $this->isFromOptionsBox = $isFromOptionsBox;
         return $this;
+    }
+
+    /**
+     * Check if the options box should be applied to the given value.
+     *
+     * @param mixed|null $value The value that will be checked if the options box should be applied to it
+     * @return bool True if the box should be applied to the given value. False if it should not be applied.
+     * @since 1.11.0
+     * @noinspection PhpUnusedParameterInspection
+     */
+    public function shouldApply($value): bool {
+        return true;
     }
 
 }

@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Rize\\UriTemplate' => array($vendorDir . '/rize/uri-template/src'),
-    'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src'),
 );

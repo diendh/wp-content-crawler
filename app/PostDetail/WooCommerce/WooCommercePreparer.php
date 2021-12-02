@@ -9,6 +9,7 @@
 namespace WPCCrawler\PostDetail\WooCommerce;
 
 
+use Illuminate\Support\Arr;
 use WPCCrawler\Objects\File\FileService;
 use WPCCrawler\Objects\File\MediaFile;
 use WPCCrawler\Objects\Settings\Enums\SettingKey;
@@ -239,7 +240,7 @@ class WooCommercePreparer extends BasePostDetailPreparer {
         $purchaseNotes = $this->getValuesForSelectorSetting(WooCommerceSettings::WC_PURCHASE_NOTE_SELECTORS, 'text', false, !$addAll, true);
 
         // Make sure the purchase notes variable is a flat array
-        if (is_array($purchaseNotes)) $purchaseNotes = array_flatten($purchaseNotes);
+        if (is_array($purchaseNotes)) $purchaseNotes = Arr::flatten($purchaseNotes);
         if (!$purchaseNotes) $purchaseNotes = [];
         if (!is_array($purchaseNotes)) $purchaseNotes = [$purchaseNotes];
 

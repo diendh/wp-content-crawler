@@ -10,7 +10,7 @@ namespace WPCCrawler\PostDetail\WooCommerce;
 
 
 use Illuminate\Contracts\View\View;
-use WPCCrawler\Objects\Settings\Enums\SettingValueType;
+use WPCCrawler\Objects\Enums\ValueType;
 use WPCCrawler\Objects\Settings\SettingData;
 use WPCCrawler\Objects\Settings\SettingRegistry;
 use WPCCrawler\PostDetail\Base\BasePostDetailSettings;
@@ -68,49 +68,49 @@ class WooCommerceSettings extends BasePostDetailSettings {
      */
     protected function createSettingRegistry() {
         return new SettingRegistry([
-            new SettingData(WooCommerceSettings::WC_PRODUCT_TYPE,   SettingValueType::T_STRING),
-            new SettingData(WooCommerceSettings::WC_VIRTUAL,        SettingValueType::T_BOOLEAN),
-            new SettingData(WooCommerceSettings::WC_DOWNLOADABLE,   SettingValueType::T_BOOLEAN),
+            new SettingData(WooCommerceSettings::WC_PRODUCT_TYPE,   ValueType::T_STRING),
+            new SettingData(WooCommerceSettings::WC_VIRTUAL,        ValueType::T_BOOLEAN),
+            new SettingData(WooCommerceSettings::WC_DOWNLOADABLE,   ValueType::T_BOOLEAN),
 
             // General
-            new SettingData(WooCommerceSettings::WC_PRODUCT_URL,                SettingValueType::T_STRING),
-            new SettingData(WooCommerceSettings::WC_BUTTON_TEXT,                SettingValueType::T_STRING),
-            new SettingData(WooCommerceSettings::WC_REGULAR_PRICE_SELECTORS,    SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_SALE_PRICE_SELECTORS,       SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_FILE_URL_SELECTORS,         SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_DOWNLOAD_LIMIT,             SettingValueType::T_INTEGER),
-            new SettingData(WooCommerceSettings::WC_DOWNLOAD_EXPIRY,            SettingValueType::T_INTEGER),
+            new SettingData(WooCommerceSettings::WC_PRODUCT_URL,                ValueType::T_STRING),
+            new SettingData(WooCommerceSettings::WC_BUTTON_TEXT,                ValueType::T_STRING),
+            new SettingData(WooCommerceSettings::WC_REGULAR_PRICE_SELECTORS,    ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_SALE_PRICE_SELECTORS,       ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_FILE_URL_SELECTORS,         ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_DOWNLOAD_LIMIT,             ValueType::T_INTEGER),
+            new SettingData(WooCommerceSettings::WC_DOWNLOAD_EXPIRY,            ValueType::T_INTEGER),
 
             // Inventory
-            new SettingData(WooCommerceSettings::WC_SKU_SELECTORS,              SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_MANAGE_STOCK,               SettingValueType::T_BOOLEAN),
-            new SettingData(WooCommerceSettings::WC_STOCK_QUANTITY_SELECTORS,   SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_BACKORDERS,                 SettingValueType::T_STRING),
-            new SettingData(WooCommerceSettings::WC_LOW_STOCK_AMOUNT,           SettingValueType::T_INTEGER),
-            new SettingData(WooCommerceSettings::WC_STOCK_STATUS,               SettingValueType::T_STRING),
-            new SettingData(WooCommerceSettings::WC_SOLD_INDIVIDUALLY,          SettingValueType::T_BOOLEAN),
+            new SettingData(WooCommerceSettings::WC_SKU_SELECTORS,              ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_MANAGE_STOCK,               ValueType::T_BOOLEAN),
+            new SettingData(WooCommerceSettings::WC_STOCK_QUANTITY_SELECTORS,   ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_BACKORDERS,                 ValueType::T_STRING),
+            new SettingData(WooCommerceSettings::WC_LOW_STOCK_AMOUNT,           ValueType::T_INTEGER),
+            new SettingData(WooCommerceSettings::WC_STOCK_STATUS,               ValueType::T_STRING),
+            new SettingData(WooCommerceSettings::WC_SOLD_INDIVIDUALLY,          ValueType::T_BOOLEAN),
 
             // Shipping
-            new SettingData(WooCommerceSettings::WC_WEIGHT_SELECTORS,       SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_LENGTH_SELECTORS,       SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_WIDTH_SELECTORS,        SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_HEIGHT_SELECTORS,       SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_PRODUCT_SHIPPING_CLASS, SettingValueType::T_INTEGER),
+            new SettingData(WooCommerceSettings::WC_WEIGHT_SELECTORS,       ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_LENGTH_SELECTORS,       ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_WIDTH_SELECTORS,        ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_HEIGHT_SELECTORS,       ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_PRODUCT_SHIPPING_CLASS, ValueType::T_INTEGER),
 
             // Attributes
-            new SettingData(WooCommerceSettings::WC_ATTRIBUTE_NAME_SELECTORS,           SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_ATTRIBUTE_VALUE_SELECTORS,          SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_CUSTOM_ATTRIBUTES_WITH_SELECTORS,   SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_ATTRIBUTE_VALUE_SEPARATORS,         SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_CUSTOM_ATTRIBUTES,                  SettingValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_ATTRIBUTE_NAME_SELECTORS,           ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_ATTRIBUTE_VALUE_SELECTORS,          ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_CUSTOM_ATTRIBUTES_WITH_SELECTORS,   ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_ATTRIBUTE_VALUE_SEPARATORS,         ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_CUSTOM_ATTRIBUTES,                  ValueType::T_ARRAY),
 
             // Advanced
-            new SettingData(WooCommerceSettings::WC_PURCHASE_NOTE_SELECTORS,            SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_PURCHASE_NOTE_ADD_ALL_FOUND,        SettingValueType::T_BOOLEAN),
-            new SettingData(WooCommerceSettings::WC_CUSTOM_PURCHASE_NOTES,              SettingValueType::T_ARRAY),
-            new SettingData(WooCommerceSettings::WC_ALWAYS_ADD_CUSTOM_PURCHASE_NOTE,    SettingValueType::T_BOOLEAN),
-            new SettingData(WooCommerceSettings::WC_ENABLE_REVIEWS,                     SettingValueType::T_BOOLEAN),
-            new SettingData(WooCommerceSettings::WC_MENU_ORDER,                         SettingValueType::T_INTEGER),
+            new SettingData(WooCommerceSettings::WC_PURCHASE_NOTE_SELECTORS,            ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_PURCHASE_NOTE_ADD_ALL_FOUND,        ValueType::T_BOOLEAN),
+            new SettingData(WooCommerceSettings::WC_CUSTOM_PURCHASE_NOTES,              ValueType::T_ARRAY),
+            new SettingData(WooCommerceSettings::WC_ALWAYS_ADD_CUSTOM_PURCHASE_NOTE,    ValueType::T_BOOLEAN),
+            new SettingData(WooCommerceSettings::WC_ENABLE_REVIEWS,                     ValueType::T_BOOLEAN),
+            new SettingData(WooCommerceSettings::WC_MENU_ORDER,                         ValueType::T_INTEGER),
         ]);
     }
 

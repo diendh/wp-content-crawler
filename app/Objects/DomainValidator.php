@@ -12,6 +12,7 @@ namespace WPCCrawler\Objects;
 
 
 use GuzzleHttp\Psr7\Uri;
+use WPCCrawler\Objects\Settings\Enums\SettingInnerKey;
 use WPCCrawler\Utils;
 
 class DomainValidator {
@@ -38,18 +39,41 @@ class DomainValidator {
     /**
      * Checks if a domain is valid using the domains provided by the user.
      *
-     * @param string $domainListOptionName Name of the option that stores the domain list.
-     *                                     E.g. '_wpcc_allowed_iframe_short_code_domains'
-     * @param string $sourceUrl            Source URL to be validated against. E.g. "https://wordpress.org/resource/path/"
-     * @return bool If the source URL is from a domain supplied in the options
-     * @since 1.8.0
+     * @param string|null $domainListOptionName Name of the option that stores the domain list.
+     *                                          E.g. '_wpcc_allowed_iframe_short_code_domains'
+     * @param string|null $sourceUrl            See {@link validateWithRules()}
+     * @return bool Returns what {@link validateWithRules()} returns
+     * @uses  validateWithRules()
+     * @since 1.11.0
      */
-    public function validate($domainListOptionName, $sourceUrl) {
-        if (!$sourceUrl) return false;
+    public function validateWithOption(?string $domainListOptionName, ?string $sourceUrl): bool {
+        return $this->validateWithRegexes($this->getDomainRegexesFromOption($domainListOptionName), $sourceUrl);
+    }
 
-        // Get the regular expressions that match valid domains
-        $domainRegexes = $this->getDomainRegexes($domainListOptionName);
-        if (!$domainRegexes) return false;
+    /**
+     * Checks if a domain is valid using the domain rules
+     *
+     * @param string[]|null $domainRules An array of domain rules that will be converted to regexes to match valid
+     *                                   domains
+     * @param string|null   $sourceUrl   {@link validateWithRules()}
+     * @return bool Returns what {@link validateWithRules()} returns
+     * @since 1.11.0
+     */
+    public function validateWithRules(?array $domainRules, ?string $sourceUrl): bool {
+        return $this->validateWithRegexes($this->convertRulesToRegexes($domainRules), $sourceUrl);
+    }
+
+    /**
+     * Checks if a domain is valid using the domain regexes
+     *
+     * @param string[]|null $domainRegexes An array of domain regexes that may match the given source URL's host
+     * @param string|null   $sourceUrl     Source URL to be validated against. E.g.
+     *                                     "https://wordpress.org/resource/path/"
+     * @return bool If the host of the source URL matches one of the domain regexes, true. Otherwise, false.
+     * @since 1.11.0
+     */
+    public function validateWithRegexes(?array $domainRegexes, ?string $sourceUrl): bool {
+        if ($sourceUrl === null || !$domainRegexes) return false;
 
         // Get the domain of the source URL
         $uri = new Uri($sourceUrl);
@@ -66,46 +90,87 @@ class DomainValidator {
         return false;
     }
 
+    /**
+     * @param string[]|null $rules An array of domain rules
+     * @return string[]|null Regex equivalents of the given rules
+     * @since 1.11.0
+     */
+    public function convertRulesToRegexes(?array $rules): ?array {
+        if ($rules === null) return null;
+
+        $regexes = [];
+        foreach($rules as $rule) {
+            $regexes[] = $this->convertRuleToRegex($rule);
+        }
+
+        return $regexes;
+    }
+
+    /**
+     * Clear the option cache.
+     *
+     * @since 1.11.0
+     */
+    public function clearOptionCache() {
+        $this->optionCache = [];
+    }
+
     /*
      *
      */
 
     /**
-     * @param string $regex        A regex that matches a valid domain.
-     * @param string $testedDomain The domain to be checked if it is valid.
+     * @param string|null $regex        A regex that matches a valid domain.
+     * @param string|null $testedDomain The domain to be checked if it is valid.
      * @return bool True if the domain is valid.
      * @since 1.8.0
      */
-    private function isDomainValid($regex, $testedDomain) {
+    private function isDomainValid(?string $regex, ?string $testedDomain): bool {
+        if ($regex === null || $testedDomain === null) return false;
+
         // Try to match
         return !!preg_match($regex, $testedDomain);
     }
 
     /**
-     * @param string $domainListOptionName The option name from which the domains will be retrieved. See
-     *                                     {@link getOptionValue()}
-     * @return string[] An array of regular expressions that match valid domains
+     * @param string|null $domainListOptionName The option name from which the domain rules will be retrieved. See
+     *                                          {@link getOptionValue()}
+     * @return string[] An array of regular expressions extracted from the given option
      * @since 1.8.0
+     * @since 1.11.0 Renamed from getDomainRegexes to getDomainRegexesFromOption.
      */
-    private function getDomainRegexes($domainListOptionName) {
+    private function getDomainRegexesFromOption(?string $domainListOptionName): array {
+        if ($domainListOptionName === null) return [];
+
         $domainData = $this->getOptionValue($domainListOptionName);
         if (!$domainData) return [];
 
         $regexes = [];
         foreach($domainData as $data) {
-            $domain = Utils::array_get($data, 'domain');
-            if (!$domain) continue;
+            $rule = Utils::array_get($data, SettingInnerKey::DOMAIN);
+            if ($rule === null || $rule === '') continue;
 
-            // Prepare the regular expression
-            $domain = trim($domain, '/');                               // Trim the forward slashes
-            $domain = preg_quote($domain, '/');                        // Quote the regex
-            $domain = str_replace(['\*\.', '\*'], '.*?', $domain);      // Replace wildcards with corresponding regex.
-            $regex = "/^{$domain}$/i";                                          // Create the final regex that matches non case-sensitive
-
-            $regexes[] = $regex;
+            $regexes[] = $this->convertRuleToRegex($rule);
         }
 
         return $regexes;
+    }
+
+    /**
+     * Create a regular expression from a domain rule
+     *
+     * @param string $rule A domain rule
+     * @return string The regular expression equivalent of the rule
+     * @since 1.11.0
+     */
+    private function convertRuleToRegex(string $rule): string {
+        // Prepare the regular expression
+        $rule = trim($rule, '/');                        // Trim the forward slashes
+        $rule = preg_quote($rule, '/');                 // Quote the regex
+        $rule = str_replace('\*', '.*?', $rule);  // Replace wildcards with corresponding regex.
+
+        // Create the final regex that matches non-case-sensitive
+        return "/^{$rule}$/i";
     }
 
     /**

@@ -12,30 +12,40 @@ namespace WPCCrawler\Objects\Value;
 
 
 use WPCCrawler\Exceptions\MethodNotExistException;
+use WPCCrawler\Objects\Transformation\Objects\TransformableFieldList;
 
 class ValueExtractor {
 
-    private $separator = '.';
+    const DEFAULT_SEPARATOR = '.';
+
+    private $separator = self::DEFAULT_SEPARATOR;
+
+    /** @var ValueExtractorOptions */
+    private $options;
 
     /**
      * Fills the given map with the data extracted from given $value. The resultant array is a flat array where
      * keys are dot notation keys and the values are their values retrieved from the given $value.
      *
      * @param mixed  $value     The value from which the data will be extracted to fill the given map.
-     * @param array $map        An associative array showing the fields from which the data will be extracted. The
+     * @param array  $map       An associative array showing the fields from which the data will be extracted. The
      *                          fields must be specified in dot notation. For example, "post.title" will extract the
      *                          value of the title field that exists in the value of post field. Here, the given object
      *                          has a "post" value and "getPost" method that returns an object having a "title" field
      *                          and "getTitle" method. This map must be associative. In other words, the dot notations
      *                          must be provided as keys of the given array.
      * @param string $separator Separator used in the dot notation.
+     * @param null|ValueExtractorOptions $options Options that will be used by the extractor. When this is null, the
+     *                                            defaults will be used. See {@link ValueExtractorOptions} for defaults.
      * @return array|null       Flattened array where keys are dot keys and the values are their corresponding values
-     *                          extracted from $value.
+     *                          extracted from $value. If $map evaluates to false, returns null.
      * @throws MethodNotExistException See {@link getForObject()}
      * @since 1.8.0
+     * @since 1.11.0 Add $options parameter
      */
-    public function fillAndFlatten($value, $map, $separator = '.') {
+    public function fillAndFlatten($value, $map, $separator = '.', $options = null) {
         $this->separator = $separator;
+        $this->options = $options ?: new ValueExtractorOptions();
 
         // If there is no map, return null.
         if (!$map) return null;
@@ -47,7 +57,7 @@ class ValueExtractor {
         $results = [];
         foreach($map as $dotKey => $val) {
             // There must be a dot key.
-            if ($dotKey === null || $dotKey === '') continue;
+            if (!$this->isKeyValid($dotKey)) continue;
 
             // Extract the values from the given $value for this dot key
             $res = $this->getResult($value, $dotKey);
@@ -71,7 +81,8 @@ class ValueExtractor {
      * separator is "|", then this array ['item1.item2' => 'Val 1', 'item1.item3.item4' => 'Val 2'] becomes
      * ['item1|item2' => 'Val 1', 'item1|item3|item4' => 'Val 2']
      *
-     * @param null|string|array $map The map to be prepared, such as {@link Transformable::getTransformableFields()}
+     * @param null|string|array $map The map to be prepared, such as {@link TransformableFieldList::toAssociativeArray()}
+     *                               retrieved from {@link Transformable::getTransformableFields()}
      * @return null|array Prepared map or null.
      * @since 1.8.0
      */
@@ -131,7 +142,8 @@ class ValueExtractor {
      * @throws MethodNotExistException If a getter method does not exist in the given object's class.
      */
     private function getForObject($object, $dotKey, $parentKey = null) {
-        if (!$dotKey) return null;
+        $res = $this->maybeCreateResult($object, $dotKey, $parentKey, $this->options->isAllowObjects());
+        if ($res !== false) return $res;
 
         // Get first key in the dot notation and the remaining keys (the dot key that does not include the first key)
         $dotKeyParts     = explode($this->separator, $dotKey);
@@ -143,17 +155,16 @@ class ValueExtractor {
 
         // If the method does not exist in the object, throw an exception.
         if(!method_exists($object, $getterMethodName)) {
-            throw new MethodNotExistException(sprintf('%1$s method does not exist in %2$s', $getterMethodName, get_class($object)));
+            throw new MethodNotExistException(sprintf(_wpcc('%1$s method does not exist in %2$s'), $getterMethodName, get_class($object)));
         }
 
         // Get the value by calling the getter
         $value = $object->$getterMethodName();
 
         // Prepare the item's parent key
-        $parentKey = $parentKey !== null && $parentKey !== '' ? $parentKey . $this->separator . $firstKey : $firstKey;
+        $parentKey = $this->isKeyValid($parentKey) ? $parentKey . $this->separator . $firstKey : $firstKey;
 
         return $this->getResult($value, $remainingDotKey, $parentKey);
-
     }
 
     /**
@@ -168,19 +179,28 @@ class ValueExtractor {
      * @throws MethodNotExistException See {@link getForObject()}
      */
     private function getForArray($arr, $dotKey, $parentKey = null) {
+        // If this is the last key and the arrays are allowed to be directly included
+        if (!$this->isKeyValid($dotKey) && $this->options->isAllowArrays()) {
+            // Get the combined key
+            $combinedDotKey = $this->createCombinedDotKey($parentKey, $dotKey);
+
+            // If the combined key is valid, return an array that contains the array directly.
+            if ($this->isKeyValid($combinedDotKey)) {
+                return [$combinedDotKey => $arr];
+            }
+        }
+
         // Get first key in the dot notation and the remaining keys (the dot key that does not include the first key)
         $dotKeyParts     = explode($this->separator, $dotKey);
         $firstKey        = array_shift($dotKeyParts);
         $remainingDotKey = implode($this->separator, $dotKeyParts);
 
         // If there is a dot key and the array is an associative array
-        if ($dotKey !== null && $dotKey !== '' && isset($arr[$firstKey])) {
+        if ($this->isKeyValid($dotKey) && isset($arr[$firstKey])) {
             $parentKey = $parentKey ? $parentKey . $this->separator . $firstKey : $firstKey;
 
             // Prepare the value at $firstKey index of the array
-            $res = $this->getResult($arr[$firstKey], $remainingDotKey, $parentKey);
-
-            return $res;
+            return $this->getResult($arr[$firstKey], $remainingDotKey, $parentKey);
 
         } else {
             $results = [];
@@ -211,12 +231,18 @@ class ValueExtractor {
      */
     private function getForString($value, $dotKey, $parentKey) {
         // Merge the parent key and the dot key to create a combined dot key
-        $key = implode($this->separator, array_filter([$parentKey, $dotKey], function($v) {
-            return $v !== null && $v !== '';
-        }));
+        $key = $this->createCombinedDotKey($parentKey, $dotKey);
 
-        // If the value is numeric, empty or null, or the key does not exist, return null.
-        if (is_numeric($value) || $value === '' || $value === null || $key === null || $key === '') return null;
+        // If the key does not exist, return null.
+        if (!$this->isKeyValid($key)) return null;
+
+        // If the value should be validated
+        if (!$this->options->isAllowAll()) {
+            // If the value is numeric, empty or null, return null.
+            if (!$this->options->isAllowNumeric()       && is_numeric($value))  return null;
+            if (!$this->options->isAllowEmptyString()   && $value === '')       return null;
+            if (!$this->options->isAllowNull()          && $value === null)     return null;
+        }
 
         // Create a 1-item associative array with the key and the value.
         return [$key => $value];
@@ -235,6 +261,54 @@ class ValueExtractor {
      */
     private function getGetterMethodName($fieldName) {
         return "get" . ucfirst($fieldName);
+    }
+
+    /**
+     * Merge the parent key and the dot key to create a combined dot key
+     *
+     * @param string|null $parentKey
+     * @param string|null $dotKey
+     * @return string Combined dot key
+     * @since 1.11.0
+     */
+    private function createCombinedDotKey($parentKey, $dotKey) {
+        return implode($this->separator, array_filter([$parentKey, $dotKey], function($v) {
+            return $this->isKeyValid($v);
+        }));
+    }
+
+    /**
+     * @param $dotKey
+     * @return bool True if the given dot key is a non-empty string
+     * @since 1.11.0
+     */
+    private function isKeyValid($dotKey) {
+        return $dotKey !== null && $dotKey !== '';
+    }
+
+    /**
+     * @param mixed       $value          The value that might be added as a result
+     * @param string|null $dotKey         The dot key
+     * @param string|null $parentKey      The parent key of the dot key
+     * @param bool        $isValueAllowed True if the value can be added as a result, in case the dot key is not valid
+     * @return false|array|null If the result should not be created, returns false. Otherwise, returns null or the result
+     *                          as an array.
+     * @since 1.11.0
+     */
+    private function maybeCreateResult($value, $dotKey, $parentKey, bool $isValueAllowed) {
+        // If we did not reach the end of the dot key, return false.
+        if ($this->isKeyValid($dotKey)) return false;
+
+        // If the value is not allowed, return null.
+        if (!$isValueAllowed) return null;
+
+        // Create the final key
+        $combinedDotKey = $this->createCombinedDotKey($parentKey, $dotKey);
+
+        // If the combined key is valid, return an array. Otherwise, return null.
+        return $this->isKeyValid($combinedDotKey)
+            ? [$combinedDotKey => $value]
+            : null;
     }
 
 }

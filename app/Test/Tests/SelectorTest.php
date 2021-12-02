@@ -11,14 +11,15 @@ namespace WPCCrawler\Test\Tests;
 
 use Exception;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Symfony\Component\DomCrawler\Crawler;
-use WPCCrawler\Objects\Crawling\Bot\PostBot;
+use WPCCrawler\Objects\Crawling\Bot\DummyBot;
 use WPCCrawler\Objects\Informing\Informer;
 use WPCCrawler\Objects\Settings\Enums\SettingInnerKey;
-use WPCCrawler\Test\Test;
 use WPCCrawler\Test\Base\AbstractTest;
 use WPCCrawler\Test\Data\TestData;
+use WPCCrawler\Test\Test;
 use WPCCrawler\Utils;
 
 class SelectorTest extends AbstractTest {
@@ -65,7 +66,7 @@ class SelectorTest extends AbstractTest {
          */
 
         // Create a dummy bot to get the client.
-        $bot = new PostBot($data->getPostSettings(), null, $data->getUseUtf8(), $data->getConvertEncodingToUtf8());
+        $bot = new DummyBot($data->getPostSettings(), null, $data->getUseUtf8(), $data->getConvertEncodingToUtf8());
         $bot->setResponseCacheEnabled($data->isCacheTestUrlResponses());
 
         if(!$content) {
@@ -75,8 +76,8 @@ class SelectorTest extends AbstractTest {
             // If the form item name contains 'unnecessary', it means the user is testing if the unnecessary element
             // selectors are working. So, in this case, do not remove unnecessary elements from the crawler so that the
             // user can see whether the selectors work or not.
-            $lastStep = str_contains($data->getFormItemName(), 'unnecessary') ? AbstractTest::MANIPULATION_STEP_FIND_REPLACE_ELEMENT_HTML : null;
-            $this->applyHtmlManipulationOptions($crawler, $lastStep, $url);
+            $lastStep = Str::contains($data->getFormItemName(), 'unnecessary') ? AbstractTest::MANIPULATION_STEP_FIND_REPLACE_ELEMENT_HTML : null;
+            $this->applyHtmlManipulationOptions($bot, $crawler, $lastStep, $url);
         } else {
             $crawler = new Crawler($content);
         }

@@ -39,7 +39,7 @@ abstract class AbstractPageHandler {
             // Verify nonce
             $nonce = Utils::getValueFromArray($_POST, Environment::nonceName(), false);
             if(!$nonce || !wp_verify_nonce($nonce, $this->getPageActionKey())) {
-                dd("Nonce is invalid.");
+                wp_die("Nonce is invalid.");
             }
 
             $this->handlePOST();

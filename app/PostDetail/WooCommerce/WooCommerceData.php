@@ -9,8 +9,13 @@
 namespace WPCCrawler\PostDetail\WooCommerce;
 
 
+use WPCCrawler\Objects\Enums\ValueType;
 use WPCCrawler\Objects\File\MediaFile;
+use WPCCrawler\Objects\Events\Enums\EventGroupKey;
+use WPCCrawler\Objects\Filtering\Objects\FieldConfig;
 use WPCCrawler\Objects\Transformation\Interfaces\Transformable;
+use WPCCrawler\Objects\Transformation\Objects\TransformableField;
+use WPCCrawler\Objects\Transformation\Objects\TransformableFieldList;
 use WPCCrawler\PostDetail\Base\BasePostDetailData;
 use WPCCrawler\PostDetail\WooCommerce\Data\ProductAttribute;
 
@@ -34,6 +39,7 @@ class WooCommerceData extends BasePostDetailData implements Transformable {
     const FIELD_HEIGHT                      = 'height';
     const FIELD_PURCHASE_NOTE               = 'purchaseNote';
     const FIELD_ATTRIBUTE_KEY               = 'attributes.key';
+    const FIELD_ATTRIBUTE_KEY_RELAXED       = 'attributes.keyRelaxed';
     const FIELD_ATTRIBUTE_VALUE             = 'attributes.values';
 
     /** @var string */
@@ -51,10 +57,10 @@ class WooCommerceData extends BasePostDetailData implements Transformable {
     /** @var string */
     private $buttonText;
 
-    /** @var double */
+    /** @var float|string */
     private $regularPrice;
 
-    /** @var double */
+    /** @var float|string */
     private $salePrice;
 
     /** @var MediaFile[] */
@@ -72,7 +78,7 @@ class WooCommerceData extends BasePostDetailData implements Transformable {
     /** @var bool */
     private $isManageStock;
 
-    /** @var int */
+    /** @var float|string */
     private $stockQuantity;
 
     /** @var string */
@@ -87,16 +93,16 @@ class WooCommerceData extends BasePostDetailData implements Transformable {
     /** @var bool */
     private $isSoldIndividually;
 
-    /** @var double */
+    /** @var float|string */
     private $weight;
 
-    /** @var double */
+    /** @var float|string */
     private $length;
 
-    /** @var double */
+    /** @var float|string */
     private $width;
 
-    /** @var double */
+    /** @var float|string */
     private $height;
 
     /** @var int */
@@ -116,6 +122,16 @@ class WooCommerceData extends BasePostDetailData implements Transformable {
 
     /** @var null|ProductAttribute[] */
     private $attributes;
+
+    /*
+     *
+     */
+
+    /** @var TransformableFieldList */
+    private $transformableFields = null;
+
+    /** @var TransformableFieldList */
+    private $interactableFields = null;
 
     /**
      * @return string|null
@@ -191,14 +207,14 @@ class WooCommerceData extends BasePostDetailData implements Transformable {
 
     /**
      * @param mixed $default Default value to be returned if the value is null.
-     * @return float|null
+     * @return float|string|null
      */
     public function getRegularPrice($default = null) {
         return $this->regularPrice !== null ? $this->regularPrice : $default;
     }
 
     /**
-     * @param float $regularPrice
+     * @param float|string $regularPrice
      */
     public function setRegularPrice($regularPrice) {
         $this->regularPrice = $regularPrice;
@@ -206,14 +222,14 @@ class WooCommerceData extends BasePostDetailData implements Transformable {
 
     /**
      * @param mixed $default Default value to be returned if the value is null.
-     * @return float|null
+     * @return float|string|null
      */
     public function getSalePrice($default = null) {
         return $this->salePrice !== null ? $this->salePrice : $default;
     }
 
     /**
-     * @param float $salePrice
+     * @param float|string $salePrice
      */
     public function setSalePrice($salePrice) {
         $this->salePrice = $salePrice;
@@ -294,14 +310,14 @@ class WooCommerceData extends BasePostDetailData implements Transformable {
 
     /**
      * @param mixed $default Default value to be returned if the value is null.
-     * @return int|null
+     * @return float|string|null
      */
     public function getStockQuantity($default = null) {
         return $this->stockQuantity !== null ? $this->stockQuantity : $default;
     }
 
     /**
-     * @param int $stockQuantity
+     * @param float|string $stockQuantity
      */
     public function setStockQuantity($stockQuantity) {
         $this->stockQuantity = $stockQuantity;
@@ -366,14 +382,14 @@ class WooCommerceData extends BasePostDetailData implements Transformable {
 
     /**
      * @param mixed $default Default value to be returned if the value is null.
-     * @return float|null
+     * @return float|string|null
      */
     public function getWeight($default = null) {
         return $this->weight !== null ? $this->weight : $default;
     }
 
     /**
-     * @param float $weight
+     * @param float|string $weight
      */
     public function setWeight($weight) {
         $this->weight = $weight;
@@ -381,14 +397,14 @@ class WooCommerceData extends BasePostDetailData implements Transformable {
 
     /**
      * @param mixed $default Default value to be returned if the value is null.
-     * @return float|null
+     * @return float|string|null
      */
     public function getLength($default = null) {
         return $this->length !== null ? $this->length : $default;
     }
 
     /**
-     * @param float $length
+     * @param float|string $length
      */
     public function setLength($length) {
         $this->length = $length;
@@ -396,14 +412,14 @@ class WooCommerceData extends BasePostDetailData implements Transformable {
 
     /**
      * @param mixed $default Default value to be returned if the value is null.
-     * @return float|null
+     * @return float|string|null
      */
     public function getWidth($default = null) {
         return $this->width !== null ? $this->width : $default;
     }
 
     /**
-     * @param float $width
+     * @param float|string $width
      */
     public function setWidth($width) {
         $this->width = $width;
@@ -411,14 +427,14 @@ class WooCommerceData extends BasePostDetailData implements Transformable {
 
     /**
      * @param mixed $default Default value to be returned if the value is null.
-     * @return float|null
+     * @return float|string|null
      */
     public function getHeight($default = null) {
         return $this->height !== null ? $this->height : $default;
     }
 
     /**
-     * @param float $height
+     * @param float|string $height
      */
     public function setHeight($height) {
         $this->height = $height;
@@ -544,30 +560,62 @@ class WooCommerceData extends BasePostDetailData implements Transformable {
         // everything and validate all data.
     }
 
-    public function getTransformableFields() {
-        return [
-            static::FIELD_BUTTON_TEXT              => _wpcc('Product Button Text'),
-            static::FIELD_DOWNLOADABLE_TITLE       => _wpcc('Product Media Title'),
-            static::FIELD_DOWNLOADABLE_DESCRIPTION => _wpcc('Product Media Description'),
-            static::FIELD_DOWNLOADABLE_CAPTION     => _wpcc('Product Media Caption'),
-            static::FIELD_DOWNLOADABLE_ALT         => _wpcc('Product Media Alternate Text'),
-            static::FIELD_PURCHASE_NOTE            => _wpcc('Product Purchase Note'),
-            static::FIELD_ATTRIBUTE_KEY            => _wpcc('Product Attribute Name'),
-            static::FIELD_ATTRIBUTE_VALUE          => _wpcc('Product Attribute Values'),
-        ];
+    public function getTransformableFields(): TransformableFieldList {
+        if ($this->transformableFields === null) {
+            $this->transformableFields = new TransformableFieldList([
+                new TransformableField(static::FIELD_BUTTON_TEXT,              _wpcc('Product Button Text'),          ValueType::T_STRING),
+                new TransformableField(static::FIELD_DOWNLOADABLE_TITLE,       _wpcc('Product Media Title'),          [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                new TransformableField(static::FIELD_DOWNLOADABLE_DESCRIPTION, _wpcc('Product Media Description'),    [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                new TransformableField(static::FIELD_DOWNLOADABLE_CAPTION,     _wpcc('Product Media Caption'),        [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                new TransformableField(static::FIELD_DOWNLOADABLE_ALT,         _wpcc('Product Media Alternate Text'), [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                new TransformableField(static::FIELD_PURCHASE_NOTE,            _wpcc('Product Purchase Note'),        ValueType::T_STRING),
+                new TransformableField(static::FIELD_ATTRIBUTE_KEY,            _wpcc('Product Attribute Name'),       [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+                new TransformableField(static::FIELD_ATTRIBUTE_VALUE,          _wpcc('Product Attribute Values'),     [ValueType::T_STRING, ValueType::T_COUNTABLE]),
+            ], new FieldConfig(EventGroupKey::POST_DATA));
+        }
+
+        return $this->transformableFields;
     }
 
-    public function getInteractableFields() {
-        return $this->getTransformableFields() + [
-            static::FIELD_PRODUCT_URL    => _wpcc('Product URL'),
-            static::FIELD_REGULAR_PRICE  => _wpcc('Product Regular Price'),
-            static::FIELD_SALE_PRICE     => _wpcc('Product Sale Price'),
-            static::FIELD_SKU            => _wpcc('Product SKU'),
-            static::FIELD_STOCK_QUANTITY => _wpcc('Product Stock Quantity'),
-            static::FIELD_WEIGHT         => _wpcc('Product Weight'),
-            static::FIELD_LENGTH         => _wpcc('Product Length'),
-            static::FIELD_WIDTH          => _wpcc('Product Width'),
-            static::FIELD_HEIGHT         => _wpcc('Product Height'),
-        ];
+    public function getInteractableFields(): TransformableFieldList {
+        if ($this->interactableFields === null) {
+            $this->interactableFields = (new TransformableFieldList(null, new FieldConfig(EventGroupKey::POST_DATA)))
+                ->addAllFromList($this->getTransformableFields())
+
+                // FIELD_ATTRIBUTE_KEY does not allow taxonomy keys to be modified without providing an additional
+                // parameter, which is designed to block changes made by ValueSetter, to not transform the value by
+                // transformation APIs. But, we want the users to be able to change the key via the filters. For that
+                // purpose, FIELD_ATTRIBUTE_KEY_RELAXED is added. So, we simply replace the one that blocks changes with
+                // the one that allows changes. See ProductAttribute::getKeyRelaxed() and
+                // ProductAttribute::setKeyRelaxed() for more information.
+                ->replaceByKey(
+                    static::FIELD_ATTRIBUTE_KEY,
+                    (new TransformableField(static::FIELD_ATTRIBUTE_KEY_RELAXED, _wpcc('Product Attribute Name'), [ValueType::T_STRING, ValueType::T_COUNTABLE]))
+                        ->setFieldConfigs([new FieldConfig(EventGroupKey::POST_DATA)])
+                )
+
+                ->addAll([
+                    new TransformableField(static::FIELD_PRODUCT_URL,    _wpcc('Product URL'),            ValueType::T_STRING),
+                    new TransformableField(static::FIELD_REGULAR_PRICE,  _wpcc('Product Regular Price'),  ValueType::T_NUMERIC),
+                    new TransformableField(static::FIELD_SALE_PRICE,     _wpcc('Product Sale Price'),     ValueType::T_NUMERIC),
+                    new TransformableField(static::FIELD_SKU,            _wpcc('Product SKU'),            ValueType::T_STRING),
+                    new TransformableField(static::FIELD_STOCK_QUANTITY, _wpcc('Product Stock Quantity'), ValueType::T_NUMERIC),
+                    new TransformableField(static::FIELD_WEIGHT,         _wpcc('Product Weight'),         ValueType::T_NUMERIC),
+                    new TransformableField(static::FIELD_LENGTH,         _wpcc('Product Length'),         ValueType::T_NUMERIC),
+                    new TransformableField(static::FIELD_WIDTH,          _wpcc('Product Width'),          ValueType::T_NUMERIC),
+                    new TransformableField(static::FIELD_HEIGHT,         _wpcc('Product Height'),         ValueType::T_NUMERIC),
+                ]);
+        }
+
+        return $this->interactableFields;
     }
+
+    public function getConditionCommandFields(): ?TransformableFieldList {
+        return null;
+    }
+
+    public function getActionCommandFields(): ?TransformableFieldList {
+        return null;
+    }
+
 }

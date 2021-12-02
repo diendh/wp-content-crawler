@@ -11,9 +11,11 @@
 namespace WPCCrawler\Objects\Transformation\Base;
 
 use Exception;
+use Illuminate\Support\Str;
 use WPCCrawler\Objects\Informing\Informer;
 use WPCCrawler\Objects\Settings\SettingsImpl;
 use WPCCrawler\Objects\Transformation\Exceptions\TransformationFailedException;
+use WPCCrawler\Objects\Transformation\Objects\TransformableFieldList;
 use WPCCrawler\Utils;
 
 /**
@@ -247,7 +249,7 @@ abstract class AbstractTransformationService {
         $identifierLength = strlen($identifier) + 1; // +1 for "."
 
         return array_filter(array_map(function($optionValue) use (&$identifier, &$identifierLength) {
-            return starts_with($optionValue, $identifier) ? substr($optionValue, $identifierLength) : false;
+            return Str::startsWith($optionValue, $identifier) ? substr($optionValue, $identifierLength) : false;
         }, $selectedOptions));
     }
 
@@ -297,7 +299,8 @@ abstract class AbstractTransformationService {
      * to each transformable field's key.
      *
      * @param array $transformableFields A key-value pair. For translation, this can be retrieved from
-     *                                   {@link Transformable::getTransformableFields()}
+     *                                   {@link Transformable::getTransformableFields()} by calling
+     *                                   {@link TransformableFieldList::toAssociativeArray()}
      * @param string $identifier An identifier that will be prepended to each key of $transformableFields
      * @return array Transformable fields with the identifier prepended to their keys
      * @since 1.9.0

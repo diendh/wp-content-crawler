@@ -31,20 +31,20 @@ class FileOptionsBoxApplier extends BaseOptionsBoxApplier {
     use FindAndReplaceTrait;
 
     /** @var bool */
-    private $shouldApplyFindReplaceOptions = true;
+    private $applyFindReplaceOptions = true;
 
     /** @var bool */
-    private $shouldApplyTemplateOptions = true;
+    private $applyTemplateOptions = true;
 
     /** @var bool */
-    private $shouldApplyFileOperationsOptions = true;
+    private $applyFileOperationsOptions = true;
 
     /**
      * Applies the options configured in options box to the given value
      * @param mixed|MediaFile $value
      * @return mixed|null $modifiedValue Null, if the item should be removed. Otherwise, the modified value.
      */
-    public function apply($value) {
+    protected function onApply($value) {
         // If this is for a test applied outside of the options box but in the site settings page and there is a valid
         // value, assume that it is a valid URL and create a temporary media file for that URL.
         if ($this->isForTest() && !is_a($value, MediaFile::class) && $value) {
@@ -90,6 +90,13 @@ class FileOptionsBoxApplier extends BaseOptionsBoxApplier {
         return $value;
     }
 
+    public function shouldApply($value): bool {
+        // Apply only if the options box has options.
+        return $this->isApplyFindReplaceOptions() ||
+            $this->isApplyFileOperationsOptions() ||
+            $this->isApplyTemplateOptions();
+    }
+
     /*
      * APPLIER CONFIGURATION METHODS
      */
@@ -99,8 +106,16 @@ class FileOptionsBoxApplier extends BaseOptionsBoxApplier {
      * @return FileOptionsBoxApplier
      */
     public function setApplyFindReplaceOptions($apply) {
-        $this->shouldApplyFindReplaceOptions = $apply;
+        $this->applyFindReplaceOptions = $apply;
         return $this;
+    }
+
+    /**
+     * @return bool True if the find-replace options exist, and they should be applied.
+     * @since 1.11.0
+     */
+    public function isApplyFindReplaceOptions(): bool {
+        return $this->applyFindReplaceOptions && $this->getData()->hasFindReplaceOptions();
     }
 
     /**
@@ -108,8 +123,16 @@ class FileOptionsBoxApplier extends BaseOptionsBoxApplier {
      * @return FileOptionsBoxApplier
      */
     public function setApplyTemplateOptions($apply) {
-        $this->shouldApplyTemplateOptions = $apply;
+        $this->applyTemplateOptions = $apply;
         return $this;
+    }
+
+    /**
+     * @return bool True if the template options exist, and they should be applied.
+     * @since 1.11.0
+     */
+    public function isApplyTemplateOptions(): bool {
+        return $this->applyTemplateOptions && $this->getData()->hasTemplateOptions();
     }
 
     /**
@@ -117,8 +140,16 @@ class FileOptionsBoxApplier extends BaseOptionsBoxApplier {
      * @return FileOptionsBoxApplier
      */
     public function setApplyFileOperationsOptions($apply) {
-        $this->shouldApplyFileOperationsOptions = $apply;
+        $this->applyFileOperationsOptions = $apply;
         return $this;
+    }
+
+    /**
+     * @return bool True if the file operation options exist, and they should be applied
+     * @since 1.11.0
+     */
+    public function isApplyFileOperationsOptions(): bool {
+        return $this->applyFileOperationsOptions && $this->getData()->hasFileOperationOptions();
     }
 
     /*
@@ -132,7 +163,7 @@ class FileOptionsBoxApplier extends BaseOptionsBoxApplier {
      * @since 1.8.0
      */
     private function applyFindReplaceOptions($mediaFile) {
-        if (!$this->shouldApplyFindReplaceOptions) return;
+        if (!$this->isApplyFindReplaceOptions()) return;
 
         // Get find-replace options
         $frOptions = $this->getData()->getFindReplaceOptions();
@@ -152,7 +183,7 @@ class FileOptionsBoxApplier extends BaseOptionsBoxApplier {
      * @since 1.8.0
      */
     private function applyTemplateOptions($mediaFile) {
-        if (!$this->shouldApplyTemplateOptions) return;
+        if (!$this->isApplyTemplateOptions()) return;
 
         // Get the map storing short code names and corresponding values
         $shortCodeMap = $mediaFile->getShortCodeMap();
@@ -198,7 +229,7 @@ class FileOptionsBoxApplier extends BaseOptionsBoxApplier {
      * @since 1.8.0
      */
     private function applyFileOperationOptions($mediaFile) {
-        if (!$this->shouldApplyFileOperationsOptions) return;
+        if (!$this->isApplyFileOperationsOptions()) return;
 
         $options = $this->getData()->getFileOperationOptions();
         if (!$options) return;

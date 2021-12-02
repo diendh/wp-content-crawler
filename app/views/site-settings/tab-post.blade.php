@@ -841,6 +841,27 @@ $testFindReplaceFirstLoadSelector = sprintf('#%s', \WPCCrawler\Objects\Settings\
         'showDevTools'  =>  true,
     ])
 
+    {{-- SECTION: FILTERS --}}
+    @include('partials.table-section-title', ['title' => _wpcc("Filters")])
+
+    {{-- POST REQUEST FILTERS --}}
+    @include('form-items.combined.filter-with-label', [
+        'name'        => \WPCCrawler\Objects\Settings\Enums\SettingKey::POST_REQUEST_FILTERS,
+        'title'       => _wpcc('Post request filters'),
+        'info'        => _wpcc('Define filters that are related to the requests made to crawl post pages.') . _wpcc_filter(true),
+        'eventGroup'  => \WPCCrawler\Objects\Events\Enums\EventGroupKey::POST_REQUEST,
+        'filterClass' => 'request-filter',
+    ])
+
+    {{-- POST PAGE FILTERS --}}
+    @include('form-items.combined.filter-with-label', [
+        'name'        => \WPCCrawler\Objects\Settings\Enums\SettingKey::POST_PAGE_FILTERS,
+        'title'       => _wpcc('Post page filters'),
+        'info'        => _wpcc('Define filters that will be applied in the post pages.') . _wpcc_filter(true),
+        'eventGroup'  => \WPCCrawler\Objects\Events\Enums\EventGroupKey::POST_PAGE,
+        'filterClass' => 'page-filter',
+    ])
+
     {{-- SECTION: NOTIFICATIONS --}}
     @include('partials.table-section-title', ['title' => _wpcc("Notifications")])
 
@@ -858,6 +879,7 @@ $testFindReplaceFirstLoadSelector = sprintf('#%s', \WPCCrawler\Objects\Settings\
     <?php
 
     /** @var int $postId */
+    /** @var array $settings */
     /**
      * Fires before closing table tag in post tab of site settings page.
      *

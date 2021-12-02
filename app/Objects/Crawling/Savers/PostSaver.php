@@ -1,4 +1,6 @@
-<?php
+<?php /** @noinspection SqlResolve */
+/** @noinspection SqlNoDataSourceInspection */
+
 /**
  * Created by PhpStorm.
  * User: turgutsaricam
@@ -13,7 +15,10 @@ use DOMElement;
 use Exception;
 use WP_Error;
 use WPCCrawler\Exceptions\AlreadySavedPageException;
+use WPCCrawler\Exceptions\CancelSavingException;
+use WPCCrawler\Objects\Database\UrlTuple;
 use WPCCrawler\Objects\Enums\PostStatus;
+use WPCCrawler\Objects\File\MediaSavingOptions;
 use WPCCrawler\Objects\Settings\Enums\SettingInnerKey;
 use WPCCrawler\Objects\Settings\Factory\Cron\AbstractCronKeyFactory;
 use WPCCrawler\Objects\Settings\Factory\Cron\PostCrawlCronKeyFactory;
@@ -26,7 +31,7 @@ use WPCCrawler\Objects\Crawling\Bot\PostBot;
 use WPCCrawler\Objects\Crawling\Data\PostData;
 use WPCCrawler\Objects\Settings\Enums\SettingKey;
 use WPCCrawler\PostDetail\PostDetailsService;
-use WPCCrawler\PostDetail\PostSaverData;
+use WPCCrawler\Objects\Crawling\Data\PostSaverData;
 use WPCCrawler\Objects\Enums\ErrorType;
 use WPCCrawler\Objects\Enums\InformationMessage;
 use WPCCrawler\Objects\Enums\InformationType;
@@ -70,7 +75,7 @@ class PostSaver extends AbstractSaver {
      *
      */
 
-    /** @var PostData */
+    /** @var PostData|null */
     private $data;
 
     /** @var bool Stores whether the current task is a recrawl task or not. */
@@ -89,7 +94,7 @@ class PostSaver extends AbstractSaver {
     /** @var bool */
     private $isFirstPage = false;
 
-    /** @var null|object */
+    /** @var UrlTuple|null */
     private $urlTuple = null;
 
     /** @var string|null */
@@ -112,6 +117,9 @@ class PostSaver extends AbstractSaver {
 
     /** @var PostBot|null */
     private $bot = null;
+
+    /** @var PostSaverData|null */
+    private $saverData = null;
 
     /** @var bool */
     private $contentExists = true;
@@ -222,7 +230,7 @@ class PostSaver extends AbstractSaver {
      * @return int|null Post ID, or null if the post is not saved
      */
     public function savePost($siteIdToCheck, $settings, $urlId = null, $updateLastCrawled = false,
-                             $nextPageUrl = null, $nextPageUrls = null, $draftPostId = null) {
+                             $nextPageUrl = null, $nextPageUrls = null, $draftPostId = null): ?int {
 
         // Invalidate factory instances since new data will be received. If not invalidated, the factories will use
         // old data, if it exists. For example, if this is a second page of a post, the factories will use the data
@@ -253,71 +261,36 @@ class PostSaver extends AbstractSaver {
             $this->prepareUrlTupleToCrawl($urlId);
 
             // Lock the URL tuple so that it won't be selected as the URL to crawl again during saving process
-            Factory::databaseService()->updateUrlSavedStatus($this->urlTuple->id, $this->urlTuple->is_saved, $this->urlTuple->saved_post_id, $this->urlTuple->update_count, true);
+            Factory::databaseService()->updateUrlSavedStatus(
+                $this->urlTuple->getId(),
+                $this->urlTuple->isSaved(),
+                $this->urlTuple->getSavedPostId(),
+                $this->urlTuple->getUpdateCount(),
+                true
+            );
 
-            $mainSiteUrl    = $this->getSetting(SettingKey::MAIN_PAGE_URL);
-            $this->postUrl  = Utils::prepareUrl($mainSiteUrl, $this->urlToCrawl);
+            $this->initPostUrl();
+            $this->initBot($settings);                              // Create a new bot
+            $this->initSaverData();                                 // Create the saver data that will be used by other objects
 
-            // Create a new bot
-            $this->bot = new PostBot($settings, $this->siteIdToCheck);
-
-            // Prepare the post data
-            $this->preparePostData();
-
-            // Prepare next page URL
-            $this->prepareNextPageUrl();
-
-            // Check content existence
-            $this->checkAndReactToContentExistence();
-
-            // Prepare the post data and store it in the PostData instance
-            $this->data->setWpPostData($this->createWPPostData());
-
-            // Check if the post is duplicate and, if so, handle the situation.
-            $this->handleIfDuplicate();
-
-            // Insert the prepared post data into the database.
-            $this->insertPostData();
-
-            // Set post's category if it belongs to a custom taxonomy
-            $this->saveCategories();
-
-            // Delete already-existing attachments when updating a post.
-            $this->maybeDeleteAttachments();
-
-            // Save featured image
-            $this->saveFeaturedImage();
-
-            // Save meta keywords
-            $this->saveMetaKeywords();
-
-            // Save meta description
-            $this->saveMetaDescription();
+            $this->preparePostData();                               // Prepare the post data
+            $this->prepareNextPageUrl();                            // Prepare next page URL
+            $this->checkAndReactToContentExistence();               // Check content existence
+            $this->data->setWpPostData($this->createWPPostData());  // Prepare the post data and store it in the PostData instance
+            $this->handleIfDuplicate();                             // Check if the post is duplicate and, if so, handle the situation.
+            $this->insertPostData();                                // Insert the prepared post data into the database.
+            $this->saveCategories();                                // Set post's category if it belongs to a custom taxonomy
+            $this->maybeDeleteAttachments();                        // Delete already-existing attachments when updating a post.
+            $this->saveFeaturedImage();                             // Save featured image
+            $this->saveMetaKeywords();                              // Save meta keywords
+            $this->saveMetaDescription();                           // Save meta description
 
             // Save attachments
             $galleryAttachmentIds = $this->saveAttachments();
-
-            /*
-             * SAVE REGISTERED POST DETAILS
-             */
-
-            // Create the data that will be used by the savers
-            $saverData = new PostSaverData(
-                $this,
-                $this->postId,
-                $this->data,
-                $this->isRecrawl,
-                $this->isFirstPage,
-                $this->urlTuple,
-                $galleryAttachmentIds
-            );
+            $this->saverData->setGalleryAttachmentIds($galleryAttachmentIds);
 
             // Save registered post details
-            PostDetailsService::getInstance()->save($this->bot, $saverData);
-
-            /*
-             *
-             */
+            PostDetailsService::getInstance()->save($this->bot, $this->saverData);
 
             // Save custom meta. This should be done at last to allow the user to override some previously-set post meta values.
             $this->saveCustomMeta();
@@ -337,32 +310,55 @@ class PostSaver extends AbstractSaver {
 
             // Update the post so that its status is set as the user wants. Also, by this way, we set the ID of the post,
             // which is required for the rest of this method to properly tidy up the saving.
-            $this->postId = wp_insert_post($e->getWpPostData());
+            $this->setPostId(wp_insert_post($e->getWpPostData()));
 
             // Do nothing. The rest of this method will handle the rest.
 
         } catch(DuplicatePostException $e) {
-            $this->onDuplicatePostException($e, isset($saverData) ? $saverData : null);
+            $this->onDuplicatePostException($e);
+            return null;
 
-            // Return.
+        } catch (CancelSavingException $e) {
+            $this->onCancelSavingException($e);
+            return null;
+
+        } catch (Exception $e) {
+            // Log any other exception and return null
+            Informer::addInfo($e->getMessage())->setException($e)->addAsLog();
             return null;
         }
 
-        /*
-         *
-         */
+        $this->onAfterSaving();
+        return $this->postId;
+    }
 
+    /**
+     * Tidies up the saving operation by updating the database
+     *
+     * @since 1.11.0
+     */
+    private function onAfterSaving() {
         // Save related meta
         if($this->updateLastCrawled)
-            $this->updateLastCrawled($this->siteIdToCheck, $this->nextPageUrl ? $this->urlTuple->id : null, $this->nextPageUrl, $this->nextPageUrls, $this->nextPageUrl ? $this->postId : '');
+            $this->updateLastCrawled(
+                $this->siteIdToCheck,
+                $this->nextPageUrl ? $this->urlTuple->getId() : null,
+                $this->nextPageUrl,
+                $this->nextPageUrls,
+                $this->nextPageUrl ? $this->postId : ''
+            );
 
         // Save post URL as post meta
-        if($this->isFirstPage && $this->postId && isset($this->urlTuple->url))
-            update_post_meta($this->postId, $this->postMetaPostFirstPageUrl, $this->urlTuple->url);
+        if($this->isFirstPage && $this->postId)
+            update_post_meta($this->postId, $this->postMetaPostFirstPageUrl, $this->urlTuple->getUrl());
 
         // Update saved_at if this is the first page and the URL tuple does not have a saved_post_id
-        if($this->isFirstPage && $this->postId && !$this->urlTuple->saved_post_id) {
-            Factory::databaseService()->updateUrlPostSavedAt($this->urlTuple->id, $this->postId, $this->data->getDateCreated());
+        if($this->isFirstPage && $this->postId && !$this->urlTuple->getSavedPostId()) {
+            Factory::databaseService()->updateUrlPostSavedAt(
+                $this->urlTuple->getId(),
+                $this->postId,
+                $this->data->getDateCreated(true)
+            );
         }
 
         // If this is the last page, tidy up things.
@@ -371,45 +367,52 @@ class PostSaver extends AbstractSaver {
             // Set this URL as saved
             if(!$this->isRecrawl) {
                 Factory::databaseService()->updateUrlSavedStatus(
-                    $this->urlTuple->id,
+                    $this->urlTuple->getId(),
                     true,
                     $this->postId ? $this->postId : null,
-                    $this->urlTuple->update_count,
+                    $this->urlTuple->getUpdateCount(),
                     false
                 );
 
-            // Otherwise, set this URL as recrawled
+                // Otherwise, set this URL as recrawled
             } else {
-                Factory::databaseService()->updateUrlRecrawledStatus($this->urlTuple->id, $this->urlTuple->update_count + 1, false);
+                Factory::databaseService()->updateUrlRecrawledStatus(
+                    $this->urlTuple->getId(),
+                    $this->urlTuple->getUpdateCount() + 1,
+                    false
+                );
             }
 
-        // Otherwise, remove the lock so that the next page can be saved. Also, make this URL not saved so that it won't
-        // be selected as a URL that needs to be crawled for post crawling event.
+            // Otherwise, remove the lock so that the next page can be saved. Also, make this URL not saved so that it won't
+            // be selected as a URL that needs to be crawled for post crawling event.
         } else {
-            Factory::databaseService()->updateUrlSavedStatus($this->urlTuple->id, false, $this->postId ? $this->postId : null, $this->urlTuple->update_count, false);
+            Factory::databaseService()->updateUrlSavedStatus(
+                $this->urlTuple->getId(),
+                false,
+                $this->postId ? $this->postId : null,
+                $this->urlTuple->getUpdateCount(),
+                false
+            );
         }
 
         if(static::$DEBUG) {
-            var_dump('Last Crawled Url ID: '    . $this->urlTuple->id);
-            var_dump('Category ID: '            . $this->urlTuple->category_id);
+            var_dump('Last Crawled Url ID: '    . $this->urlTuple->getId());
+            var_dump('Category ID: '            . $this->urlTuple->getCategoryId());
             var_dump('Next Page URL: '          . $this->nextPageUrl);
             var_dump('Next Page URLs:');
             var_dump($this->nextPageUrls);
             var_dump('Draft Post ID: '          . ($this->nextPageUrl ? $this->postId : ''));
         }
-
-        return $this->postId;
     }
 
     /**
      * Handles what happens when there is a duplicate post.
      *
      * @param DuplicatePostException $e
-     * @param null|PostSaverData $saverData
      * @since 1.8.0
+     * @uses  cancelCrawlingCurrentPost()
      */
-    private function onDuplicatePostException(DuplicatePostException $e, $saverData) {
-        // There is a duplicate post.
+    private function onDuplicatePostException(DuplicatePostException $e) {
         $duplicateId = $e->getCode();
 
         /**
@@ -425,53 +428,102 @@ class PostSaver extends AbstractSaver {
          */
         do_action('wpcc/post/after_decided_duplicate', $this->siteIdToCheck, $duplicateId, $this->data, $this->postUrl, $this);
 
+        $this->cancelCrawlingCurrentPost();
+
+        // Notify the user
+        $messages = [
+            _wpcc('A duplicate post has been found.'),
+            sprintf(
+                _wpcc('Current URL: %1$s, Duplicate post ID: %2$s, Duplicate post title: %3$s, Site ID: %4$s.'),
+                $this->postUrl,
+                $duplicateId,
+                get_the_title($duplicateId),
+                $this->siteIdToCheck
+            ),
+            _wpcc('The URL is not saved and it is marked as saved so that it will not be tried again.')
+        ];
+
+        Informer::add(Information::fromInformationMessage(
+            InformationMessage::DUPLICATE_POST,
+            implode(' ', $messages),
+            InformationType::INFO
+        )->setException($e)->addAsLog());
+    }
+
+    /**
+     * Handles the "cancel saving" exception and notifies the user by adding an information message.
+     *
+     * @param CancelSavingException $e
+     * @since 1.11.0
+     * @uses cancelCrawlingCurrentPost()
+     */
+    private function onCancelSavingException(CancelSavingException $e) {
+        $deletedPostIds = $this->cancelCrawlingCurrentPost($e->isDeleteUrl());
+
+        $messages = [
+            $e->getMessage() ?: '',
+            _wpcc('The URL is not saved due to a cancel request.'),
+            $e->isDeleteUrl()
+                ? _wpcc('The URL is deleted from the database, which means it can be crawled again if it is found in a category page.')
+                : _wpcc('It is marked as saved so that it will not be tried again.'),
+            $deletedPostIds
+                ? _wpcc('Deleted post ID') . ': ' . implode(', ', $deletedPostIds)
+                : _wpcc('Because there was no saved post, no post is deleted. Instead, saving operation is stopped.'),
+            _wpcc('Current URL') . ': ' . $this->postUrl,
+        ];
+
+        Informer::addInfo(trim(implode(' ', $messages)))->setException($e)->addAsLog();
+    }
+
+    /**
+     * This deletes everything related to the current post, i.e. makes the post detail factories delete what they have
+     * saved, deletes the attachments, deletes the saved post (if exists), deletes gallery attachments (if exist). Then,
+     * calls {@link resetLastCrawled()} and updates the current URL's saved status so that the URL will not be tried to
+     * be crawled again in the future.
+     *
+     * @param bool $deleteUrl True if the URL should be removed from the database. False if the URL should remain in the
+     *                        database and be marked as "saved" so that it will not be crawled again.
+     * @return int[] IDs of the deleted posts. If no ID exists, this is an empty array.
+     * @since 1.11.0
+     */
+    private function cancelCrawlingCurrentPost(bool $deleteUrl = false): array {
         // Make the factories delete the things they are concerned with. Make them delete only if there is a
         // saver data. If saver data does not exist, it means they did not save anything, since their savers were
         // not called.
-        if ($saverData) {
-            PostDetailsService::getInstance()->delete($this->bot->getSettingsImpl(), $saverData);
+        if ($this->saverData) {
+            PostDetailsService::getInstance()->delete($this->bot->getSettingsImpl(), $this->saverData);
         }
 
         // If there is a PostData, delete the attachments.
         if ($this->data) $this->data->deleteAttachments();
 
         // If there is a post saved, delete it from the database. If there is a different draft post ID, delete it as well.
-        $postIds = array_unique([$this->postId, $this->draftPostId]);
+        $postIds = array_filter(array_unique([$this->postId, $this->draftPostId]));
         foreach($postIds as $postId) $this->deletePost($postId);
 
         // If there are gallery attachment IDs, delete them as well.
-        if ($saverData && $saverData->getGalleryAttachmentIds()) {
-            foreach($saverData->getGalleryAttachmentIds() as $mediaId) wp_delete_post($mediaId, true);
+        if ($this->saverData && $this->saverData->getGalleryAttachmentIds()) {
+            foreach($this->saverData->getGalleryAttachmentIds() as $mediaId) wp_delete_post($mediaId, true);
         }
 
         $this->resetLastCrawled($this->siteIdToCheck);
 
-        // Set this URL as saved so that this won't be tried to be saved again and unlock it.
-        Factory::databaseService()->updateUrlSavedStatus($this->urlTuple->id, true, null, $this->urlTuple->update_count, false);
+        // If the URL should be deleted, delete it.
+        if ($deleteUrl) {
+            Factory::databaseService()->deleteUrl($this->urlTuple->getId());
 
-        /*
-         * Notify the user
-         */
+        } else {
+            // Set this URL as saved so that this won't be tried to be saved again and unlock it.
+            Factory::databaseService()->updateUrlSavedStatus(
+                $this->urlTuple->getId(),
+                true,
+                null,
+                $this->urlTuple->getUpdateCount(),
+                false
+            );
+        }
 
-        $msg0 = _wpcc('A duplicate post has been found.');
-
-        $msg1 = sprintf(
-            _wpcc('Current URL: %1$s, Duplicate post ID: %2$s, Duplicate post title: %3$s, Site ID: %4$s.'),
-            $this->postUrl,
-            $duplicateId,
-            get_the_title($duplicateId),
-            $this->siteIdToCheck
-        );
-
-        $msg2 = _wpcc('The URL is not saved and it is marked as saved so that it will not be tried again.');
-
-        $info = Information::fromInformationMessage(
-            InformationMessage::DUPLICATE_POST,
-            implode(' ', [$msg0, $msg1, $msg2]),
-            InformationType::INFO
-        );
-
-        Informer::add($info->setException($e)->addAsLog());
+        return $postIds;
     }
 
     /**
@@ -538,16 +590,23 @@ class PostSaver extends AbstractSaver {
             }
 
             // Get the URL tuple we will work on
-            $this->urlTuple = $results[0];
+            $this->urlTuple = new UrlTuple($results[0]);
 
             // Set the page url we should crawl
             $this->urlToCrawl = $this->nextPageUrl;
 
         } else {
             // We're getting a specified post or a random-ish one
-            $this->urlTuple = $lastCrawledUrlId ? Factory::databaseService()->getUrlById($lastCrawledUrlId) : null;
+            $this->urlTuple = null;
+            if ($lastCrawledUrlId) {
+                $urlTupleObject = Factory::databaseService()->getUrlById($lastCrawledUrlId);
 
-            if(!$this->urlTuple || (!$this->isRecrawl && $this->urlTuple->is_saved)) {
+                if ($urlTupleObject) {
+                    $this->urlTuple = new UrlTuple($urlTupleObject);
+                }
+            }
+
+            if(!$this->urlTuple || (!$this->isRecrawl && $this->urlTuple->isSaved())) {
                 // We're getting a new post. Let's find a URL tuple to save.
                 $this->urlTuple = $this->getUrlTupleToCrawl($this->siteIdToCheck, $lastCrawledUrlId);
 
@@ -578,14 +637,14 @@ class PostSaver extends AbstractSaver {
             }
 
             // Set the page url we should crawl
-            $this->urlToCrawl = $this->urlTuple->url;
+            $this->urlToCrawl = $this->urlTuple->getUrl();
 
         }
 
         if(static::$DEBUG) var_dump($this->urlTuple);
 
         // Do not proceed if this URL tuple is locked.
-        if($this->urlTuple->is_locked) {
+        if($this->urlTuple->isLocked()) {
             $this->addError(ErrorType::URL_LOCKED);
             Informer::add(Information::fromInformationMessage(
                 InformationMessage::URL_LOCKED,
@@ -601,10 +660,13 @@ class PostSaver extends AbstractSaver {
     /**
      * Sends a request to the target URL, retrieves a PostData, and assigns it to {@link data}.
      *
+     * @throws CancelSavingException
      * @throws StopSavingException
+     * @throws Exception
+     * @noinspection PhpDocRedundantThrowsInspection
      */
     private function preparePostData() {
-        $this->data = $this->bot->crawlPost($this->postUrl);
+        $this->setData($this->bot->crawlPost($this->postUrl, $this->saverData));
         $this->setRequestMade(true);
 
         // If there is an error with the connection, reset last crawled and set this URL as saved. By this way,
@@ -620,8 +682,8 @@ class PostSaver extends AbstractSaver {
             )->addAsLog());
 
             // If the URL tuple does not have a post, delete it.
-            if(!$this->urlTuple->saved_post_id) {
-                Factory::databaseService()->deleteUrl($this->urlTuple->id);
+            if(!$this->urlTuple->getSavedPostId()) {
+                Factory::databaseService()->deleteUrl($this->urlTuple->getId());
 
                 // Write an error
                 error_log("WPCC - The URL cannot be fetched (" . $this->postUrl . "). There was a connection error. The URL is
@@ -632,11 +694,21 @@ class PostSaver extends AbstractSaver {
             }
 
             // Set this URL as saved
-            Factory::databaseService()->updateUrlSavedStatus($this->urlTuple->id, true, $this->urlTuple->saved_post_id, $this->urlTuple->update_count, false);
+            Factory::databaseService()->updateUrlSavedStatus(
+                $this->urlTuple->getId(),
+                true,
+                $this->urlTuple->getSavedPostId(),
+                $this->urlTuple->getUpdateCount(),
+                false
+            );
 
             // If this is a recrawl, mark this URL as recrawled so that it won't be tried again and again.
             if($this->isRecrawl) {
-                Factory::databaseService()->updateUrlRecrawledStatus($this->urlTuple->id, $this->urlTuple->update_count + 1, false);
+                Factory::databaseService()->updateUrlRecrawledStatus(
+                    $this->urlTuple->getId(),
+                    $this->urlTuple->getUpdateCount() + 1,
+                    false
+                );
             }
 
             // Write an error
@@ -787,22 +859,26 @@ class PostSaver extends AbstractSaver {
      * @throws AlreadySavedPageException
      */
     private function createWPPostData() {
+        // Get the author and post status defined in the post data. If these exist, we will use them.
+        $postAuthor = $this->data->getAuthorId();
+        $postStatus = $this->data->getPostStatus();
+
         // Get general settings
         // If this site has different settings, then use them.
         if($this->getSetting(SettingKey::DO_NOT_USE_GENERAL_SETTINGS)) {
             $allowComments  = $this->getSetting(SettingKey::WPCC_ALLOW_COMMENTS);
-            $postStatus     = $this->getSetting(SettingKey::WPCC_POST_STATUS);
+            $postStatus     = $postStatus ?: $this->getSetting(SettingKey::WPCC_POST_STATUS);
             $postType       = $this->getSetting(SettingKey::WPCC_POST_TYPE);
-            $postAuthor     = $this->getSetting(SettingKey::WPCC_POST_AUTHOR);
+            $postAuthor     = $postAuthor ?: $this->getSetting(SettingKey::WPCC_POST_AUTHOR);
             $tagLimit       = $this->getSetting(SettingKey::WPCC_POST_TAG_LIMIT);
             $postPassword   = $this->getSetting(SettingKey::WPCC_POST_PASSWORD);
 
             // Otherwise, go on with general settings.
         } else {
             $allowComments  = get_option(SettingKey::WPCC_ALLOW_COMMENTS);
-            $postStatus     = get_option(SettingKey::WPCC_POST_STATUS);
+            $postStatus     = $postStatus ?: get_option(SettingKey::WPCC_POST_STATUS);
             $postType       = get_option(SettingKey::WPCC_POST_TYPE);
-            $postAuthor     = get_option(SettingKey::WPCC_POST_AUTHOR);
+            $postAuthor     = $postAuthor ?: get_option(SettingKey::WPCC_POST_AUTHOR);
             $tagLimit       = get_option(SettingKey::WPCC_POST_TAG_LIMIT, 0);
             $postPassword   = get_option(SettingKey::WPCC_POST_PASSWORD);
         }
@@ -884,7 +960,7 @@ class PostSaver extends AbstractSaver {
             'post_status'       => $this->nextPageUrl           ? PostStatus::DRAFT       : ($postStatus ? $postStatus : PostStatus::DRAFT),
             'post_type'         => post_type_exists($postType)  ? $postType     : 'post',
             'post_password'     => $postPassword                ? $postPassword : '',
-            'post_category'     => [$this->urlTuple->category_id],
+            'post_category'     => [$this->urlTuple->getCategoryId()],
             'meta_input'        => [
                 $this->postMetaSourceUrls => $sourceUrls
             ],
@@ -893,14 +969,14 @@ class PostSaver extends AbstractSaver {
         // If this is the first page of the newly created post.
         if(!$this->isRecrawl && $this->isFirstPage) {
             // Set the date
-            $postDate = $this->data->getDateCreated();
+            $postDate = $this->data->getDateCreated(true);
             $postData["post_date"] = $postDate;
 
             // Set the slug if there exists one
             if ($this->data->getSlug()) $postData['post_name'] = $this->data->getSlug();
         }
 
-        // If content exists, append in to the content of the original post
+        // If content exists, append it to the content of the original post
         if($this->contentExists) {
             $postData['post_content'] = $content . $this->data->getTemplate();
 
@@ -961,7 +1037,7 @@ class PostSaver extends AbstractSaver {
         if ($this->isRecrawl) return;
 
         // Try to find a duplicate post
-        $duplicatePostId = $this->isDuplicate($this->urlTuple->url, $this->data->getWpPostData(), $this->isFirstPage, !$this->nextPageUrl);
+        $duplicatePostId = $this->isDuplicate($this->urlTuple->getUrl(), $this->data->getWpPostData(), $this->isFirstPage, !$this->nextPageUrl);
 
         // If none, stop.
         if (!$duplicatePostId) return;
@@ -1018,7 +1094,7 @@ class PostSaver extends AbstractSaver {
 
         //
 
-        $this->postId = wp_insert_post($postData);
+        $this->setPostId(wp_insert_post($postData));
 
         //
 
@@ -1067,7 +1143,7 @@ class PostSaver extends AbstractSaver {
             $id = Utils::array_get($categoryItem, 'id');
             if (!$id) continue;
 
-            if ($id == $this->urlTuple->category_id) {
+            if ($id == $this->urlTuple->getCategoryId()) {
                 $taxonomy = Utils::array_get($categoryItem, 'taxonomy');
                 break;
             }
@@ -1096,14 +1172,14 @@ class PostSaver extends AbstractSaver {
         $categoryNames = $this->data->getCategoryNames();
 
         // Get the post category defined in the category map
-        $term = get_term_by('id', $this->urlTuple->category_id, $catTaxonomy);
+        $term = get_term_by('id', $this->urlTuple->getCategoryId(), $catTaxonomy);
         $mainCatTermId = $term && isset($term->term_id) ? $term->term_id : null;
 
         // If there is no category name, set the main category ID as the category ID specified in the category map and
         // stop.
         if (!$categoryNames) {
             if($mainCatTermId !== null) {
-                wp_set_post_terms($this->postId, (int) $this->urlTuple->category_id, $catTaxonomy, false);
+                wp_set_post_terms($this->postId, (int) $this->urlTuple->getCategoryId(), $catTaxonomy, false);
             }
 
             return;
@@ -1218,8 +1294,8 @@ class PostSaver extends AbstractSaver {
 
         // Get the thumbnail image file path
         $mediaFile = null;
-        if($this->urlTuple->thumbnail_url) {
-            $thumbnailUrl = $this->urlTuple->thumbnail_url;
+        if($this->urlTuple->getThumbnailUrl()) {
+            $thumbnailUrl = $this->urlTuple->getThumbnailUrl();
 
             // If there is no thumbnail image URL, stop.
             if (!$thumbnailUrl) return;
@@ -1232,7 +1308,8 @@ class PostSaver extends AbstractSaver {
             }
 
             // Save the featured image
-            $file = MediaService::getInstance()->saveMedia($thumbnailUrl, $this->getSetting(SettingKey::WPCC_HTTP_USER_AGENT, null));
+            $file = MediaService::getInstance()
+                ->saveMedia($thumbnailUrl, MediaSavingOptions::fromSiteSettings($this->getSettingsImpl()));
             if (!$file) return;
 
             $mediaFile = new MediaFile($thumbnailUrl, $file['file']);
@@ -1433,17 +1510,20 @@ class PostSaver extends AbstractSaver {
     private function saveCustomMeta() {
         if(!$this->postId || !$this->data->getCustomMeta()) return;
 
+        $alreadyDeletedKeys = [];
         foreach($this->data->getCustomMeta() as $metaData) {
-            $metaValue  = $metaData["data"];
-            $metaKey    = $metaData["meta_key"];
+            $metaValue  = $metaData->getData();
+            $metaKey    = $metaData->getKey();
 
-            // Delete old meta values first when updating. Do this only when the first page is being crawled.
-            if($this->isFirstPage && $this->isRecrawl) {
+            // Delete old meta values first when updating. Do this only when the first page is being crawled, and the
+            // meta key is not deleted previously.
+            if($this->isFirstPage && $this->isRecrawl && !in_array($metaKey, $alreadyDeletedKeys)) {
                 delete_post_meta($this->postId, $metaKey);
+                $alreadyDeletedKeys[] = $metaKey;
             }
 
             // If it must be saved as multiple
-            if(isset($metaData["multiple"]) && $metaData["multiple"]) {
+            if($metaData->isMultiple()) {
 
                 // If the value is array
                 if(is_array($metaValue)) {
@@ -1464,6 +1544,7 @@ class PostSaver extends AbstractSaver {
                 update_post_meta($this->postId, $metaKey, $metaValue);
             }
         }
+
     }
 
     /**
@@ -1476,7 +1557,7 @@ class PostSaver extends AbstractSaver {
         // Delete old taxonomy values first when updating. Do this only when the first page is being crawled.
         if($this->data->getCustomTaxonomies() && $this->isFirstPage && $this->isRecrawl) {
             $taxNames = array_unique(array_map(function($v) {
-                return $v['taxonomy'];
+                return $v->getTaxonomy();
             }, $this->data->getCustomTaxonomies()));
 
             // Taxonomies saved via wp_insert_post are removed here. They must not be removed. For example, post_tag
@@ -1489,10 +1570,10 @@ class PostSaver extends AbstractSaver {
             if($taxNames) wp_delete_object_term_relationships($this->postId, $taxNames);
         }
 
-        foreach($this->data->getCustomTaxonomies() as $taxonomyData) {
-            $taxValue = $taxonomyData['data'];
-            $taxName = $taxonomyData['taxonomy'];
-            $isAppend = isset($taxonomyData['append']) && $taxonomyData['append'];
+        foreach($this->data->getCustomTaxonomies() as $item) {
+            $taxValue = $item->getData();
+            $taxName  = $item->getTaxonomy();
+            $isAppend = $item->isAppend();
 
             // Make sure the value is an array.
             if (!is_array($taxValue)) $taxValue = [$taxValue];
@@ -1549,9 +1630,9 @@ class PostSaver extends AbstractSaver {
      *
      * @param int $siteId Site ID for which a URL tuple will be retrieved
      * @param int $lastCrawledUrlId Last crawled URL id from urls table
-     * @return null|object Null or found URL tuple as object
+     * @return null|UrlTuple Null or found URL tuple as object
      */
-    public function getUrlTupleToCrawl($siteId, $lastCrawledUrlId) {
+    public function getUrlTupleToCrawl($siteId, $lastCrawledUrlId): ?UrlTuple {
         global $wpdb;
         $tableName = Factory::databaseService()->getDbTableUrlsName();
 
@@ -1569,7 +1650,7 @@ class PostSaver extends AbstractSaver {
             $query = "SELECT * FROM $tableName WHERE is_saved = FALSE AND is_locked = FALSE AND saved_post_id IS NULL AND post_id = %d LIMIT 1";
             $results = $wpdb->get_results($wpdb->prepare($query, $siteId));
 
-            return empty($results) ? null : $results[0];
+            return empty($results) ? null : new UrlTuple($results[0]);
         }
 
         // Get the last crawled URL as object from the table
@@ -1620,7 +1701,7 @@ class PostSaver extends AbstractSaver {
         $results = $wpdb->get_results($wpdb->prepare($query, [$siteId, $targetCategoryId]));
 
         // The results cannot be empty according to the logic. Return the first found URL tuple.
-        return $results[0];
+        return new UrlTuple($results[0]);
     }
 
     /**
@@ -1718,6 +1799,68 @@ class PostSaver extends AbstractSaver {
      */
     public function setIsRecrawl($isRecrawl) {
         $this->isRecrawl = $isRecrawl;
+    }
+
+    /**
+     * Assigns the given post ID to {@link postId} field
+     *
+     * @param int|null $postId
+     * @since 1.11.0
+     */
+    private function setPostId(?int $postId): void {
+        $this->postId = $postId;
+
+        if ($this->saverData) {
+            $this->saverData->setPostId($this->postId);
+        }
+    }
+
+    /**
+     * Assigns the given data to {@link data} field
+     *
+     * @param PostData|null $data
+     * @since 1.11.0
+     */
+    private function setData(?PostData $data): void {
+        $this->data = $data;
+
+        if ($this->saverData) {
+            $this->saverData->setPostData($this->data);
+        }
+    }
+
+    /**
+     * Initializes the value of {@link postUrl}
+     *
+     * @since 1.11.0
+     */
+    private function initPostUrl() {
+        $mainSiteUrl   = $this->getSetting(SettingKey::MAIN_PAGE_URL);
+        $this->postUrl = Utils::prepareUrl($mainSiteUrl, $this->urlToCrawl);
+    }
+
+    /**
+     * Initializes the value of {@link bot}
+     *
+     * @param array $settings
+     * @since 1.11.0
+     */
+    private function initBot(array $settings) {
+        $this->bot = new PostBot($settings, $this->siteIdToCheck);
+    }
+
+    /**
+     * Initializes the value of {@link saverData}
+     *
+     * @since 1.11.0
+     */
+    private function initSaverData() {
+        $this->saverData = new PostSaverData(
+            $this->bot,
+            $this->isRecrawl,
+            $this->isFirstPage,
+            $this->urlTuple
+        );
     }
 
     /*

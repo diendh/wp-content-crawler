@@ -22,7 +22,6 @@ use WPCCrawler\Objects\Informing\Information;
 use WPCCrawler\Objects\Informing\Informer;
 use WPCCrawler\Objects\OptionsBox\OptionsBoxService;
 use WPCCrawler\Objects\Settings\Enums\SettingInnerKey;
-use WPCCrawler\Objects\Settings\Enums\SettingKey;
 use WPCCrawler\Objects\Traits\ShortCodeReplacerAndFindAndReplace;
 use WPCCrawler\Utils;
 
@@ -290,7 +289,8 @@ class FileService {
      */
     public function saveMediaFile(MediaFile $mediaFile, PostBot $postBot) {
         // Save the file
-        $file = MediaService::getInstance()->saveMedia($mediaFile->getSourceUrl(), $postBot->getSetting(SettingKey::WPCC_HTTP_USER_AGENT, null));
+        $file = MediaService::getInstance()
+            ->saveMedia($mediaFile->getSourceUrl(), MediaSavingOptions::fromSiteSettings($postBot->getSettingsImpl()));
 
         // If there is no file, continue with the next one.
         if (!$file) {

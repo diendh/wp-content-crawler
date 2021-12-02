@@ -1,7 +1,7 @@
 <?php
 
-/** @var array $item */
-$content = array_get($item, "data");
+/** @var \WPCCrawler\Objects\Crawling\Data\Taxonomy\TaxonomyItem $item */
+$content = $item->getData();
 
 ?>
 
@@ -9,13 +9,13 @@ $content = array_get($item, "data");
     {{-- TAXONOMY NAME --}}
     <div class="post-taxonomy-name">
         <span class="name">{{ _wpcc("Taxonomy") }}</span>
-        <span>{{ array_get($item, "taxonomy") }}</span>
+        <span>{{ $item->getTaxonomy() }}</span>
     </div>
 
     {{-- APPEND --}}
     <div class="post-meta-append">
         <span class="name">{{ _wpcc("Append") }}</span>
-        <span class="dashicons dashicons-{{ array_get($item, "append") ? 'yes' : 'no' }}"></span>
+        <span class="dashicons dashicons-{{ $item->isAppend() ? 'yes' : 'no' }}"></span>
     </div>
 
     {{-- TAXONOMY VALUE --}}

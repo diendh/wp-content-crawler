@@ -22,7 +22,7 @@ class PostTitlePreparer extends AbstractPostBotPreparer {
      * @return void
      */
     public function prepare() {
-        $postTitleSelectors      = $this->bot->getSetting(SettingKey::POST_TITLE_SELECTORS);
+        $postTitleSelectors      = $this->bot->getSetting(SettingKey::POST_TITLE_SELECTORS, []);
         $findAndReplacesForTitle = $this->bot->prepareFindAndReplaces($this->bot->getSetting(SettingKey::POST_FIND_REPLACE_TITLE));
 
         foreach($postTitleSelectors as $selectorData) {

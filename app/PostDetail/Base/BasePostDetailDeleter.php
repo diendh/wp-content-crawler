@@ -12,7 +12,7 @@ namespace WPCCrawler\PostDetail\Base;
 
 
 use WPCCrawler\Objects\Settings\SettingsImpl;
-use WPCCrawler\PostDetail\PostSaverData;
+use WPCCrawler\Objects\Crawling\Data\PostSaverData;
 
 abstract class BasePostDetailDeleter {
 

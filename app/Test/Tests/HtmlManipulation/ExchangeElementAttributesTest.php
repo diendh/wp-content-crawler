@@ -10,7 +10,7 @@ namespace WPCCrawler\Test\Tests\HtmlManipulation;
 
 
 use Symfony\Component\DomCrawler\Crawler;
-use WPCCrawler\Objects\Crawling\Bot\PostBot;
+use WPCCrawler\Objects\Crawling\Bot\AbstractBot;
 use WPCCrawler\Objects\Settings\Enums\SettingInnerKey;
 use WPCCrawler\Test\Base\AbstractHtmlManipulationTest;
 use WPCCrawler\Test\Base\AbstractTest;
@@ -58,11 +58,11 @@ class ExchangeElementAttributesTest extends AbstractHtmlManipulationTest {
     }
 
     /**
-     * Returns a manipulated {@link Crawler}. {@link PostBot} is the bot that is used to get the data from the target
-     * URL and it can be used to manipulate the content.
+     * Returns a manipulated {@link Crawler}. {@link AbstractBot} is the bot that is used to get the data from the
+     * target URL and it can be used to manipulate the content.
      *
      * @param Crawler $crawler
-     * @param PostBot $bot
+     * @param AbstractBot $bot
      * @return Crawler
      */
     protected function manipulate($crawler, $bot) {

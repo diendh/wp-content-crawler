@@ -37,7 +37,7 @@ class GeneralCategoryTest extends AbstractGeneralTest {
             if($categoryData = $bot->collectUrls(Utils::prepareUrl($bot->getSiteUrl(), $data->getTestUrl()))) {
                 $template = Utils::view('site-tester/category-test')->with([
                     'nextPageUrl'   =>  $categoryData->getNextPageUrl(),
-                    'urls'          =>  $categoryData->getPostUrls()
+                    'urls'          =>  $categoryData->getPostUrlList()->toArray()
                 ])->render();
             }
         }

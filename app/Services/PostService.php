@@ -14,6 +14,7 @@ use WPCCrawler\Factory;
 use WPCCrawler\Objects\Cache\ResponseCache;
 use WPCCrawler\Objects\Crawling\Data\PostData;
 use WPCCrawler\Objects\Enums\ShortCodeName;
+use WPCCrawler\Objects\Filtering\FilteringService;
 use WPCCrawler\Objects\OptionsBox\Boxes\File\FileOptionsBoxApplier;
 use WPCCrawler\Objects\OptionsBox\Enums\OptionsBoxTab;
 use WPCCrawler\Objects\OptionsBox\Enums\OptionsBoxType;
@@ -202,6 +203,17 @@ class PostService {
 
                     case "saveSiteSettings":
                         echo $this->quickSaveSettings($data);
+                        break;
+
+                    case "filtering":
+                        if(isset($data["postId"])) {
+                            $service = new FilteringService(new SettingsImpl(
+                                get_post_meta($data["postId"]),
+                                Factory::postService()->getSingleMetaKeys()
+                            ));
+                            echo json_encode($service->handleAjax($data));
+                        }
+
                         break;
                 }
             }
@@ -409,7 +421,7 @@ class PostService {
         $dummyPostData = new PostData();
         $result = [
             _wpcc("Post") => AbstractTransformationService::prepareTransformableFieldForSelect(
-                $dummyPostData->getTransformableFields(),
+                $dummyPostData->getTransformableFields()->toAssociativeArray(),
                 Environment::defaultPostIdentifier()
             )
         ];
@@ -708,6 +720,8 @@ class PostService {
         global $wpdb;
         $tableUrls = Factory::databaseService()->getDbTableUrlsName();
 
+        /** @noinspection SqlNoDataSourceInspection */
+        /** @noinspection SqlResolve */
         $query = "SELECT t_total.post_id, count_saved, count_updated, count_queue, count_deleted,
                 (IFNULL(count_total, 0) - IFNULL(count_saved, 0) - IFNULL(count_queue, 0) - IFNULL(count_deleted, 0)) as count_other, count_total
             FROM

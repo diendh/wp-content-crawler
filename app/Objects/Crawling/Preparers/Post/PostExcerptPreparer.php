@@ -22,7 +22,7 @@ class PostExcerptPreparer extends AbstractPostBotPreparer {
      * @return void
      */
     public function prepare() {
-        $postExcerptSelectors      = $this->bot->getSetting(SettingKey::POST_EXCERPT_SELECTORS);
+        $postExcerptSelectors      = $this->bot->getSetting(SettingKey::POST_EXCERPT_SELECTORS, []);
         $findAndReplacesForExcerpt = $this->bot->prepareFindAndReplaces($this->bot->getSetting(SettingKey::POST_FIND_REPLACE_EXCERPT));
 
         foreach($postExcerptSelectors as $selectorData) {

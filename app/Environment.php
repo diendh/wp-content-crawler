@@ -10,6 +10,7 @@ namespace WPCCrawler;
 
 
 use Dotenv\Dotenv;
+use WPCCrawler\Objects\AssetManager\BaseAssetManager;
 
 class Environment {
 
@@ -80,6 +81,12 @@ class Environment {
      */
     const DEFAULT_POST_IDENTIFIER           = 'WPCC_DEFAULT_POST_IDENTIFIER';
 
+    /**
+     * @var string Key for the identifier used for default 'category' type. This is used, e.g., when defining
+     *      command subjects in the post settings page.
+     */
+    const DEFAULT_CATEGORY_IDENTIFIER       = 'WPCC_DEFAULT_CATEGORY_IDENTIFIER';
+
     // CRON validation
     const F_SIZE                            = 'WPCC_F_SIZE';
     const F_HASH                            = 'WPCC_F_HASH';
@@ -138,6 +145,7 @@ class Environment {
             static::RELATIVE_VIEWS_DIR,
             static::KEY_URL_HASH,
             static::DEFAULT_POST_IDENTIFIER,
+            static::DEFAULT_CATEGORY_IDENTIFIER,
             static::F_HASH,
             static::REQUIRED_PHP_VERSION,
             static::DEMO,
@@ -162,12 +170,15 @@ class Environment {
 
         // Return the environment variable's value. Some servers do not let server's environment variables to be set.
         // So, if we cannot get the value via getenv(), try $_SERVER and $_ENV variables.
-        return getenv($varName) ?: ($_SERVER[$varName] ?? $_ENV[$varName] ?? '');
+        return getenv($varName) ?: ($_SERVER[$varName] ?? ($_ENV[$varName] ?? ''));
     }
 
     /**
      * Get the app directory of the plugin relative to WordPress root
      * @return string The relative path without a trailing slash
+     * @deprecated This does not take into account the fact that the paths of WordPress directories might be different.
+     *             Use {@link BaseAssetManager::appPath()} or its other path methods to get an absolute path of a
+     *             plugin file, and {@link BaseAssetManager::getPluginFileUrl()} to get the URL of the absolute path.
      */
     public static function appDir() {
         if(!static::$APP_DIR) {
@@ -186,7 +197,16 @@ class Environment {
      * @since 1.9.0
      */
     public static function pluginFilePath() {
-        return WP_CONTENT_CRAWLER_PATH . DIRECTORY_SEPARATOR . static::pluginFileName() . '.php';
+        return WP_CONTENT_CRAWLER_PATH . static::pluginFileName() . '.php';
+    }
+
+    /**
+     * @return string Absolute path of WP Content Crawler's root directory with a trailing slash at the end.
+     * @see WP_CONTENT_CRAWLER_PATH
+     * @since 1.11.0
+     */
+    public static function wpccPath() {
+        return WP_CONTENT_CRAWLER_PATH;
     }
 
     /*
@@ -329,6 +349,14 @@ class Environment {
      */
     public static function defaultPostIdentifier() {
         return static::get(static::DEFAULT_POST_IDENTIFIER);
+    }
+
+    /**
+     * @return string See {@link Environment::DEFAULT_CATEGORY_IDENTIFIER}
+     * @since 1.9.0
+     */
+    public static function defaultCategoryIdentifier() {
+        return static::get(static::DEFAULT_CATEGORY_IDENTIFIER);
     }
 
     /**

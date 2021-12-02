@@ -13,7 +13,7 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use WPCCrawler\Objects\Crawling\Bot\PostBot;
 use WPCCrawler\Objects\Settings\SettingsImpl;
-use WPCCrawler\PostDetail\PostSaverData;
+use WPCCrawler\Objects\Crawling\Data\PostSaverData;
 
 abstract class BasePostDetailFactory {
 

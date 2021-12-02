@@ -11,6 +11,8 @@
 namespace WPCCrawler\Objects\Crawling\Preparers\Post;
 
 
+use WPCCrawler\Objects\Crawling\Data\Taxonomy\TaxonomyItem;
+use WPCCrawler\Objects\Crawling\Data\Taxonomy\TaxonomyItemList;
 use WPCCrawler\Objects\Crawling\Preparers\Post\Base\AbstractPostBotPreparer;
 use WPCCrawler\Objects\Enums\InformationMessage;
 use WPCCrawler\Objects\Enums\InformationType;
@@ -20,7 +22,8 @@ use WPCCrawler\Objects\Settings\Enums\SettingKey;
 
 class PostCustomTaxonomyPreparer extends AbstractPostBotPreparer {
 
-    private $customTaxonomies;
+    /** @var TaxonomyItemList|null */
+    private $customTaxonomyList;
 
     /**
      * Prepare the post bot
@@ -28,7 +31,7 @@ class PostCustomTaxonomyPreparer extends AbstractPostBotPreparer {
      * @return void
      */
     public function prepare() {
-        $this->customTaxonomies = [];
+        $this->customTaxonomyList = new TaxonomyItemList();
 
         // Get custom taxonomy with selectors
         $this->prepareCustomTaxonomyWithSelectors();
@@ -37,14 +40,15 @@ class PostCustomTaxonomyPreparer extends AbstractPostBotPreparer {
         $this->prepareManuallyAddedCustomTaxonomy();
 
         // If there is no custom taxonomy, stop.
-        if(empty($this->customTaxonomies)) return;
+        if($this->getCustomTaxonomyList()->isEmpty()) return;
 
         // Store it
-        $this->bot->getPostData()->setCustomTaxonomies($this->customTaxonomies);
+        $this->bot->getPostData()->setCustomTaxonomies($this->getCustomTaxonomyList()->getAll());
     }
 
     /**
-     * Finds the custom taxonomy whose selectors are specified and sets them to {@link $customTaxonomies}
+     * Finds the custom taxonomy whose selectors are specified and sets them to {@link $customTaxonomyList}
+     *
      * @since 1.8.0
      */
     private function prepareCustomTaxonomyWithSelectors() {
@@ -53,6 +57,7 @@ class PostCustomTaxonomyPreparer extends AbstractPostBotPreparer {
         // No need to continue if there is no selector.
         if(empty($postCustomPostTaxonomySelectors)) return;
 
+        $list = $this->getCustomTaxonomyList();
         foreach ($postCustomPostTaxonomySelectors as $selectorData) {
             // If there is no taxonomy, continue with the next one.
             if (!isset($selectorData["taxonomy"]) || empty($selectorData["taxonomy"])) continue;
@@ -67,20 +72,19 @@ class PostCustomTaxonomyPreparer extends AbstractPostBotPreparer {
             $taxonomyName = $selectorData["taxonomy"];
             if (!$this->validateTaxonomyExistence($taxonomyName)) continue;
 
-            $isAppend = isset($selectorData["append"]);
-
             // Add the values
-            $this->customTaxonomies[] = [
-                "data"      =>  $results,
-                "taxonomy"  =>  $taxonomyName,
-                "append"    =>  $isAppend ? 1 : 0,
-            ];
+            $list->add(new TaxonomyItem(
+                $taxonomyName,
+                $results,
+                isset($selectorData["append"])
+            ));
 
         }
     }
 
     /**
-     * Prepares the manually-entered custom taxonomy and sets them to {@link $customTaxonomies}
+     * Prepares the manually-entered custom taxonomy and sets them to {@link $customTaxonomyList}
+     *
      * @since 1.8.0
      */
     private function prepareManuallyAddedCustomTaxonomy() {
@@ -89,19 +93,19 @@ class PostCustomTaxonomyPreparer extends AbstractPostBotPreparer {
         // No need to continue if there is no custom taxonomy.
         if(empty($customPostTaxonomyData)) return;
 
+        $list = $this->getCustomTaxonomyList();
         foreach($customPostTaxonomyData as $taxonomyData) {
             if(!isset($taxonomyData["taxonomy"]) || !$taxonomyData["taxonomy"] || !isset($taxonomyData["value"])) continue;
-            $isAppend = isset($taxonomyData["append"]);
 
             // Validate the taxonomy's existence
             $taxonomyName = $taxonomyData["taxonomy"];
             if (!$this->validateTaxonomyExistence($taxonomyName)) continue;
 
-            $this->customTaxonomies[] = [
-                "data"      =>  $taxonomyData["value"],
-                "taxonomy"  =>  $taxonomyName,
-                "append"    =>  $isAppend ? 1 : 0,
-            ];
+            $list->add(new TaxonomyItem(
+                $taxonomyName,
+                $taxonomyData["value"],
+                isset($taxonomyData["append"])
+            ));
         }
     }
 
@@ -127,6 +131,22 @@ class PostCustomTaxonomyPreparer extends AbstractPostBotPreparer {
 
         // This is a valid taxonomy.
         return true;
+    }
+
+    /*
+     *
+     */
+
+    /**
+     * @return TaxonomyItemList See {@link customTaxonomyList}
+     * @since 1.11.0
+     */
+    public function getCustomTaxonomyList(): TaxonomyItemList {
+        if ($this->customTaxonomyList === null) {
+            $this->customTaxonomyList = new TaxonomyItemList();
+        }
+
+        return $this->customTaxonomyList;
     }
 
 }

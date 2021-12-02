@@ -228,6 +228,35 @@
         'showDevTools'  => true,
     ])
 
+    {{-- SECTION: FILTERS --}}
+    @include('partials.table-section-title', ['title' => _wpcc("Filters")])
+
+    {{-- CATEGORY REQUEST FILTERS --}}
+    @include('form-items.combined.filter-with-label', [
+        'name'        => \WPCCrawler\Objects\Settings\Enums\SettingKey::CATEGORY_REQUEST_FILTERS,
+        'title'       => _wpcc('Category request filters'),
+        'info'        => _wpcc('Define filters that are related to the requests made to crawl category pages.') . _wpcc_filter(true),
+        'eventGroup'  => \WPCCrawler\Objects\Events\Enums\EventGroupKey::CATEGORY_REQUEST,
+        'filterClass' => 'request-filter',
+    ])
+
+    {{-- CATEGORY PAGE FILTERS --}}
+    @include('form-items.combined.filter-with-label', [
+        'name'        => \WPCCrawler\Objects\Settings\Enums\SettingKey::CATEGORY_PAGE_FILTERS,
+        'title'       => _wpcc('Category page filters'),
+        'info'        => _wpcc('Define filters that will be applied in the category pages.') . _wpcc_filter(true),
+        'eventGroup'  => \WPCCrawler\Objects\Events\Enums\EventGroupKey::CATEGORY_PAGE,
+        'filterClass' => 'page-filter',
+    ])
+
+    {{-- CATEGORY DATA FILTERS --}}
+    @include('form-items.combined.filter-with-label', [
+        'name'       =>  \WPCCrawler\Objects\Settings\Enums\SettingKey::CATEGORY_DATA_FILTERS,
+        'title'      =>  _wpcc('Category data filters'),
+        'info'       =>  _wpcc('Define filters that will be applied to the category data.') . _wpcc_filter(true),
+        'eventGroup' =>  \WPCCrawler\Objects\Events\Enums\EventGroupKey::CATEGORY_DATA
+    ])
+
     {{-- SECTION: NOTIFICATIONS --}}
     @include('partials.table-section-title', ['title' => _wpcc("Notifications")])
 
@@ -245,6 +274,7 @@
     <?php
 
     /** @var int $postId */
+    /** @var array $settings */
     /**
      * Fires before closing table tag in category tab of site settings page.
      *

@@ -13,6 +13,7 @@ use Exception;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use WPCCrawler\Objects\Crawling\Bot\DummyBot;
 use WPCCrawler\Objects\Settings\Enums\SettingKey;
 use WPCCrawler\Test\Base\AbstractTest;
@@ -44,7 +45,7 @@ class ProxyTest extends AbstractTest {
                 SettingKey::WPCC_PROXIES                => $proxies,
             ] + $data->getPostSettings());
 
-        $protocol = starts_with($testUrl, "https") ? "https" : "http";
+        $protocol = Str::startsWith($testUrl, "https") ? "https" : "http";
 
         // Get proxy list for this protocol
         $proxyList = $dummyBot->preparedProxyList;

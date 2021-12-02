@@ -14,6 +14,8 @@ use Illuminate\Contracts\View\View;
 use WPCCrawler\Objects\Crawling\Data\CategoryData;
 use WPCCrawler\Objects\Crawling\Data\PostData;
 use WPCCrawler\Objects\File\MediaService;
+use WPCCrawler\Objects\Filtering\Explaining\FilterExplainingService;
+use WPCCrawler\Objects\Informing\Informer;
 use WPCCrawler\Test\Data\GeneralTestData;
 use WPCCrawler\Test\Enums\TestType;
 use WPCCrawler\Test\General\GeneralTestHistoryManager;
@@ -58,6 +60,7 @@ abstract class AbstractGeneralTest {
      * Conduct the test and return an array of results.
      *
      * @param GeneralTestData $data
+     * @throws Exception
      */
     protected abstract function createResults($data);
 
@@ -78,7 +81,7 @@ abstract class AbstractGeneralTest {
      * @return $this
      */
     public function run() {
-        WPCCrawler::setDoingTest(true);
+        WPCCrawler::setDoingGeneralTest(true);
 
         // Delete the files that were saved when conducting the previous test
         MediaService::getInstance()->deletePreviouslySavedTestFiles();
@@ -87,7 +90,13 @@ abstract class AbstractGeneralTest {
         $memoryInitial = memory_get_usage();
 
         // Create the results
-        $this->createResults($this->getData());
+        try {
+            $this->createResults($this->getData());
+
+        } catch (Exception $e) {
+            Informer::addInfo($e->getMessage() ?: _wpcc('An error occurred during the test.'))
+                ->setException($e)->addAsLog();
+        }
 
         // Update the history
         $this->historyHandler->addItemToHistoryWithGeneralTestData($this->getData());
@@ -134,8 +143,9 @@ abstract class AbstractGeneralTest {
             ->with('testHistory', $this->historyHandler->getTestHistory());
 
         return json_encode([
-            'view' => $view->render(),
-            'viewTestHistory' => $testHistoryView->render()
+            'view'                      => $view->render(),
+            'viewTestHistory'           => $testHistoryView->render(),
+            'filterSettingExplanations' => FilterExplainingService::getInstance()->explainAll(),
         ]);
     }
 

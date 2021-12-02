@@ -13,6 +13,8 @@ namespace WPCCrawler\Objects\Chunk;
 use DOMElement;
 use DOMNode;
 use Exception;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Symfony\Component\DomCrawler\Crawler;
 use WPCCrawler\Objects\Chunk\Enum\ChunkType;
 use WPCCrawler\Objects\Chunk\LengthStrategy\AbstractLengthStrategy;
@@ -625,7 +627,7 @@ class TransformationChunker {
 
             } else {
                 // Before setting the value, revert the operation that replaced short codes with dummy HTML elements
-                array_set($texts, $dotKey, $this->revertShortCodeHtmlElements($value));
+                Arr::set($texts, $dotKey, $this->revertShortCodeHtmlElements($value));
             }
 
         }
@@ -671,7 +673,7 @@ class TransformationChunker {
                 $content = $this->findAndReplace($findAndReplaces, $content, false);
 
                 // Assign the content to the related key
-                array_set($texts, $dotKey, trim($content));
+                Arr::set($texts, $dotKey, trim($content));
             }
         }
 
@@ -697,7 +699,7 @@ class TransformationChunker {
         $findAndReplaces = [];
 
         // If it has opening element
-        if (str_contains($value, '<' . $this->shortCodeElementTagForOpening)) {
+        if (Str::contains($value, '<' . $this->shortCodeElementTagForOpening)) {
             if (!$crawler) $crawler = $this->dummyBot->createDummyCrawler($value);
 
             $crawler->filter($this->shortCodeElementTagForOpening)->each(function($node) use (&$findAndReplaces) {
@@ -712,7 +714,7 @@ class TransformationChunker {
         }
 
         // If it has closing element
-        if (str_contains($value, '<' . $this->shortCodeElementTagForClosing)) {
+        if (Str::contains($value, '<' . $this->shortCodeElementTagForClosing)) {
             if (!$crawler) $crawler = $this->dummyBot->createDummyCrawler($value);
 
             $crawler->filter($this->shortCodeElementTagForClosing)->each(function($node) use (&$findAndReplaces) {

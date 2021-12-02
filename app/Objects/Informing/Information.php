@@ -12,6 +12,7 @@ namespace WPCCrawler\Objects\Informing;
 use Exception;
 use WPCCrawler\Objects\Enums\InformationMessage;
 use WPCCrawler\Objects\Enums\InformationType;
+use WPCCrawler\WPCCrawler;
 
 class Information {
 
@@ -96,7 +97,10 @@ class Information {
     public function addAsLog() {
         $this->addAsLog = true;
 
-        error_log($this->__toString());
+        if (!WPCCrawler::isDoingPhpUnitTest()) {
+            error_log($this->__toString());
+        }
+
         return $this;
     }
 

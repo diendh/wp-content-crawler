@@ -31,6 +31,7 @@ $inputKeyVal = isset($inputKey) && $inputKey ? "[{$inputKey}]" : '';
                @if(isset($required)) required="required" @endif
                @if(isset($inputClass)) class="{{ $inputClass }}" @endif
                @if(isset($step)) step="{{ $step }}" @endif
+               @if(isset($maxlength) && $maxlength) maxlength="{{ $maxlength }}" @endif
         />
     </div>
     @if(isset($remove))

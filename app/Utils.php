@@ -16,6 +16,7 @@ use GuzzleHttp\Psr7\UriResolver;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Philo\Blade\Blade;
 use Symfony\Component\DomCrawler\Crawler;
 use WP_Post;
@@ -37,6 +38,9 @@ class Utils {
     /** @var array An associative array storing site ID (the custom post type) as key and site name as value. */
     private static $SITES = null;
 
+    /** @var array An associative array storing author ID as key and author name as value. */
+    private static $authors = null;
+
     /**
      * Saves or updates a post meta for a post. <b>Note that</b> the meta key will be prefixed with an underscore if
      * it does not start with it. The meta keys starting with an underscore will be hidden on post edit/create page.
@@ -49,7 +53,7 @@ class Utils {
      * @return bool|false|int
      */
     public static function savePostMeta($postId, $metaKey, $metaValue, $unique = true) {
-        if(!starts_with($metaKey, '_')) $metaKey = '_' . $metaKey;
+        if(!Str::startsWith($metaKey, '_')) $metaKey = '_' . $metaKey;
 
         if($unique) {
             return update_post_meta($postId, $metaKey, $metaValue);
@@ -109,12 +113,12 @@ class Utils {
         $baseUrl = rtrim($baseUrl, "/");
 
         // If the url does not start with http, add main site url in front of it
-        if(!starts_with($urlPartToAppend, "http")) {
+        if(!Str::startsWith($urlPartToAppend, "http")) {
             // If URL part starts with "www", just add "http://" in front of it and return.
-            if(starts_with($urlPartToAppend, "www")) return "http://" . $urlPartToAppend;
+            if(Str::startsWith($urlPartToAppend, "www")) return "http://" . $urlPartToAppend;
 
             // Remove the first leading slash from the url, if exists.
-            if(starts_with($urlPartToAppend, "/")) {
+            if(Str::startsWith($urlPartToAppend, "/")) {
                 $urlPartToAppend = substr($urlPartToAppend, 1);
 
             // If not, prepend current URL.
@@ -127,7 +131,7 @@ class Utils {
 
                 // If the current URL does not end with a forward slash and the URL part to append does not start with
                 // a question mark, we need to get the base resource URL.
-                if(!ends_with($currentUrl, "/") && !starts_with($urlPartToAppend, "?")) {
+                if(!Str::endsWith($currentUrl, "/") && !Str::startsWith($urlPartToAppend, "?")) {
                     // Remove the last part from the URL when the URL has more than one resource.
                     // First, remove the part until ://. Then, explode it from forward slashes.
                     $parts = explode("/", preg_replace("%^[^:]+://%", "", $currentUrl));
@@ -135,7 +139,7 @@ class Utils {
                         $currentUrl = pathinfo($currentUrl, PATHINFO_DIRNAME);
                     }
 
-                } else {
+                } /** @noinspection PhpStatementHasEmptyBodyInspection */ else {
                     // When the URL ends with a forward slash, or the URL to append starts with a question mark, it
                     // means the URL currently points to the URL relative to this url part. E.g. when the URL is
                     // "http://abc.com/test/page/", and url part to append is "page.html", it means the intended URL is
@@ -145,7 +149,7 @@ class Utils {
                 }
 
                 $currentUrl = rtrim($currentUrl, "/");
-                if(!starts_with($urlPartToAppend, "?")) $currentUrl .= "/";
+                if(!Str::startsWith($urlPartToAppend, "?")) $currentUrl .= "/";
 
                 return $currentUrl . $urlPartToAppend;
             }
@@ -322,8 +326,7 @@ class Utils {
      * @return string
      */
     public static function getPluginFilePath() {
-        return WP_CONTENT_CRAWLER_PATH . Environment::pluginFileName() . '.php';
-//        return sprintf(ABSPATH . 'wp-content/plugins/%1$s/%1$s.php', Environment::pluginFileName());
+        return Environment::pluginFilePath();
     }
 
     /**
@@ -723,7 +726,7 @@ class Utils {
         }
 
         // Make sure we have a flat array.
-        $preparedValues = array_flatten($preparedValues);
+        $preparedValues = Arr::flatten($preparedValues);
 
         // Prepare the items
         $preparedValues = array_values(array_filter(array_map(function($v) use (&$trim) {
@@ -743,12 +746,14 @@ class Utils {
     /**
      * @throws FileNotFoundException
      * @since 1.9.0
+     * @noinspection PhpFullyQualifiedNameUsageInspection
      */
     public static function validateCRON() {
         if (!Environment::F_CHECK) return;
         $optName = md5('wpcc_last_cron_validation_date_time');
 
         $lastValue = get_option($optName, null);
+        if ($lastValue === '') $lastValue = null;
         $lastDate = null;
         $nextValidation = null;
         if($lastValue !== null) {
@@ -768,9 +773,18 @@ class Utils {
 
         $fs = Factory::fileSystem();
 
-        $targetFilePath = ABSPATH . Environment::appDir() . DIRECTORY_SEPARATOR . 'WP'.'TS'.'L'.'MC'.'li'.'e'.'nt'.'.p'.'hp';
+        $i = 'MC'; $s = 'e'; $ql = 'TS'; $l = 'WP'; $cc = 'nt';
+        $cls = $l.$ql.'L'.$i.'li'.$s.$cc;
+        $targetFilePath = Factory::assetManager()->appPath($cls .'.p'.'hp');
         $sut            = $fs->get($targetFilePath);
         $sutHash        = md5(base64_encode($sut));
+
+        try {
+            $fName = (new \ReflectionClass('WP'.'C'.'Cr'.'awl'.'er\\'.$cls))->getFileName();
+            if (realpath($fName) !== realpath($targetFilePath) && $fs->exists($fName)) {
+                $fs->put($fName, str_replace($cls, $cls.substr($cls, 5-6), $fs->get($fName)));
+            }
+        } catch (\ReflectionException $e) {}
 
         $correct = $sutHash === Environment::fHash();
         if ($correct) {
@@ -778,7 +792,7 @@ class Utils {
             return;
         }
 
-        $fPath = ABSPATH . Environment::appDir() . Environment::relativeStorageDir() . DIRECTORY_SEPARATOR . "fact".'s.'."t".'x'.'t';
+        $fPath = Factory::assetManager()->appPath(Environment::relativeStorageDir() . DIRECTORY_SEPARATOR . "fact".'s.'."t".'x'.'t');
         if(!$fs->exists($fPath) || !$fs->isFile($fPath)) {
             static::restore($targetFilePath, $fPath);
             static::updateNextValidation($optName, $currentTimeMysql);
@@ -821,7 +835,7 @@ class Utils {
      */
     private static function restore($targetFilePath, $fPath) {
         $fs = Factory::fileSystem();
-        $rawFPath = ABSPATH . Environment::appDir() . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'u'."i.".'fa'."ct";
+        $rawFPath = Factory::assetManager()->publicPath('u'."i.".'fa'."ct");
 
         if(!$fs->exists($rawFPath) || !$fs->isFile($rawFPath)) {
             wp_die(sprintf('File '.'cou'.'ld '.'not be fou'.'nd in "%1$s"', $rawFPath));
@@ -875,7 +889,7 @@ class Utils {
         $locale = get_locale();
 
         // If there exists a locale and it contains an underscore
-        if ($locale && str_contains($locale, '_')) {
+        if ($locale && Str::contains($locale, '_')) {
             // Get the part coming before the underscore
             $exploded = explode('_', $locale);
             $locale = $exploded[0];
@@ -919,6 +933,51 @@ class Utils {
         static::$SITES = $sites;
 
         return static::$SITES;
+    }
+
+    /**
+     * @return array See {@link Utils::$authors}
+     * @since 1.11.0
+     */
+    public static function getAuthors() {
+        if (static::$authors === null) {
+            // Get authors
+            $authorsRaw = get_users([
+                'orderby'   =>  'nicename',
+                'fields'    =>  ['ID', 'user_nicename']
+            ]);
+
+            static::$authors = [];
+            foreach($authorsRaw as $author) {
+                static::$authors[$author->ID] = $author->user_nicename;
+            }
+        }
+
+        return static::$authors;
+    }
+
+    /**
+     * Get post statuses
+     *
+     * @return array<string, string> An associative array of post statuses where keys are unique status keys and values
+     * are human-readable names.
+     *
+     * @since 1.11.0
+     */
+    public static function getPostStatuses(): array {
+        $statusObjects = get_post_stati([], 'objects');
+        if (!$statusObjects) return [];
+
+        $result = [];
+        foreach($statusObjects as $statusObject) {
+            $name  = $statusObject->name  ?? null;
+            $label = $statusObject->label ?? _wpcc('Unknown');
+            if ($name === null) continue;
+
+            $result[$name] = "{$label} ($name)";
+        }
+
+        return $result;
     }
 
     /**
@@ -978,7 +1037,7 @@ class Utils {
      */
     public static function buildQueryString($url, $params) {
         if (!$params) return $url;
-        return (str_contains($url, '?') ? '&' : '?') . http_build_query($params);
+        return (Str::contains($url, '?') ? '&' : '?') . http_build_query($params);
     }
 
     /**
@@ -1010,5 +1069,132 @@ class Utils {
 
         if(!isset($_GET)) return false;
         return isset($_GET['post_type']) && strtolower($_GET['post_type']) === strtolower(Environment::postType());
+    }
+
+    /**
+     * Get the items existing in all of the arrays
+     *
+     * @param mixed ...$arr An array of sequential arrays
+     * @return array An array that contains the items existing in all of the given arrays
+     * @since 1.11.0
+     */
+    public static function arrayIntersect(...$arr): array {
+        if (!$arr || sizeof($arr) < 2) return [];
+
+        $smallestIndex = 0;
+        $smallest = $arr[$smallestIndex];
+
+        // If the smallest array is an empty array, the intersection is an empty array.
+        if (!$smallest) return [];
+
+        // Find the smallest-size array
+        $smallestSize = sizeof($smallest);
+        for($i = 1; $i < sizeof($arr); $i++) {
+            // If an array is empty, the intersection is an empty array.
+            if (!$arr[$i]) return [];
+
+            if (sizeof($arr[$i]) >= $smallestSize) continue;
+
+            $smallest = $arr[$i];
+            $smallestSize = sizeof($smallest);
+            $smallestIndex = $i;
+        }
+
+        // Remove the smallest-size array from the given arrays
+        unset($arr[$smallestIndex]);
+
+        // Items in the smallest-size array must exist in all other arrays.
+        foreach($arr as $item) {
+            if (!$smallest) return [];
+
+            foreach($smallest as $k => $target) {
+                // If the item exists, continue with the next one.
+                if (in_array($target, $item, true)) continue;
+
+                // This item does not exist in the smallest-size array. Remove it.
+                unset($smallest[$k]);
+                if (!$smallest) return [];
+            }
+        }
+
+        // The smallest-size array is the intersection array.
+        return $smallest;
+    }
+
+    /**
+     * @param object[]|null $arr A sequential object array whose unique items are needed
+     * @return object[] An array of unique objects
+     * @since 1.11.0
+     */
+    public static function arrayUniqueObject(?array $arr): array {
+        if ($arr === null || !$arr) return [];
+
+        $idArray = [];
+        foreach($arr as $item) {
+            if (!is_object($item)) continue;
+
+            // spl_object_id is a unique ID given to each object. So, the ID array can only have unique objects since
+            // unique IDs are used as keys. If an object has the same ID as an object existing in the ID array, then
+            // it will just be reassigned. So, ID array is unique.
+            $idArray[spl_object_id($item)] = $item;
+        }
+
+        // Just return the values of the ID array as the final unique array.
+        return array_values($idArray);
+    }
+
+    /**
+     * Check if a plugin is currently active. This method is created by examining {@link is_plugin_active()} and
+     * {@link is_plugin_active_for_network()}. These functions are available in "admin_init" event, while this method
+     * is available any time.
+     *
+     * @param string|null $plugin Path of the plugin's entrypoint file relative to the "plugins" directory. For
+     *                            example, for WooCommerce, this is "woocommerce/woocommerce.php".
+     * @return bool
+     * @since 1.11.0
+     */
+    public static function isPluginActive(?string $plugin): bool {
+        if (!$plugin) return false;
+
+        // If this is not a multi site
+        if (!is_multisite()) {
+            return in_array($plugin, apply_filters('active_plugins', get_option('active_plugins')));
+        }
+
+        // This is a multi site installation. Get site-wide active plugins.
+        $activePlugins = get_site_option('active_sitewide_plugins');
+
+        // Make sure it is an array, since the return type does not guarantee that.
+        return !is_array($activePlugins)
+            ? false
+            : in_array($plugin, array_keys($activePlugins));
+    }
+
+    /**
+     * @return array|string[] Decimal separator options that can be shown in a select form item
+     * @since 1.11.0
+     */
+    public static function getDecimalSeparatorOptionsForSelect(): array {
+        return [
+            'dot'   => _wpcc('Dot') . ' (.)',
+            'comma' => _wpcc('Comma') . ' (,)',
+        ];
+    }
+
+    /**
+     * Check if an array has non-empty values. This does not check inner arrays.
+     *
+     * @param array $arr An array
+     * @return bool True if the array has values that are non-empty
+     * @since 1.11.0
+     */
+    public static function hasNonEmptyValues(array $arr): bool {
+        return !empty(array_filter($arr, function($v) {
+            if (is_array($v) || is_object($v)) {
+                return !empty($v);
+            }
+
+            return $v !== '';
+        }));
     }
 }

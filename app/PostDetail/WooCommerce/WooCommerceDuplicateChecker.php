@@ -12,7 +12,7 @@ namespace WPCCrawler\PostDetail\WooCommerce;
 
 
 use WPCCrawler\PostDetail\Base\BasePostDetailDuplicateChecker;
-use WPCCrawler\PostDetail\PostSaverData;
+use WPCCrawler\Objects\Crawling\Data\PostSaverData;
 
 class WooCommerceDuplicateChecker extends BasePostDetailDuplicateChecker {
 

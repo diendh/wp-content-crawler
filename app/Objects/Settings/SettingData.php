@@ -12,13 +12,13 @@ namespace WPCCrawler\Objects\Settings;
 
 
 use WPCCrawler\Objects\Enums\TabKey;
-use WPCCrawler\Objects\Settings\Enums\SettingValueType;
+use WPCCrawler\Objects\Enums\ValueType;
 
 /**
  * Stores data about a single setting. It might be an option or a post meta. The data stored about the setting indicates
  * the key of the setting, the data structure of the setting's value, and the setting's default value.
  *
- * This class uses the constants defined in {@link SettingKey} and {@link SettingValueType}.
+ * This class uses the constants defined in {@link SettingKey} and {@link ValueType}.
  *
  * @package WPCCrawler\Objects\Settings
  * @since   1.8.1
@@ -28,7 +28,7 @@ class SettingData {
     /** @var string Key of this setting. One of the constants defined in {@link SettingKey} */
     private $key;
 
-    /** @var int Data structure of the value of this setting. One of the constants defined in {@link SettingValueType} */
+    /** @var int Data structure of the value of this setting. One of the constants defined in {@link ValueType}. */
     private $valueType;
 
     /** @var mixed Default value for this setting. The default value is null by default. */
@@ -45,7 +45,7 @@ class SettingData {
      * @since 1.9.0
      * @since 1.10.0 Added $tabKey
      */
-    public function __construct($key, $valueType, $defaultVal = null, $tabKey = null) {
+    public function __construct(string $key, int $valueType, $defaultVal = null, $tabKey = null) {
         // We do not check the validity of $key and $valueType by checking their availability in SettingKey and
         // SettingValueType classes, respectively, because custom keys and value types can be used to create an instance.
         // For example, other plugins, using the filters of this plugin, can define custom settings. In order not to
@@ -103,6 +103,6 @@ class SettingData {
      * @since 1.9.0
      */
     public function isSingleValue() {
-        return $this->getValueType() !== SettingValueType::T_ARRAY;
+        return $this->getValueType() !== ValueType::T_ARRAY;
     }
 }

@@ -19,6 +19,7 @@ class TabKey {
     const SITE_SETTINGS_TAB_CATEGORY                    = 'tab-category';
     const SITE_SETTINGS_TAB_POST                        = 'tab-post';
     const SITE_SETTINGS_TAB_TEMPLATES                   = 'tab-templates';
+    const SITE_SETTINGS_TAB_FILTERS                     = 'tab-filters';
     const SITE_SETTINGS_TAB_NOTES                       = 'tab-notes';
     const SITE_SETTINGS_TAB_GENERAL_SETTINGS            = 'tab-general-settings';
     const SITE_SETTINGS_TAB_IMPORT_EXPORT_SETTINGS      = 'tab-import-export-settings';

@@ -1,4 +1,6 @@
-<?php
+<?php /** @noinspection SqlResolve */
+/** @noinspection SqlNoDataSourceInspection */
+
 /**
  * Created by PhpStorm.
  * User: turgutsaricam
@@ -11,7 +13,6 @@ namespace WPCCrawler\Objects\Settings;
 
 use WPCCrawler\Environment;
 use WPCCrawler\Factory;
-use WPCCrawler\Objects\Enums\PostStatus;
 use WPCCrawler\Objects\Settings\Enums\SettingKey;
 use WPCCrawler\Objects\Transformation\Spinning\SpinningService;
 use WPCCrawler\Objects\Transformation\Translation\TranslationService;
@@ -164,27 +165,10 @@ class SettingService {
         }
 
         // Post statuses
-        $postStatuses = [
-            PostStatus::PUBLISH => _wpcc('Publish'),
-            PostStatus::DRAFT   => _wpcc('Draft'),
-            PostStatus::PENDING => _wpcc('Pending'),
-            PostStatus::PRIVATE => _wpcc('Private')
-        ];
-
-        $result['postStatuses'] = $postStatuses;
+        $result['postStatuses'] = Utils::getPostStatuses();
 
         // Get authors
-        $authorsRaw = get_users([
-            'orderby'   =>  'nicename',
-            'fields'    =>  ['ID', 'user_nicename']
-        ]);
-
-        $authors = [];
-        foreach($authorsRaw as $author) {
-            $authors[$author->ID] = $author->user_nicename;
-        }
-
-        $result['authors'] = $authors;
+        $result['authors'] = Utils::getAuthors();
 
         // CRON intervals
         if($isGeneralPage) {

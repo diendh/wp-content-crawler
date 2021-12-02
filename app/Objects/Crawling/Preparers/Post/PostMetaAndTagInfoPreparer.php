@@ -9,6 +9,7 @@
 namespace WPCCrawler\Objects\Crawling\Preparers\Post;
 
 
+use Illuminate\Support\Arr;
 use WPCCrawler\Objects\Crawling\Preparers\Post\Base\AbstractPostBotPreparer;
 use WPCCrawler\Objects\Settings\Enums\SettingKey;
 
@@ -41,14 +42,14 @@ class PostMetaAndTagInfoPreparer extends AbstractPostBotPreparer {
         // Get tags
         $allTags = $this->getValuesForSelectorSetting(SettingKey::POST_TAG_SELECTORS,'text', false, false, true);
         if (!$allTags) $allTags = [];
-        $allTags = array_flatten(array_map(function($tag) {
+        $allTags = Arr::flatten(array_map(function($tag) {
 
             // Explode and trim
             return array_map(function($tagFromExplode) {
                 return trim($tagFromExplode);
             }, explode(",", $tag));
 
-        }, array_flatten($allTags)));
+        }, Arr::flatten($allTags)));
 
         // Store the tags found by given selectors
         if(!empty($allTags)) $this->bot->getPostData()->setTags(array_unique($allTags));

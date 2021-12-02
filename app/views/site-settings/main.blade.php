@@ -1,4 +1,4 @@
-<div class="panel-wrap wcc-settings-meta-box">
+<div class="panel-wrap wcc-settings-meta-box" data-post-id="{{ $postId }}">
     <?php wp_nonce_field('wcc-settings-metabox', \WPCCrawler\Environment::nonceName()); ?>
 
     @include('partials.form-error-alert')
@@ -22,6 +22,7 @@
         <a href="#" data-tab="#tab-category"    class="nav-tab">{{ _wpcc('Category') }}</a>
         <a href="#" data-tab="#tab-post"        class="nav-tab">{{ _wpcc('Post') }}</a>
         <a href="#" data-tab="#tab-templates"   class="nav-tab">{{ _wpcc('Templates') }}</a>
+        <a href="#" data-tab="#tab-filters"     class="nav-tab">{{ _wpcc('Filters') }}</a>
         <a href="#" data-tab="#tab-notes"       class="nav-tab">{{ _wpcc('Notes') }}</a>
 
         <?php
@@ -70,6 +71,11 @@
     {{-- TEMPLATE SETTINGS --}}
     <div id="tab-templates" class="tab hidden">
         @include('site-settings.tab-templates')
+    </div>
+
+    {{-- FILTER SETTINGS --}}
+    <div id="tab-filters" class="tab hidden">
+        @include('site-settings.tab-filters')
     </div>
 
     {{-- NOTES --}}

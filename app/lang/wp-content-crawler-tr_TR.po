@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Content Crawler 1.0\n"
-"POT-Creation-Date: 2020-02-11 21:58+0300\n"
-"PO-Revision-Date: 2020-02-11 22:01+0300\n"
+"POT-Creation-Date: 2021-02-28 10:21+0300\n"
+"PO-Revision-Date: 2021-02-28 10:26+0300\n"
 "Last-Translator: Turgut Sarıçam <turgutsaricam@gmail.com>\n"
 "Language-Team: \n"
 "Language: tr_TR\n"
@@ -20,12 +20,13 @@ msgstr ""
 
 #: Controllers/DashboardController.php:36
 #: Controllers/DashboardController.php:43
-#: Objects/AssetManager/AssetManager.php:143
+#: Objects/AssetManager/AssetManager.php:206
 msgid "Dashboard"
 msgstr "Pano"
 
 #: Controllers/FeatureRequestController.php:45
 #: Controllers/FeatureRequestController.php:52
+#: storage/cache/c9078b08ca0af3aa65d91a9a4f3d5089291ce02a.php:10
 msgid "Feature Request"
 msgstr "Özellik İsteği"
 
@@ -55,7 +56,8 @@ msgid "Feature Request Confirmation"
 msgstr "Özellik İsteği Onayı"
 
 #: Controllers/FeatureRequestController.php:187
-#: Objects/Crawling/Bot/AbstractBot.php:1248
+#: Objects/Crawling/Bot/AbstractBot.php:1337
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:376
 msgid "WP Content Crawler"
 msgstr "WP İçerik Toplayıcı"
 
@@ -65,7 +67,7 @@ msgstr "Anahtar geçerli değil."
 
 #: Controllers/GeneralSettingsController.php:76
 #: Controllers/GeneralSettingsController.php:83
-#: Objects/AssetManager/AssetManager.php:146 WPCCrawler.php:130
+#: Objects/AssetManager/AssetManager.php:209 WPCCrawler.php:148
 #: storage/cache/2a91d9781656dea8634dedab4e3e9541c4fc275c.php:2
 msgid "General Settings"
 msgstr "Genel Ayarlar"
@@ -82,7 +84,7 @@ msgstr "Bunu yapmak için yetkiniz bulunmuyor."
 msgid "Settings updated."
 msgstr "Ayarlar güncellendi."
 
-#: Controllers/GeneralSettingsController.php:237 Services/PostService.php:625
+#: Controllers/GeneralSettingsController.php:237 Services/PostService.php:637
 msgid "Settings are updated, but password could not be changed."
 msgstr "Ayarlar güncellendi, fakat şifre değiştirilemedi."
 
@@ -91,7 +93,7 @@ msgid "General settings have been reset."
 msgstr "Genel ayarlar sıfırlandı."
 
 #: Controllers/TestController.php:31 Controllers/TestController.php:38
-#: Objects/AssetManager/AssetManager.php:144
+#: Objects/AssetManager/AssetManager.php:207
 msgid "Tester"
 msgstr "Testçi"
 
@@ -104,7 +106,7 @@ msgid "Category Page"
 msgstr "Kategori Sayfası"
 
 #: Controllers/ToolsController.php:39 Controllers/ToolsController.php:46
-#: Objects/AssetManager/AssetManager.php:145
+#: Objects/AssetManager/AssetManager.php:208
 #: storage/cache/28bced3e933b70e75ada67fd2172e68ac2e5c8b1.php:2
 msgid "Tools"
 msgstr "Araçlar"
@@ -179,21 +181,21 @@ msgstr "1 URL’nin kilidi açıldı."
 msgid "There are no locked URLs currently."
 msgstr "Şu anda hiç kilitli URL yok."
 
-#: Controllers/ToolsController.php:477
-#: Objects/Crawling/Savers/PostSaver.php:1697
+#: Controllers/ToolsController.php:475
+#: Objects/Crawling/Savers/PostSaver.php:1778
 #: storage/cache/7916caad143dbd7a2fdaab02028045d033c90ca9.php:20
 msgid "Post ID"
 msgstr "Yazı ID’si"
 
-#: Controllers/ToolsController.php:577
+#: Controllers/ToolsController.php:575
 msgid "In Queue"
 msgstr "Sırada"
 
-#: Controllers/ToolsController.php:578
+#: Controllers/ToolsController.php:576
 msgid "Already Saved"
 msgstr "Kaydedilmiş"
 
-#: Controllers/ToolsController.php:579
+#: Controllers/ToolsController.php:577
 #: Objects/Transformation/Spinning/Clients/ChimpRewriterClient.php:391
 #: Objects/Transformation/Spinning/Clients/ChimpRewriterClient.php:406
 #: storage/cache/03557e0035dd641f3a931e1df7c35a537994fda2.php:17
@@ -205,216 +207,516 @@ msgstr "Hepsi"
 msgid "Content Crawler"
 msgstr "İçerik Toplayıcı"
 
-#: Objects/AssetManager/AssetManager.php:81
+#: Objects/AssetManager/AssetManager.php:83
 #: storage/cache/afaca590fa685159e3ab0aee59217891e0d2ea6c.php:7
 msgid "An error occurred."
 msgstr "Bir hata oluştu."
 
-#: Objects/AssetManager/AssetManager.php:82
+#: Objects/AssetManager/AssetManager.php:84
 msgid "Press {0} to copy"
 msgstr "Kopyalamak için {0} tuşlarına bas"
 
-#: Objects/AssetManager/AssetManager.php:83
+#: Objects/AssetManager/AssetManager.php:85
 msgid "Copied!"
 msgstr "Kopyalandı!"
 
-#: Objects/AssetManager/AssetManager.php:84
+#: Objects/AssetManager/AssetManager.php:86
 msgid "No result."
 msgstr "Sonuç bulunamadı."
 
-#: Objects/AssetManager/AssetManager.php:85
+#: Objects/AssetManager/AssetManager.php:87
 msgid "Found"
 msgstr "Bulunan"
 
-#: Objects/AssetManager/AssetManager.php:86
+#: Objects/AssetManager/AssetManager.php:88
 msgid "This is required to perform the test."
 msgstr "Bu, testi yapmak için gerekli."
 
-#: Objects/AssetManager/AssetManager.php:87
+#: Objects/AssetManager/AssetManager.php:89
 msgid "This is required."
 msgstr "Bu, gerekli."
 
-#: Objects/AssetManager/AssetManager.php:88
+#: Objects/AssetManager/AssetManager.php:90
 msgid "CSS selector found"
 msgstr "CSS seçici bulundu"
 
-#: Objects/AssetManager/AssetManager.php:89
+#: Objects/AssetManager/AssetManager.php:91
 msgid "Do you want to delete all test history?"
 msgstr "Tüm test geçmişini silmek istiyor musunuz?"
 
-#: Objects/AssetManager/AssetManager.php:90
+#: Objects/AssetManager/AssetManager.php:92
 msgid "URL data cannot be found."
 msgstr "URL verisi bulunamadı."
 
-#: Objects/AssetManager/AssetManager.php:91
+#: Objects/AssetManager/AssetManager.php:93
 msgid "Currently crawling"
 msgstr "Şu an kaydedilen"
 
-#: Objects/AssetManager/AssetManager.php:92
+#: Objects/AssetManager/AssetManager.php:94
 msgid "Retrieving URLs from {0}"
 msgstr "URL’ler {0} üzerinden alınıyor"
 
-#: Objects/AssetManager/AssetManager.php:93
+#: Objects/AssetManager/AssetManager.php:95
 #: storage/cache/98780646bde969762ca888206f6560caf5bcbd82.php:15
 msgid "Pause"
 msgstr "Duraklat"
 
-#: Objects/AssetManager/AssetManager.php:94
+#: Objects/AssetManager/AssetManager.php:96
 #: storage/cache/98780646bde969762ca888206f6560caf5bcbd82.php:22
 msgid "Continue"
 msgstr "Devam et"
 
-#: Objects/AssetManager/AssetManager.php:95
+#: Objects/AssetManager/AssetManager.php:97
 msgid "Test data could not be retrieved."
 msgstr "Test verisi alınamadı."
 
-#: Objects/AssetManager/AssetManager.php:96
+#: Objects/AssetManager/AssetManager.php:98
 msgid "Response of content retrieval process is not valid."
 msgstr "İçerik alma işleminin yanıtı geçerli değil."
 
-#: Objects/AssetManager/AssetManager.php:97
+#: Objects/AssetManager/AssetManager.php:99
 msgid "Test data retrieval failed."
 msgstr "Test verisi alma başarısız oldu."
 
-#: Objects/AssetManager/AssetManager.php:98
+#: Objects/AssetManager/AssetManager.php:100
 msgid "No URLs found."
 msgstr "Hiç URL bulunamadı."
 
-#: Objects/AssetManager/AssetManager.php:99
+#: Objects/AssetManager/AssetManager.php:101
 msgid "This is not valid."
 msgstr "Bu geçerli değil."
 
-#: Objects/AssetManager/AssetManager.php:100
+#: Objects/AssetManager/AssetManager.php:102
 msgid "URL data does not exist for this."
 msgstr "Bunun için URL verisi bulunamadı."
 
-#: Objects/AssetManager/AssetManager.php:101
+#: Objects/AssetManager/AssetManager.php:103
 msgid "This URL has not been crawled yet."
 msgstr "Bu URL’nin içeriği henüz alınmadı."
 
-#: Objects/AssetManager/AssetManager.php:102
+#: Objects/AssetManager/AssetManager.php:104
 msgid "The URL cannot be retrieved."
 msgstr "URL alınamadı."
 
-#: Objects/AssetManager/AssetManager.php:103
+#: Objects/AssetManager/AssetManager.php:105
 msgid "The cache has been invalidated."
 msgstr "Önbellek temizlendi."
 
-#: Objects/AssetManager/AssetManager.php:104
+#: Objects/AssetManager/AssetManager.php:106
 msgid "The cache could not be invalidated."
 msgstr "Önbellek temizlenemedi."
 
-#: Objects/AssetManager/AssetManager.php:105
+#: Objects/AssetManager/AssetManager.php:107
 msgid "All caches have been invalidated."
 msgstr "Tüm önbellek temizlendi."
 
-#: Objects/AssetManager/AssetManager.php:106
+#: Objects/AssetManager/AssetManager.php:108
 msgid "All caches could not be invalidated."
 msgstr "Tüm önbellek temizlenemedi."
 
-#: Objects/AssetManager/AssetManager.php:107
+#: Objects/AssetManager/AssetManager.php:109
 msgid "Custom short code"
 msgstr "Özel kısa kod"
 
-#: Objects/AssetManager/AssetManager.php:108
+#: Objects/AssetManager/AssetManager.php:110
 msgid "Post ID could not be found."
 msgstr "Yazı ID’si bulunamadı."
 
-#: Objects/AssetManager/AssetManager.php:109
+#: Objects/AssetManager/AssetManager.php:111
 msgid "Settings could not be retrieved."
 msgstr "Seçenekler alınamadı."
 
-#: Objects/AssetManager/AssetManager.php:110
+#: Objects/AssetManager/AssetManager.php:112
 msgid "The settings have been saved."
 msgstr "Seçenekler kaydedildi."
 
-#: Objects/AssetManager/AssetManager.php:111
+#: Objects/AssetManager/AssetManager.php:113
 msgid "The state could not be parsed."
 msgstr "Durum işlenemedi."
 
-#: Objects/AssetManager/AssetManager.php:112
+#: Objects/AssetManager/AssetManager.php:114
 msgid "Top"
 msgstr "Üst"
 
-#: Objects/AssetManager/AssetManager.php:113
+#: Objects/AssetManager/AssetManager.php:115
 msgid "{0} element selected"
 msgstr "{0} element seçildi"
 
-#: Objects/AssetManager/AssetManager.php:114
+#: Objects/AssetManager/AssetManager.php:116
 msgid "{0} elements selected"
 msgstr "{0} element seçildi"
 
-#: Objects/AssetManager/AssetManager.php:115
+#: Objects/AssetManager/AssetManager.php:117
+#: Objects/Filtering/Commands/ActionCommands/Text/TextClear.php:24
 msgid "Clear"
 msgstr "Temizle"
 
-#: Objects/AssetManager/AssetManager.php:116
+#: Objects/AssetManager/AssetManager.php:118
+#: Objects/AssetManager/AssetManager.php:126
 msgid "or"
 msgstr "ya da"
 
-#: Objects/AssetManager/AssetManager.php:117
+#: Objects/AssetManager/AssetManager.php:119
 msgid "Select a category URL"
 msgstr "Bir kategori URL’si seç"
 
-#: Objects/AssetManager/AssetManager.php:118
+#: Objects/AssetManager/AssetManager.php:120
 msgid "See in docs"
 msgstr "Dokümantasyonda göster"
 
-#: Objects/AssetManager/AssetManager.php:120
+#: Objects/AssetManager/AssetManager.php:121
+#: Objects/Filtering/Commands/ActionCommands/Element/RemoveElement.php:29
+#: storage/cache/884ed659f8ca462f297d7486ba661cbbb20b39f6.php:1
+msgid "Remove"
+msgstr "Kaldır"
+
+#: Objects/AssetManager/AssetManager.php:122
+msgid "Subject"
+msgstr "Özne"
+
+#: Objects/AssetManager/AssetManager.php:123
+msgid "Property"
+msgstr "Nitelik"
+
+#: Objects/AssetManager/AssetManager.php:124
+msgid "Command"
+msgstr "Komut"
+
+#: Objects/AssetManager/AssetManager.php:125
+#: Test/Base/AbstractHtmlManipulationTest.php:118
+#: Test/Tests/FindReplaceInCustomMetaOrShortCodeTest.php:86
+msgid "and"
+msgstr "ve"
+
+#: Objects/AssetManager/AssetManager.php:127
+msgid "If"
+msgstr "Eğer"
+
+#: Objects/AssetManager/AssetManager.php:128
+msgid "Then"
+msgstr "O halde"
+
+#: Objects/AssetManager/AssetManager.php:129
+#: Objects/SitePostTypeCreator.php:258
+#: storage/cache/4e030d94d4dc98ffdabda3c6817271fe857af7b8.php:37
+msgid "Add New"
+msgstr "Yeni Ekle"
+
+#: Objects/AssetManager/AssetManager.php:130
+msgid "Add command"
+msgstr "Komut ekle"
+
+#: Objects/AssetManager/AssetManager.php:131
+msgid "Remove command"
+msgstr "Komutu kaldır"
+
+#: Objects/AssetManager/AssetManager.php:132
+msgid "Add condition block"
+msgstr "Koşul bloğu ekle"
+
+#: Objects/AssetManager/AssetManager.php:133
+msgid "Remove block"
+msgstr "Bloğu kaldır"
+
+#: Objects/AssetManager/AssetManager.php:134
+msgid "Remove filter"
+msgstr "Filtreyi kaldır"
+
+#: Objects/AssetManager/AssetManager.php:135
+msgid "Move this"
+msgstr "Bunu taşı"
+
+#: Objects/AssetManager/AssetManager.php:136
+#: Objects/Filtering/Commands/ConditionCommands/Base/AbstractNumericConditionCommand.php:58
+#: Objects/StringCalculator.php:70
+#: storage/cache/e47cdb17ea8038b49c8b85e018769cabb16d1689.php:23
+msgid "Value"
+msgstr "Değer"
+
+#: Objects/AssetManager/AssetManager.php:137
+msgid "Enter a title/description (optional)"
+msgstr "Başlık/açıklama gir (isteğe bağlı)"
+
+#: Objects/AssetManager/AssetManager.php:138
+#: storage/cache/4e030d94d4dc98ffdabda3c6817271fe857af7b8.php:44
+#: storage/cache/81e998b82ed1948ab5aaffec458cdda7e0164075.php:26
+msgid "Import"
+msgstr "İçeri Aktar"
+
+#: Objects/AssetManager/AssetManager.php:139
+#: storage/cache/4e030d94d4dc98ffdabda3c6817271fe857af7b8.php:40
+msgid "Export"
+msgstr "Dışarı Aktar"
+
+#: Objects/AssetManager/AssetManager.php:140
+msgid ""
+"Copy the text below and use another filter setting's import button to import "
+"it. Click the export button again to hide this. If you changed anything "
+"after this was shown, double click the export button to refresh the export "
+"text."
+msgstr ""
+"Aşağıdaki metni kopyalayın ve başka bir filtre seçeneğinin içeri aktarma "
+"butonunu kullanarak içeri aktarın. Bunu gizlemek için dışarı aktarma "
+"butonuna tekrar tıklayın. Bu gösterildikten sonra bir şey değiştirdiyseniz, "
+"dışarı aktarma butonuna çift tıklayarak metni yenileyin."
+
+#: Objects/AssetManager/AssetManager.php:141
+msgid ""
+"Paste the exported filter settings below. Click the import button again to "
+"import the settings and hide this. The imported filters will be added to the "
+"top. The existing filters will not be removed."
+msgstr ""
+"Dışarı aktarılmış filtre seçeneklerini aşağıya yapıştırın. İçeri aktarmak ve "
+"bunu gizlemek için içeri aktarma butonuna tekrar tıklayın. İçeri aktarılan "
+"filtreler en üste eklenir. Hali hazırda olan filtreler silinmez."
+
+#: Objects/AssetManager/AssetManager.php:142
+#: Objects/AssetManager/AssetManager.php:145
+msgid "Paste the exported text here to import..."
+msgstr "İçeri aktarmak için, dışarı aktarılmış metni buraya yapıştırın..."
+
+#: Objects/AssetManager/AssetManager.php:143
+msgid ""
+"Copy the text below and use another setting's import button to import it. "
+"Click the export button again to hide this. If you changed anything after "
+"this was shown, double click the export button to refresh the export text."
+msgstr ""
+"Aşağıdaki metni kopyalayın ve başka bir seçeneğin içeri aktarma butonunu "
+"kullanarak içeri aktarın. Bunu gizlemek için dışarı aktarma butonuna tekrar "
+"tıklayın. Bu gösterildikten sonra bir şey değiştirdiyseniz, dışarı aktarma "
+"butonuna çift tıklayarak metni yenileyin."
+
+#: Objects/AssetManager/AssetManager.php:144
+msgid ""
+"Paste the exported settings below. Click the import button again to import "
+"the settings and hide this. The imported settings will be added to the "
+"existing ones. The existing settings will not be removed."
+msgstr ""
+"Dışarı aktarılmış seçenekleri aşağıya yapıştırın. İçeri aktarmak ve bunu "
+"gizlemek için içeri aktarma butonuna tekrar tıklayın. İçeri aktarılan "
+"seçenekler mevcut olanlara eklenir. Mevcut seçenekler silinmez."
+
+#: Objects/AssetManager/AssetManager.php:146
+msgid "Enabled"
+msgstr "Etkin"
+
+#: Objects/AssetManager/AssetManager.php:147
+msgid "Disabled"
+msgstr "Devre dışı"
+
+#: Objects/AssetManager/AssetManager.php:148
+msgid ""
+"When this is checked, the filters of this setting will be applied. "
+"Otherwise, they won't be applied."
+msgstr ""
+"Bu işaretliyken, bu seçenekteki filtreler uygulanır. Aksi halde filtreler "
+"uygulanmaz."
+
+#: Objects/AssetManager/AssetManager.php:149
+msgid ""
+"This filter has been disabled in the site settings. Hence, it is not "
+"executed."
+msgstr ""
+"Bu filtre, site ayarlarında devre dışı bırakıldığı için çalıştırılmadı."
+
+#: Objects/AssetManager/AssetManager.php:150
+msgid ""
+"This filter setting has been disabled in the site settings. Hence, the "
+"filters are not executed."
+msgstr ""
+"Bu filtre seçeneği site ayarlarında devre dışı bırakıldığı için filtreler "
+"çalıştırılmadı."
+
+#: Objects/AssetManager/AssetManager.php:151
+msgid "Stop after first match"
+msgstr "İlk eşleşmeden sonra dur"
+
+#: Objects/AssetManager/AssetManager.php:152
+msgid ""
+"Check this if only one match is enough to say that this condition is true "
+"when multiple items exist in the selected subject. Checking this improves "
+"the performance."
+msgstr ""
+"Seçilen öznede birden fazla değer bulunması durumunda, sadece bir eşleşmenin "
+"bulunması bu koşulun geçerli olduğunu söylemek için yeterliyse, işaretleyin. "
+"Bunu işaretlemek performansı artırır."
+
+#: Objects/AssetManager/AssetManager.php:153
+msgid "Only the items matched by conditions"
+msgstr "Sadece koşulların eşleştiği değerler"
+
+#: Objects/AssetManager/AssetManager.php:154
+msgid ""
+"If there is a true condition having the same subject as this command's, "
+"check this to execute this command only for the items matched by the "
+"condition(s). When checked, if no condition has the same subject, then this "
+"command will definitely be executed without any limitations."
+msgstr ""
+"Bu komutla aynı özneye sahip olan geçerli bir koşul varsa, yalnızca "
+"koşulların eşleştiği değerlerde çalıştırmak için bunu işaretleyin. "
+"İşaretliyken, eğer aynı özneye sahip olan bir koşul yoksa, bu komut hiçbir "
+"sınırlama olmaksızın çalıştırılacaktır."
+
+#: Objects/AssetManager/AssetManager.php:155
+msgid "When"
+msgstr "Zaman"
+
+#: Objects/AssetManager/AssetManager.php:156
+msgid "Filter Setting Explanations"
+msgstr "Filtre Seçeneği Açıklamaları"
+
+#: Objects/AssetManager/AssetManager.php:157
+msgid "Executed"
+msgstr "Çalıştırıldı"
+
+#: Objects/AssetManager/AssetManager.php:158
+msgid "Not executed"
+msgstr "Çalıştırılmadı"
+
+#: Objects/AssetManager/AssetManager.php:159
+#: storage/cache/54cddf05740c42b72027edac6568545e8a38893b.php:44
+msgid "Used memory"
+msgstr "Kullanılan bellek"
+
+#: Objects/AssetManager/AssetManager.php:160
+#: storage/cache/54cddf05740c42b72027edac6568545e8a38893b.php:46
+msgid "Elapsed time"
+msgstr "Geçen zaman"
+
+#: Objects/AssetManager/AssetManager.php:161
+msgid "This condition is met"
+msgstr "Koşul sağlandı"
+
+#: Objects/AssetManager/AssetManager.php:162
+msgid "This condition is not met"
+msgstr "Koşul sağlanmadı"
+
+#: Objects/AssetManager/AssetManager.php:163
+msgid "Messages"
+msgstr "Mesajlar"
+
+#: Objects/AssetManager/AssetManager.php:164
+msgid "Subjects"
+msgstr "Özneler"
+
+#: Objects/AssetManager/AssetManager.php:165
+msgid "Modified subjects"
+msgstr "Değiştirilen özneler"
+
+#: Objects/AssetManager/AssetManager.php:166
+msgid "Denied subjects"
+msgstr "Reddedilen özneler"
+
+#: Objects/AssetManager/AssetManager.php:167
+#: Objects/SitePostTypeCreator.php:478
+#: storage/cache/9594b0dd964b1a7930ce2bad983ce405f148972c.php:44
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: Objects/AssetManager/AssetManager.php:168
+msgid "Message count"
+msgstr "Mesaj sayısı"
+
+#: Objects/AssetManager/AssetManager.php:169
+msgid "Subject count"
+msgstr "Özne sayısı"
+
+#: Objects/AssetManager/AssetManager.php:170
+msgid "Denied subject count"
+msgstr "Reddedilen özne sayısı"
+
+#: Objects/AssetManager/AssetManager.php:172
+#: Objects/Filtering/Commands/ActionCommands/Element/ElementClone.php:49
+msgid "Clone"
+msgstr "Klonla"
+
+#: Objects/AssetManager/AssetManager.php:173
+msgid "Move up"
+msgstr "Yukarı taşı"
+
+#: Objects/AssetManager/AssetManager.php:174
+msgid "Move down"
+msgstr "Aşağı taşı"
+
+#: Objects/AssetManager/AssetManager.php:175
+msgid "Move in"
+msgstr "İçeri taşı"
+
+#: Objects/AssetManager/AssetManager.php:176
+msgid "Move out"
+msgstr "Dışarı taşı"
+
+#: Objects/AssetManager/AssetManager.php:177
+msgid "Toggle expand all"
+msgstr "Tümünü genişlet/daralt"
+
+#: Objects/AssetManager/AssetManager.php:178
+msgid "Toggle side-by-side"
+msgstr "Yan yana görünümü aç/kapat"
+
+#: Objects/AssetManager/AssetManager.php:179
+msgid "Enable/disable"
+msgstr "Etkinleştir/devre dışı bırak"
+
+#: Objects/AssetManager/AssetManager.php:180
+msgid "Side by side"
+msgstr "Yan yana"
+
+#: Objects/AssetManager/AssetManager.php:182
 msgid "Previous"
 msgstr "Önceki"
 
-#: Objects/AssetManager/AssetManager.php:121
+#: Objects/AssetManager/AssetManager.php:183
 #: storage/cache/fc0c1b33f36e919d662b3f4f2a3207a0c83d1d51.php:62
 msgid "Next"
 msgstr "Sonraki"
 
-#: Objects/AssetManager/AssetManager.php:122
+#: Objects/AssetManager/AssetManager.php:184
 msgid "Complete"
 msgstr "Tamamla"
 
-#: Objects/AssetManager/AssetManager.php:123
+#: Objects/AssetManager/AssetManager.php:185
 msgid "Cancel"
 msgstr "Vazgeç"
 
-#: Objects/AssetManager/AssetManager.php:124
+#: Objects/AssetManager/AssetManager.php:186
 msgid "Skip"
 msgstr "Atla"
 
-#: Objects/AssetManager/AssetManager.php:125
+#: Objects/AssetManager/AssetManager.php:187
 #, php-format
 msgid "Enable %s tab"
 msgstr "%s sekmesini aktifleştir"
 
-#: Objects/AssetManager/AssetManager.php:126
+#: Objects/AssetManager/AssetManager.php:188
 msgid "Please fix this error"
 msgstr "Lütfen bu hatayı düzeltin"
 
-#: Objects/AssetManager/AssetManager.php:127
+#: Objects/AssetManager/AssetManager.php:189
 msgid "Please fix these errors"
 msgstr "Lütfen bu hataları düzeltin"
 
-#: Objects/AssetManager/AssetManager.php:128
+#: Objects/AssetManager/AssetManager.php:190
 msgid "Start the guide"
 msgstr "Kılavuzu başlat"
 
-#: Objects/AssetManager/AssetManager.php:129
+#: Objects/AssetManager/AssetManager.php:191
 msgid "Start from this step"
 msgstr "Bu adımdan başlat"
 
-#: Objects/AssetManager/AssetManager.php:130
+#: Objects/AssetManager/AssetManager.php:192
 msgid "You must enable this tab by clicking to it"
 msgstr "Bunu tıklayarak aktifleştirmelisiniz"
 
-#: Objects/AssetManager/AssetManager.php:131
+#: Objects/AssetManager/AssetManager.php:193
 msgid "You must not enable this tab"
 msgstr "Bu sekmeyi aktifleştirmemelisiniz"
 
-#: Objects/AssetManager/AssetManager.php:132
+#: Objects/AssetManager/AssetManager.php:194
 msgid "Please enter a valid URL."
 msgstr "Lütfen geçerli bir URL girin."
 
-#: Objects/AssetManager/AssetManager.php:133
+#: Objects/AssetManager/AssetManager.php:195
 #, php-format
 msgid ""
 "This step cannot be shown in this page. Please open %s page and start the "
@@ -423,11 +725,11 @@ msgstr ""
 "Bu adım bu sayfada gösterilemiyor. Lütfen %s sayfasını açıp adımı orada "
 "başlatın."
 
-#: Objects/AssetManager/AssetManager.php:134
+#: Objects/AssetManager/AssetManager.php:196
 msgid "There is no previous step."
 msgstr "Önceki adım bulunmuyor."
 
-#: Objects/AssetManager/AssetManager.php:135
+#: Objects/AssetManager/AssetManager.php:197
 #, php-format
 msgid ""
 "Previous step cannot be shown in this page. Please open %s page and start "
@@ -436,46 +738,57 @@ msgstr ""
 "Önceki adım bu sayfada gösterilemiyor. Lütfen %s sayfasını açıp önceki adımı "
 "orada başlatın."
 
-#: Objects/AssetManager/AssetManager.php:136
+#: Objects/AssetManager/AssetManager.php:198
 #, php-format
 msgid "Please select %s"
 msgstr "Lütfen %s seçin"
 
-#: Objects/AssetManager/AssetManager.php:138
+#: Objects/AssetManager/AssetManager.php:199
+msgid ""
+"Test this command. The test considers only the command's options. The "
+"options of the subject and the property are not considered. Hover over the "
+"selected command to highlight its options."
+msgstr ""
+"Bu komutu test et. Test yalnızca komutun seçeneklerini dikkate alır. Özne ve "
+"niteliğin seçenekleri dikkate alınmaz. Seçilen komutun üzerine gelerek "
+"seçeneklerini vurgulu hale getirebilirsiniz."
+
+#: Objects/AssetManager/AssetManager.php:201
+#: Objects/Crawling/Bot/AbstractBot.php:1573
 msgid "(No name)"
 msgstr "(isim yok)"
 
-#: Objects/AssetManager/AssetManager.php:140
+#: Objects/AssetManager/AssetManager.php:203
 #: Objects/SitePostTypeCreator.php:263
 msgid "All Sites"
 msgstr "Tüm Siteler"
 
-#: Objects/AssetManager/AssetManager.php:141
+#: Objects/AssetManager/AssetManager.php:204
 msgid "Site Settings"
 msgstr "Site Ayarları"
 
-#: Objects/AssetManager/AssetManager.php:142
+#: Objects/AssetManager/AssetManager.php:205
 #: Objects/Guides/GuideTranslations.php:253 Objects/SitePostTypeCreator.php:259
 msgid "Add New Site"
 msgstr "Yeni Site Ekle"
 
-#: Objects/AssetManager/AssetManager.php:150
+#: Objects/AssetManager/AssetManager.php:213
 msgid "You must check the checkbox."
 msgstr "İşaret kutusunu işaretlemelisiniz."
 
-#: Objects/AssetManager/AssetManager.php:151
+#: Objects/AssetManager/AssetManager.php:214
 msgid "You must uncheck the checkbox."
 msgstr "İşaret kutusunun işaretini kaldırmalısınız."
 
-#: Objects/AssetManager/AssetManager.php:152
+#: Objects/AssetManager/AssetManager.php:215
 msgid "The value should be an integer."
 msgstr "Değer bir tam sayı olmalıdır."
 
-#: Objects/AssetManager/AssetManager.php:153
+#: Objects/AssetManager/AssetManager.php:216
 msgid "The value is not valid."
 msgstr "Değer geçerli değil."
 
-#: Objects/AssetManager/AssetManager.php:154
+#: Objects/AssetManager/AssetManager.php:217
 #, php-format
 msgid ""
 "Value's format is not correct. (It must match the pattern <code class=\"regex"
@@ -484,7 +797,7 @@ msgstr ""
 "Değerin formatı doğru değil. (<code class=\"regex\">%s</code> örüntüsüyle "
 "eşleşmeli)"
 
-#: Objects/AssetManager/AssetManager.php:155
+#: Objects/AssetManager/AssetManager.php:218
 #, php-format
 msgid ""
 "Enter a valid URL. (It must match the pattern <code class=\"regex\">%s</"
@@ -493,21 +806,21 @@ msgstr ""
 "Geçerli bir URL girin. (<code class=\"regex\">%s</code> örüntüsüyle "
 "eşleşmeli)"
 
-#: Objects/AssetManager/AssetManager.php:156
+#: Objects/AssetManager/AssetManager.php:219
 #, php-format
 msgid "Value must start with <code>%s</code>."
 msgstr "Değer <code>%s</code> ile başlamalı."
 
-#: Objects/AssetManager/AssetManager.php:157
+#: Objects/AssetManager/AssetManager.php:220
 msgid "Please remove the duplicate URLs which are highlighted"
 msgstr "Lütfen vurgulu olarak gösterilen kopya URL’leri kaldırın"
 
-#: Objects/AssetManager/AssetManager.php:158
+#: Objects/AssetManager/AssetManager.php:221
 #, php-format
 msgid "The value is not valid. Valid values: %s"
 msgstr "Değer geçerli değil. Geçerli değerler: %s"
 
-#: Objects/AssetManager/AssetManager.php:159
+#: Objects/AssetManager/AssetManager.php:222
 msgid ""
 "Length of the value must be between <code class=\"number\">{0}</code> and "
 "<code class=\"number\">{1}</code>."
@@ -515,149 +828,206 @@ msgstr ""
 "Değerin uzunluğu <code class=\"number\">{0}</code> ile <code class=\"number"
 "\">{1}</code> arasında olmalıdır."
 
-#: Objects/AssetManager/AssetManager.php:160
+#: Objects/AssetManager/AssetManager.php:223
 #, php-format
 msgid ""
 "Length of the value must be greater than or equal to <code class=\"number\">"
 "%s</code>."
 msgstr "Değerin uzunluğu en az <code class=\"number\">%s</code> olmalıdır."
 
-#: Objects/AssetManager/AssetManager.php:415
+#: Objects/AssetManager/AssetManager.php:488
 #, php-format
 msgid "File \"%1$s\" could not be found."
 msgstr "Dosya “%1$s” bulunamadı."
 
-#: Objects/Crawling/Bot/AbstractBot.php:400
+#: Objects/Crawling/Bot/AbstractBot.php:434
 #, php-format
 msgid "Last tried proxy: %1$s"
 msgstr "Son denenen proxy: %1$s"
 
-#: Objects/Crawling/Bot/AbstractBot.php:404
-#: Objects/Crawling/Bot/AbstractBot.php:419
-#: Objects/Crawling/Bot/AbstractBot.php:430
-#: Objects/Crawling/Bot/AbstractBot.php:440
+#: Objects/Crawling/Bot/AbstractBot.php:438
+#: Objects/Crawling/Bot/AbstractBot.php:454
+#: Objects/Crawling/Bot/AbstractBot.php:466
+#: Objects/Crawling/Bot/AbstractBot.php:477
 #, php-format
 msgid "URL: %1$s, Message: %2$s"
 msgstr "URL: %1$s, Mesaj: %2$s"
 
-#: Objects/Crawling/Bot/AbstractBot.php:1248
+#: Objects/Crawling/Bot/AbstractBot.php:1337
 msgid "Empty CSS selectors found"
 msgstr "Boş CSS seçiciler bulundu"
 
-#: Objects/Crawling/Bot/AbstractBot.php:1334
+#: Objects/Crawling/Bot/AbstractBot.php:1423
 #, php-format
 msgid "Encoding %1$s does not exist in available encodings."
 msgstr "%1$s kodlaması mevcut kodlamalar arasında bulunmuyor."
 
-#: Objects/Crawling/Bot/CategoryBot.php:199
-#: Objects/Crawling/Bot/CategoryBot.php:240
-#: Objects/Crawling/Bot/CategoryBot.php:317
+#: Objects/Crawling/Bot/AbstractBot.php:1580
+msgid ""
+"Filters could not be registered because the default event does not exist."
+msgstr "Varsayılan olay bulunmadığı için filtreler kayda alınamadı."
+
+#: Objects/Crawling/Bot/CategoryBot.php:69
+#: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:237
+msgid "Category request filters"
+msgstr "Kategori isteği filtreleri"
+
+#: Objects/Crawling/Bot/CategoryBot.php:81
+#: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:246
+msgid "Category page filters"
+msgstr "Kategori sayfası filtreleri"
+
+#: Objects/Crawling/Bot/CategoryBot.php:92
+#: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:255
+msgid "Category data filters"
+msgstr "Kategori verisi filtreleri"
+
+#: Objects/Crawling/Bot/CategoryBot.php:174
+#: Objects/Crawling/Bot/CategoryBot.php:292
+#: Objects/Crawling/Bot/CategoryBot.php:339
+#: Objects/Crawling/Bot/CategoryBot.php:370
 #: Objects/Crawling/Preparers/Post/PostMediaPreparer.php:122
 #: Objects/Crawling/Preparers/Post/PostPaginationInfoPreparer.php:70
 #: Objects/Crawling/Preparers/Post/PostPaginationInfoPreparer.php:114
-#: Objects/Crawling/Savers/PostSaver.php:1231
+#: Objects/Crawling/Savers/PostSaver.php:1307
 msgid "URL could not be resolved"
 msgstr "URL çözümlenemedi"
 
-#: Objects/Crawling/Data/PostData.php:528
-#: Objects/Crawling/Savers/PostSaver.php:1738
-#: Test/General/GeneralPostTest.php:98
+#: Objects/Crawling/Bot/PostBot.php:116
+#: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:851
+msgid "Post request filters"
+msgstr "Yazı isteği filtreleri"
+
+#: Objects/Crawling/Bot/PostBot.php:132
+#: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:860
+msgid "Post page filters"
+msgstr "Yazı sayfası filtreleri"
+
+#: Objects/Crawling/Bot/PostBot.php:141
+#: storage/cache/057d7712c625a8aa3d3aae0cd6c23f402bd4df7c.php:10
+msgid "Post data filters"
+msgstr "Yazı verisi filtreleri"
+
+#: Objects/Crawling/Data/CategoryData.php:118
+#: storage/cache/98780646bde969762ca888206f6560caf5bcbd82.php:52
+msgid "Post URL"
+msgstr "Yazı URL’si"
+
+#: Objects/Crawling/Data/CategoryData.php:119
+msgid "Post Thumbnail URL"
+msgstr "Yazı Öne Çıkan Görseli URL'si"
+
+#: Objects/Crawling/Data/PostData.php:605
+#: Objects/Crawling/Savers/PostSaver.php:1881
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:85
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:150
+#: Test/General/GeneralPostTest.php:103
 #: storage/cache/b30228fec80e617bd16a5ac6297e366d1fc275e7.php:19
 msgid "Title"
 msgstr "Başlık"
 
-#: Objects/Crawling/Data/PostData.php:529 Test/General/GeneralPostTest.php:113
+#: Objects/Crawling/Data/PostData.php:606 Test/General/GeneralPostTest.php:118
 msgid "Excerpt"
 msgstr "Kısa Açıklama"
 
-#: Objects/Crawling/Data/PostData.php:530
+#: Objects/Crawling/Data/PostData.php:607
 msgid "Category Names"
 msgstr "Kategori İsimleri"
 
-#: Objects/Crawling/Data/PostData.php:531 Test/General/GeneralPostTest.php:100
+#: Objects/Crawling/Data/PostData.php:608 Test/General/GeneralPostTest.php:105
 msgid "Slug"
 msgstr "Slug"
 
-#: Objects/Crawling/Data/PostData.php:532
-#: Objects/Crawling/Savers/PostSaver.php:1739
+#: Objects/Crawling/Data/PostData.php:609
+#: Objects/Crawling/Savers/PostSaver.php:1882
 #: storage/cache/79d34e859e9c84aa9c905fc6e11d37715aa92afb.php:23
 msgid "Content"
 msgstr "İçerik"
 
-#: Objects/Crawling/Data/PostData.php:533 Test/General/GeneralPostTest.php:116
+#: Objects/Crawling/Data/PostData.php:610
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddTags.php:54
+#: Test/General/GeneralPostTest.php:121
 msgid "Tags"
 msgstr "Etiketler"
 
-#: Objects/Crawling/Data/PostData.php:534 Test/General/GeneralPostTest.php:108
+#: Objects/Crawling/Data/PostData.php:611 Test/General/GeneralPostTest.php:113
 msgid "Meta Keywords"
 msgstr "Meta Anahtar Kelimeler"
 
-#: Objects/Crawling/Data/PostData.php:535 Test/General/GeneralPostTest.php:110
+#: Objects/Crawling/Data/PostData.php:612 Test/General/GeneralPostTest.php:115
 msgid "Meta Description"
 msgstr "Meta Açıklama"
 
-#: Objects/Crawling/Data/PostData.php:536
+#: Objects/Crawling/Data/PostData.php:613
 #: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:721
 msgid "Custom Meta"
 msgstr "Özel Meta"
 
-#: Objects/Crawling/Data/PostData.php:537
+#: Objects/Crawling/Data/PostData.php:614
 msgid "Media Title"
 msgstr "Ortam Başlığı"
 
-#: Objects/Crawling/Data/PostData.php:538
+#: Objects/Crawling/Data/PostData.php:615
 msgid "Media Description"
 msgstr "Ortam Tanımı"
 
-#: Objects/Crawling/Data/PostData.php:539
+#: Objects/Crawling/Data/PostData.php:616
 msgid "Media Caption"
 msgstr "Ortam Altyazısı"
 
-#: Objects/Crawling/Data/PostData.php:540
+#: Objects/Crawling/Data/PostData.php:617
 msgid "Media Alternate Text"
 msgstr "Ortam Alternatif Metni"
 
-#: Objects/Crawling/Data/PostData.php:541
+#: Objects/Crawling/Data/PostData.php:618
 msgid "Thumbnail Title"
 msgstr "Öne Çıkan Görsel Başlığı"
 
-#: Objects/Crawling/Data/PostData.php:542
+#: Objects/Crawling/Data/PostData.php:619
 msgid "Thumbnail Description"
 msgstr "Öne Çıkan Görsel Tanımı"
 
-#: Objects/Crawling/Data/PostData.php:543
+#: Objects/Crawling/Data/PostData.php:620
 msgid "Thumbnail Caption"
 msgstr "Öne Çıkan Görsel Altyazısı"
 
-#: Objects/Crawling/Data/PostData.php:544
+#: Objects/Crawling/Data/PostData.php:621
 msgid "Thumbnail Alternate Text"
 msgstr "Öne Çıkan Görsel Alternatif Metni"
 
-#: Objects/Crawling/Data/PostData.php:545
+#: Objects/Crawling/Data/PostData.php:622
 #: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:767
 msgid "Taxonomies"
 msgstr "Taksonomiler"
 
-#: Objects/Crawling/Data/PostData.php:551 Test/Base/AbstractGeneralTest.php:176
+#: Objects/Crawling/Data/PostData.php:634 Test/Base/AbstractGeneralTest.php:186
 #: storage/cache/4dd7a578e773d6e664ee75d41f608a322d568b5a.php:10
 msgid "Next Page URL"
 msgstr "Sonraki Sayfa URL’si"
 
-#: Objects/Crawling/Data/PostData.php:552
+#: Objects/Crawling/Data/PostData.php:635
 msgid "All Page URLs"
 msgstr "Tüm Sayfa URL’leri"
 
-#: Objects/Crawling/Data/PostData.php:553
+#: Objects/Crawling/Data/PostData.php:636
 #: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:441
 msgid "Custom Short Codes"
 msgstr "Özel Kısa Kodlar"
 
-#: Objects/Crawling/Preparers/Post/PostCreatedDatePreparer.php:78
+#: Objects/Crawling/Data/PostData.php:649
+msgid "Media Files"
+msgstr "Ortam Dosyaları"
+
+#: Objects/Crawling/Data/PostData.php:662
+msgid "Publish Date"
+msgstr "Yayımlanma Tarihi"
+
+#: Objects/Crawling/Preparers/Post/PostCreatedDatePreparer.php:86
 #, php-format
 msgid "Date \"%1$s\" could not be parsed."
 msgstr "Tarih “%1$s” işlenemedi."
 
-#: Objects/Crawling/Preparers/Post/PostCustomTaxonomyPreparer.php:121
+#: Objects/Crawling/Preparers/Post/PostCustomTaxonomyPreparer.php:125
 #, php-format
 msgid "Taxonomy: %1$s"
 msgstr "Taksonomi: %1$s"
@@ -667,16 +1037,16 @@ msgstr "Taksonomi: %1$s"
 msgid "URL could not be resolved."
 msgstr "URL çözümlenemedi."
 
-#: Objects/Crawling/Preparers/TransformablePreparer.php:75
+#: Objects/Crawling/Preparers/TransformablePreparer.php:76
 #, php-format
 msgid "Transformation error for %1$s"
 msgstr "%1$s için dönüştürme hatası"
 
-#: Objects/Crawling/Savers/PostSaver.php:456
+#: Objects/Crawling/Savers/PostSaver.php:435
 msgid "A duplicate post has been found."
 msgstr "Bir kopya yazı bulundu."
 
-#: Objects/Crawling/Savers/PostSaver.php:459
+#: Objects/Crawling/Savers/PostSaver.php:437
 #, php-format
 msgid ""
 "Current URL: %1$s, Duplicate post ID: %2$s, Duplicate post title: %3$s, Site "
@@ -685,14 +1055,46 @@ msgstr ""
 "Şu anki URL: %1$s, Kopya yazı ID’si: %2$s, Kopya yazı başlığı: %3$s, Site "
 "ID’si: %4$s."
 
-#: Objects/Crawling/Savers/PostSaver.php:466
+#: Objects/Crawling/Savers/PostSaver.php:443
 msgid ""
 "The URL is not saved and it is marked as saved so that it will not be tried "
 "again."
 msgstr ""
 "URL kaydedilmedi ve bir daha denenmemesi için kaydedilmiş olarak işaretlendi."
 
-#: Objects/Crawling/Savers/PostSaver.php:853
+#: Objects/Crawling/Savers/PostSaver.php:465
+msgid "The URL is not saved due to a cancel request."
+msgstr "Vazgeçme isteğinden dolayı URL kaydedilmedi."
+
+#: Objects/Crawling/Savers/PostSaver.php:467
+msgid ""
+"The URL is deleted from the database, which means it can be crawled again if "
+"it is found in a category page."
+msgstr ""
+"URL veritabanından silindi. Bu, bir kategori sayfasında bulunması durumunda "
+"tekrar kaydedilebileceği anlamına gelir."
+
+#: Objects/Crawling/Savers/PostSaver.php:468
+msgid "It is marked as saved so that it will not be tried again."
+msgstr "Bir daha denenmemesi için kaydedilmiş olarak işaretlendi."
+
+#: Objects/Crawling/Savers/PostSaver.php:470
+msgid "Deleted post ID"
+msgstr "Silinen yazı ID'si"
+
+#: Objects/Crawling/Savers/PostSaver.php:471
+msgid ""
+"Because there was no saved post, no post is deleted. Instead, saving "
+"operation is stopped."
+msgstr ""
+"Kaydedilmiş bir yazı olmadığı için, herhangi bir yazı silinmedi. Sadece "
+"kaydetme işlemi durduruldu."
+
+#: Objects/Crawling/Savers/PostSaver.php:472
+msgid "Current URL"
+msgstr "Şu anki URL"
+
+#: Objects/Crawling/Savers/PostSaver.php:929
 #, php-format
 msgid ""
 "Current URL (%1$s) was already crawled. Crawling of this post has been "
@@ -703,30 +1105,30 @@ msgstr ""
 "URL’den alınan hiçbir veri kaydedilmedi ve bu yazının kaydedilmesi "
 "durduruldu. Kaydedilmiş URL’ler: %2$s"
 
-#: Objects/Crawling/Savers/PostSaver.php:970
+#: Objects/Crawling/Savers/PostSaver.php:1046
 msgid "A duplicate post is found."
 msgstr "Bir kopya yazı bulundu."
 
-#: Objects/Crawling/Savers/PostSaver.php:1124
+#: Objects/Crawling/Savers/PostSaver.php:1200
 msgid "Category IDs could not be assigned to the post."
 msgstr "Kategori numaraları yazıya eklenemedi."
 
-#: Objects/Crawling/Savers/PostSaver.php:1251
-#: Objects/Crawling/Savers/PostSaver.php:1307
+#: Objects/Crawling/Savers/PostSaver.php:1328
+#: Objects/Crawling/Savers/PostSaver.php:1384
 msgid "Media file does not have a local path."
 msgstr "Media dosyasının yerel bir dosya yolu yok."
 
-#: Objects/Crawling/Savers/PostSaver.php:1737
+#: Objects/Crawling/Savers/PostSaver.php:1880
 #: storage/cache/b81bd1d89b6151a86a9253794ad37c29828f5221.php:9
 msgid "URL"
 msgstr "URL"
 
-#: Objects/Docs.php:177
+#: Objects/Docs.php:164
 #, php-format
 msgid "Label index could not be retrieved from URL %1$s."
 msgstr "Etiket endeksi %1$s URL’sinden alınamadı."
 
-#: Objects/Docs.php:187
+#: Objects/Docs.php:174
 msgid "Label index could not be created locally."
 msgstr "Etiket endeksi yerel olarak oluşturulamadı."
 
@@ -762,13 +1164,14 @@ msgstr "Spin hatası."
 msgid "Information"
 msgstr "Bilgi"
 
-#: Objects/Enums/InformationMessage.php:48 Test/Tests/ProxyTest.php:82
-#: Test/Tests/ProxyTest.php:86
+#: Objects/Enums/InformationMessage.php:48
+#: Objects/Filtering/Property/Request/RequestErrorProperty.php:28
+#: Test/Tests/ProxyTest.php:83 Test/Tests/ProxyTest.php:87
 msgid "Error"
 msgstr "Hata"
 
-#: Objects/Enums/InformationMessage.php:51 Test/Tests/ProxyTest.php:67
-#: Test/Tests/ProxyTest.php:78
+#: Objects/Enums/InformationMessage.php:51 Test/Tests/ProxyTest.php:68
+#: Test/Tests/ProxyTest.php:79
 msgid "Fail"
 msgstr "Başarısız"
 
@@ -816,6 +1219,84 @@ msgstr "Dosya mevcut değil"
 msgid "URI could not be resolved"
 msgstr "URI çözümlenemedi"
 
+#: Objects/Events/EventService.php:116
+#: storage/cache/a4886dd63a96c09bdbbe36083ef8a5c7b34fbd90.php:33
+msgid "Not found"
+msgstr "Bulunamadı"
+
+#: Objects/Events/Events/AfterCategoryCrawlerReadyEvent.php:32
+msgid "After category crawler is ready"
+msgstr "Kategori toplayıcısı hazır olduktan sonra"
+
+#: Objects/Events/Events/AfterCategoryCrawlerReadyEvent.php:36
+#: Objects/Events/Events/AfterPostCrawlerReadyEvent.php:36
+msgid ""
+"Executed after all the HTML manipulations are finished and unnecessary "
+"elements are removed"
+msgstr ""
+"Tüm HTML manipülasyonları bittikten ve gereksiz elemanlar kaldırıldıktan "
+"sonra çalıştırılır"
+
+#: Objects/Events/Events/AfterCategoryRequestEvent.php:32
+msgid "After category request is made"
+msgstr "Kategori isteği yapıldıktan sonra"
+
+#: Objects/Events/Events/AfterCategoryRequestEvent.php:36
+msgid "Executed after the request to crawl a category page is made"
+msgstr "Bir kategori sayfasını almak için istek yapıldıktan sonra çalıştırılır"
+
+#: Objects/Events/Events/AfterPostCrawlerReadyEvent.php:32
+msgid "After post crawler is ready"
+msgstr "Yazı toplayıcısı hazır olduktan sonra"
+
+#: Objects/Events/Events/AfterPostRequestEvent.php:32
+msgid "After post request is made"
+msgstr "Yazı isteği yapıldıktan sonra"
+
+#: Objects/Events/Events/AfterPostRequestEvent.php:36
+msgid "Executed after the request to crawl a post page is made"
+msgstr "Bir yazı sayfasını almak için istek yapıldıktan sonra çalıştırılır"
+
+#: Objects/Events/Events/AfterSpinningEvent.php:27
+msgid "After spinning"
+msgstr "Spin işleminden sonra"
+
+#: Objects/Events/Events/AfterSpinningEvent.php:31
+msgid "Executed after the post is spun, whether the spinning is active or not"
+msgstr ""
+"Yazı spinlendikten sonra, spinleme aktif olsa da olmasa da, çalıştırılır"
+
+#: Objects/Events/Events/AfterTranslationEvent.php:27
+msgid "After translation"
+msgstr "Çeviri yapıldıktan sonra"
+
+#: Objects/Events/Events/AfterTranslationEvent.php:31
+msgid ""
+"Executed after the post is translated, whether the translation is active or "
+"not"
+msgstr ""
+"Yazının çevirisi yapıldıktan sonra, çeviri aktif olsa da olmasa da, "
+"çalıştırılır"
+
+#: Objects/Events/Events/CategoryDataReadyEvent.php:32
+msgid "When the category data is ready"
+msgstr "Kategori verisi hazır olduğunda"
+
+#: Objects/Events/Events/CategoryDataReadyEvent.php:36
+msgid "Executed just after the category data is ready"
+msgstr "Kategori verisi hazır olur olmaz çalıştırılır"
+
+#: Objects/Events/Events/PostDataReadyEvent.php:27
+msgid "When the post data is ready"
+msgstr "Yazı verisi hazır olduktan sonra"
+
+#: Objects/Events/Events/PostDataReadyEvent.php:31
+msgid ""
+"Executed just after the post data is ready, before translating or spinning "
+"the post"
+msgstr ""
+"Yazı verisi hazır olur olmaz, çeviri ve spin işleminden önce çalıştırılır"
+
 #: Objects/FeatureRequest.php:39
 msgid "Both the email and the feature request must be supplied"
 msgstr "Emailin ve özellik isteğinin ikisinin de sağlanması gerekiyor"
@@ -825,7 +1306,17 @@ msgstr "Emailin ve özellik isteğinin ikisinin de sağlanması gerekiyor"
 msgid "The minimum length of the request content is %1$s."
 msgstr "İstek içeriğinin en kısa uzunluğu %1$s."
 
-#: Objects/File/FileService.php:93
+#: Objects/File/FileInfoFinder.php:520
+#, php-format
+msgid "An error occurred when finding extensions for MIME type \"%1$s\""
+msgstr "\"%1$s\" MIME türünün uzantılarını bulurken bir hata oluştu"
+
+#: Objects/File/FileInfoFinder.php:540
+#, php-format
+msgid "An error occurred when finding MIME type of file \"%1$s\""
+msgstr "\"%1$s\" dosyasının MIME türünü bulurken bir hata oluştu"
+
+#: Objects/File/FileService.php:92
 #, php-format
 msgid ""
 "%1$s directory is not in %2$s directory. The file can only be moved to a "
@@ -835,7 +1326,7 @@ msgstr ""
 "%1$s klasörü,  %2$s klasörü içinde değil. Dosya yalnızca WordPress’in "
 "uploads klasörü altında bulunan bir klasöre taşınabilir."
 
-#: Objects/File/FileService.php:214
+#: Objects/File/FileService.php:213
 msgid "Upload directory could not be retrieved: "
 msgstr "Yükleme klasörü alınamadı: "
 
@@ -868,19 +1359,1297 @@ msgstr "%1$s dosyası silinemedi."
 msgid "%1$s directory could not be created"
 msgstr "%1$s klasörü oluşturulamadı"
 
-#: Objects/File/MediaService.php:212 Objects/File/MediaService.php:222
+#: Objects/File/MediaService.php:156
+#, php-format
+msgid "The local file does not exist. File URL: %1$s"
+msgstr "Yerel dosya yok. Dosya URL'si: %1$s"
+
+#: Objects/File/MediaService.php:215 Objects/File/MediaService.php:225
 #, php-format
 msgid "%1$s, File URL: %2$s"
 msgstr "%1$s, Dosya URL’si: %2$s"
 
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractActionCommand.php:181
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractActionCommand.php:192
+msgid "Command is not executed because there are no subjects that can be used."
+msgstr "Kullanılabilecek bir özne olmadığı için komut çalıştırılmadı."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractActionCommand.php:304
+msgid ""
+"Only allowed subjects should have been used but all subjects are allowed \n"
+"                        since there were no subjects found by a condition."
+msgstr ""
+"Yalnızca izin verilen özneler kullanılmalıydı, fakat bir koşul tarafından "
+"bulunan özneler olmadığından tüm öznelere izin verildi."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractActionCommand.php:363
+#, php-format
+msgid "New value could not be set in \"%1$s\" command."
+msgstr "\"%1$s\" komutunda yeni değer atanamadı."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractActionCommand.php:389
+#, php-format
+msgid ""
+"New value could not be set in \"%1$s\" command because there is no data "
+"source."
+msgstr "Veri kaynağı olmadığından \"%1$s\" komutunda yeni değer atanamadı."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractActionCommand.php:398
+#, php-format
+msgid ""
+"New value could not be set in \"%1$s\" command because the command cannot "
+"output the value \n"
+"                    in a required data type."
+msgstr ""
+"Gereken veri türünde bir sonuç vermediğinden \"%1$s\" komutunda yeni değer "
+"atanamadı."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractActionCommand.php:414
+#, php-format
+msgid ""
+"New value could not be set in \"%1$s\" command because it cannot be casted "
+"to the \n"
+"                        correct type. (Type of new value: \"%2$s\", type of "
+"old value: \"%3$s\")"
+msgstr ""
+"Değer, doğru veri türüne dönüştürülemediği için \"%1$s\" komutunda yeni "
+"değer atanamadı. (Yeni değerin türü: \"%2$s\", eski değerin türü: \"%3$s\")"
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:76
+#: Objects/Filtering/Commands/ActionCommands/Text/TextTemplate.php:50
+#: storage/cache/596ba7c1547e7a2785bbb66df79b576735f4e8fd.php:9
+msgid "Short codes"
+msgstr "Kısa kodlar"
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:77
+msgid ""
+"Short codes that can be used in the templates of the\n"
+"                    notification, such as title and message templates. You "
+"can hover over the short codes to see what\n"
+"                    they do. You can click to the short code buttons to copy "
+"the short codes. Then, you can paste the\n"
+"                    short codes into the templates to include them. They "
+"will be replaced with the actual information \n"
+"                    before sending the notification."
+msgstr ""
+"Bildirimin şablonlarında, başlık ve yazı şablonu gibi, kullanılabilecek kısa "
+"kodlar. Kısa kodların üzerine gelerek ne işe yaradıklarını görebilirsiniz. "
+"Butonlara tıklayarak kısa kodları kopyalayabilir ve şablonların içerisine "
+"yapıştırabilirsiniz. Bildirimi göndermeden önce, kısa kodlar asıl bilgilerle "
+"değiştirilecektir."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:93
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:151
+#: WPTSLMClient.php:281
+#: storage/cache/b4b3d47091706552b5f766a00f61863fbb06f9f4.php:11
+msgid "Message"
+msgstr "Mesaj"
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:101
+msgid "Notification identifier"
+msgstr "Bildirim tanımlayıcı"
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:102
+msgid ""
+"A text that will be used to identify this \n"
+"                    notification to limit the number of same-type "
+"notifications to be sent. Getting numerous \n"
+"                    notifications about the same thing will probably bother "
+"you. To prevent this, just enter a text so\n"
+"                    that the plugin can reduce the number of notifications. "
+"If you leave this empty, the notifications\n"
+"                    will not be limited. You can use the same identifier for "
+"other notification commands as well. For\n"
+"                    example, you can enter \"notification-about-low-price\". "
+"When a notification is sent, the date of the\n"
+"                    notification will be stored for this identifier. The "
+"date will be checked before sending another \n"
+"                    notification."
+msgstr ""
+"Aynı tür bildirimleri sınırlandırmak için kullanılabilecek bir metin. Aynı "
+"şeyle ilgili bir sürü bildirim almak büyük ihtimalle sizi rahatsız "
+"edecektir. Bunu engellemek için buraya bir metin girin ve eklenti de "
+"gönderilen bildirim sayısını sınırlasın. Bunu boş bırakırsanız, bildirimler "
+"sınırlanmaz. Aynı tanımlayıcıyı diğer bildirim komutlarında da "
+"kullanabilirsiniz. Örneğin, buraya \"dusuk-fiyat-bildirimi\" girebilirsiniz. "
+"Bir bildirim gönderildiğinde, bu tanımlayıcıya bir tarih değeri atanır. "
+"Başka bir bildirim gönderilmeden önce tarih kontrol edilir."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:116
+msgid "Notification interval (in minutes)"
+msgstr "Bildirim aralığı (dakika)"
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:118
+#, php-format
+msgid ""
+"This defines the minimum duration between two notifications, in minutes. "
+"For \n"
+"                        example, if you enter %1$d, you will not get more "
+"than one notification within %1$d minutes. For\n"
+"                        this to work, you have to define the notification "
+"identifier as well. If you leave this empty,\n"
+"                        the default value will be used, which is %2$d."
+msgstr ""
+"Bu, iki bildirim arasındaki en kısa zaman aralığını (dakika olarak) "
+"tanımlar. Örneğin, %1$d girerseniz, %1$d dakika içerisinde birden fazla "
+"bildirim almazsınız. Bunun çalışabilmesi için bir bildirim tanımlayıcı da "
+"girmelisiniz. Bunu boş bırakırsanız, varsayılan değer olan %2$d kullanılır."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:147
+msgid ""
+"The notification templates are prefixed to indicate that the notification "
+"is \n"
+"                    sent for testing purposes. The prefix will not be added "
+"when not testing."
+msgstr ""
+"Bildirimin test amacıyla gönderildiğini belirtmek için, bildirim "
+"şablonlarına ön ek eklendi. Ön ek, test yapılmadığı durumlarda "
+"eklenmeyecektir."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:168
+msgid ""
+"Notification could not be sent, because the notifications are not active in "
+"the \n"
+"                general settings."
+msgstr ""
+"Genel ayarlarda bildirimler aktif olmadığı için bildirim gönderilemedi."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:177
+msgid ""
+"Number of notifications is not limited, because an identifier is not defined."
+msgstr "Tanımlayıcı girilmediği için bildirim sayısı sınırlandırılmıyor."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:185
+msgid ""
+"The notification interval value is not numeric or it is negative. The value "
+"must be \n"
+"                a positive number. The notification is not sent."
+msgstr ""
+"Bildirim aralığı değeri sayısal değil ya da negatif. Değer pozitif bir sayı "
+"olmalı. Bildirim gönderilmedi."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:200
+msgid ""
+"The current time could not be retrieved. The duration of time between the "
+"last \n"
+"                notification and now could not be checked. The notification "
+"will be sent anyway."
+msgstr ""
+"Şu anki zaman değeri elde edilemedi. Son bildirim tarihiyle şu an arasındaki "
+"süre kontrol edilemedi. Bildirim yine de gönderilecek."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:215
+#, php-format
+msgid ""
+"Notification is not sent, because the last notification was sent %1$d "
+"minute(s) ago for \n"
+"                    %2$s identifier. The limit between two notifications is "
+"%3$d minute(s)."
+msgstr ""
+"%2$s tanımlayıcısı için son bildirim %1$d dakika önce gönderildiği için "
+"bildirim gönderilmedi. İki bildirim arasındaki zaman sınırı %3$d dakika."
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:320
+#: storage/cache/a48309acbfd0f1eda308afc48abaef5a2272fd84.php:42
+#: storage/cache/c10fa04c16afaacbb46b501721dfec5faa124da5.php:3
+msgid "Test"
+msgstr "Test"
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:349
+msgid "No title"
+msgstr "Başlık yok"
+
+#: Objects/Filtering/Commands/ActionCommands/Base/AbstractSendNotificationCommand.php:374
+#, php-format
+msgid "Notification for %1$s"
+msgstr "%1$s için bildirim"
+
+#: Objects/Filtering/Commands/ActionCommands/Crawling/StopAndDeletePost.php:41
+msgid "Stop and delete the post"
+msgstr "Dur ve yazıyı sil"
+
+#: Objects/Filtering/Commands/ActionCommands/Crawling/StopAndDeletePost.php:45
+msgid ""
+"Stops the execution of the crawling operation immediately. Then, deletes the "
+"post created in \n"
+"            your site for the current URL, if the post exists."
+msgstr ""
+"Kaydetme işleminin çalışmasını hemen durdurur. Ardından, eğer varsa, şu anki "
+"URL için sitenizde oluşturulan yazıyı siler."
+
+#: Objects/Filtering/Commands/ActionCommands/Crawling/StopAndDeletePost.php:68
+#: Objects/Filtering/Commands/ActionCommands/Crawling/StopAndDeletePost.php:122
+msgid "Reason"
+msgstr "Sebep"
+
+#: Objects/Filtering/Commands/ActionCommands/Crawling/StopAndDeletePost.php:69
+msgid ""
+"A short explanation about why the crawling should be \n"
+"                    stopped and the post should be deleted. This will be "
+"added to the log message and to the information \n"
+"                    messages that you will see when this command is run. "
+"This is optional. If you define this, you will \n"
+"                    be able to understand why this command is run when it is "
+"run."
+msgstr ""
+"Kaydetme işleminin neden durdurulması gerektiğini ve yazının neden silinmesi "
+"gerektiğini açıklayan kısa bir metin. Bu metin, sistem günlüğüne eklenecek "
+"girdiye ve komut çalıştığında göreceğiniz bilgi mesajlarına eklenecek. Bunu "
+"girmek isteğe bağlı. Eğer girerseniz, bu komut çalıştığında neden "
+"çalıştığını anlayabilirsiniz."
+
+#: Objects/Filtering/Commands/ActionCommands/Crawling/StopAndDeletePost.php:77
+msgid "Delete URL?"
+msgstr "URL'yi sil?"
+
+#: Objects/Filtering/Commands/ActionCommands/Crawling/StopAndDeletePost.php:78
+msgid ""
+"Check this if the URL of the post should be deleted \n"
+"                    from the database. When the URL is deleted, the plugin "
+"will be able to save the URL to the database\n"
+"                    again, if the URL is found in a category page. This "
+"means that the post can be saved again. If the\n"
+"                    URL is not deleted, the post will not be saved again."
+msgstr ""
+"Yazının URL'sinin veritabanından silinmesini istiyorsanız, işaretleyin. URL "
+"silindiğinde, eğer aynı URL bir kategori sayfasında bulunursa, eklenti "
+"URL'yi veritabanına tekrar ekleyebilir. Bu, yazının tekrar kaydedilebileceği "
+"anlamına gelir. Eğer URL silinmezse, yazı tekrar kaydedilmez."
+
+#: Objects/Filtering/Commands/ActionCommands/Crawling/StopAndDeletePost.php:94
+#, php-format
+msgid ""
+"\"%1$s\" command requested the saving operation to be stopped and the post \n"
+"            currently being crawled to be deleted."
+msgstr ""
+"\"%1$s\" komutu, kaydetme işleminin durdurulmasını ve şu an kaydedilen "
+"yazının silinmesini istedi."
+
+#: Objects/Filtering/Commands/ActionCommands/Element/ElementClone.php:55
+msgid "Clone all found elements?"
+msgstr "Bulunan tüm elementleri klonla?"
+
+#: Objects/Filtering/Commands/ActionCommands/Element/ElementClone.php:56
+msgid ""
+"Check this if all the elements found by the provided\n"
+"                    CSS selectors must be cloned. If this is not checked, "
+"only the first one in the found elements will \n"
+"                    be cloned."
+msgstr ""
+"Girilen CSS seçicilerin bulduğu tüm elementlerin klonlanmasını istiyorsanız, "
+"işaretleyin. Bu işaretlenmezse, bulunan elementler arasından yalnızca ilki "
+"klonlanır."
+
+#: Objects/Filtering/Commands/ActionCommands/Element/ElementClone.php:62
+msgid "Element ID"
+msgstr "Element ID'si"
+
+#: Objects/Filtering/Commands/ActionCommands/Element/ElementClone.php:63
+#, php-format
+msgid ""
+"Enter the ID that will be assigned to the \n"
+"                    cloned element. You can use this ID to interact with the "
+"cloned element later. An ID attribute \n"
+"                    cannot have a space character in it, according to the "
+"specifications. However, if you enter a \n"
+"                    space-separated list, it will be considered as multiple "
+"IDs. In case of cloning multiple elements,\n"
+"                    the given ID(s) will be suffixed a number for each "
+"cloned element. For example, if the given ID is \n"
+"                    %1$s, and there are three cloned elements, while the "
+"first clone will have %1$s as its ID, the \n"
+"                    second and third ones will have %2$s and %3$s as their "
+"IDs."
+msgstr ""
+"Klon elemente verilecek ID değerini girin. Daha sonra bu elementle ilgili "
+"bir şeyler yapmak için bu ID değerini kullanabilirsiniz. Teknik "
+"spesifikasyona göre, bir ID özniteliğinin değeri boşluk karakteri içeremez. "
+"Eğer boşlukla ayrılmış bir liste girerseniz, bu liste birden fazla ID olarak "
+"dikkate alınır. Birden fazla elementin klonlanması durumunda, girilen "
+"ID'lere her klon element için bir sayı değeri son ek olarak eklenir. "
+"Örneğin, girilen ID değeri %1$s ise ve üç klon element varsa, ilk klonun "
+"ID'si %1$s olarak atanırken, ikinci ve üçüncününkü %2$s ve %3$s olarak "
+"atanır."
+
+#: Objects/Filtering/Commands/ActionCommands/Element/ElementClone.php:143
+msgid ""
+"Multiple elements are found, but only the first one is cloned \n"
+"                because the command is configured that way."
+msgstr ""
+"Birden fazla element bulundu, fakat, komut bu şekilde ayarlandığı için, "
+"yalnızca ilki klonlandı."
+
+#: Objects/Filtering/Commands/ActionCommands/Element/ElementClone.php:159
+#, php-format
+msgid "An element (%2$s) could not be cloned via \"%1$s\" command."
+msgstr "Bir element (%2$s) \"%1$s\" komutu ile klonlanamadı."
+
+#: Objects/Filtering/Commands/ActionCommands/Element/ElementClone.php:161
+msgid "unknown"
+msgstr "bilinmeyen"
+
+#: Objects/Filtering/Commands/ActionCommands/Element/ElementClone.php:179
+#, php-format
+msgid ""
+"No element ID is provided for \"%1$s\" command. The element is not cloned. "
+"ID for the cloned \n"
+"                    element must be provided."
+msgstr ""
+"\"%1$s\" komutuna bir ID değeri girilmedi. Element klonlanmadı. Klon "
+"elemente atanacak ID değeri girilmelidir."
+
+#: Objects/Filtering/Commands/ActionCommands/Element/ElementRemoveLinks.php:35
+#: Objects/Filtering/Commands/ActionCommands/Text/TextRemoveLinks.php:29
+msgid "Remove links"
+msgstr "Linkleri kaldır"
+
+#: Objects/Filtering/Commands/ActionCommands/Helpers/LinkRemoverCommandHelper.php:37
+#, php-format
+msgid ""
+"You can use %1$s to indicate the variable parts. For example, %2$s rule does "
+"not match %3$s, \n"
+"            but %4$s does."
+msgstr ""
+"Değişken bölümleri belirtmek için %1$s kullanabilirsiniz. Örneğin, %2$s "
+"kuralı %3$s ile eşleşmezken, %4$s eşleşir."
+
+#: Objects/Filtering/Commands/ActionCommands/Helpers/LinkRemoverCommandHelper.php:47
+msgid "Blocked domains"
+msgstr "Engelli alan adları"
+
+#: Objects/Filtering/Commands/ActionCommands/Helpers/LinkRemoverCommandHelper.php:48
+msgid ""
+"Enter the blocked domain rules. The links \n"
+"                    targeting one of the given domains will be removed."
+msgstr ""
+"Engelli alan adı kurallarını girin. Girilen alan adlarından birini "
+"hedefleyen linkler kaldırılacaktır."
+
+#: Objects/Filtering/Commands/ActionCommands/Helpers/LinkRemoverCommandHelper.php:51
+msgid "Blocked domain"
+msgstr "Engelli alan adı"
+
+#: Objects/Filtering/Commands/ActionCommands/Helpers/LinkRemoverCommandHelper.php:55
+msgid "Allowed domains"
+msgstr "İzinli alan adları"
+
+#: Objects/Filtering/Commands/ActionCommands/Helpers/LinkRemoverCommandHelper.php:56
+msgid ""
+"Enter the allowed domain rules. The links \n"
+"                    targeting a domain outside of the given domains will be "
+"removed."
+msgstr ""
+"İzinli alan adı kurallarını girin. Girilen alan adlarından farklı bir alan "
+"adını hedefleyen linkler kaldırılacaktır."
+
+#: Objects/Filtering/Commands/ActionCommands/Helpers/LinkRemoverCommandHelper.php:59
+msgid "Allowed domain"
+msgstr "İzinli alan adı"
+
+#: Objects/Filtering/Commands/ActionCommands/Notification/SendEmailNotification.php:27
+msgid "Send email notification"
+msgstr "E-posta bildirimi gönder"
+
+#: Objects/Filtering/Commands/ActionCommands/Notification/SendEmailNotification.php:37
+msgid ""
+"No email notification is sent, because there are no email addresses defined."
+msgstr "Tanımlı e-posta adresi olmadığı için e-posta bildirimi gönderilmedi."
+
+#: Objects/Filtering/Commands/ActionCommands/Notification/SendEmailNotification.php:55
+#, php-format
+msgid ""
+"Notification email could not be sent to %1$s. Please make sure that \n"
+"                WordPress is correctly configured to send emails."
+msgstr ""
+"E-posta bildirimi %1$s adresine gönderilemedi. Lütfen WordPress'in e-posta "
+"gönderebilecek şekilde ayarlandığından emin olun."
+
+#: Objects/Filtering/Commands/ActionCommands/Numeric/Calculate.php:43
+msgid "Calculate"
+msgstr "Hesapla"
+
+#: Objects/Filtering/Commands/ActionCommands/Numeric/Calculate.php:54
+msgid "Decimal separator"
+msgstr "Ondalık ayırıcı"
+
+#: Objects/Filtering/Commands/ActionCommands/Numeric/Calculate.php:55
+msgid ""
+"Select the decimal separator to be used in the \n"
+"                    resultant number. The one that is not selected will be "
+"used as the thousands separator."
+msgstr ""
+"Sonuçta kullanılacak ondalık ayırıcıyı seçin. Seçili olmayan seçenek binlik "
+"ayırıcı olarak kullanılacak."
+
+#: Objects/Filtering/Commands/ActionCommands/Numeric/Calculate.php:61
+msgid "Use thousands separator?"
+msgstr "Binlik basamak ayırıcı kullan?"
+
+#: Objects/Filtering/Commands/ActionCommands/Numeric/Calculate.php:62
+msgid ""
+"Check this if you want to use thousands separator in \n"
+"                    the result."
+msgstr "Sonuçta binlik basamak ayırıcı kullanmak istiyorsanız, işaretleyin."
+
+#: Objects/Filtering/Commands/ActionCommands/Numeric/Calculate.php:68
+#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:52
+msgid "Precision"
+msgstr "Hassasiyet"
+
+#: Objects/Filtering/Commands/ActionCommands/Numeric/Calculate.php:70
+#, php-format
+msgid ""
+"Enter how many digits at max there can be after the \n"
+"                        decimal separator. Default: %s"
+msgstr ""
+"Ondalık ayırıcıdan sonra en fazla kaç hane olabileceğini girin. Varsayılan: "
+"%s"
+
+#: Objects/Filtering/Commands/ActionCommands/Numeric/Calculate.php:118
+#, php-format
+msgid "Formula: %1$s"
+msgstr "Formül: %1$s"
+
+#: Objects/Filtering/Commands/ActionCommands/Numeric/Calculate.php:138
+#, php-format
+msgid ""
+"No valid formula is found in \"%1$s\" command. No calculation could be "
+"performed. The subject \n"
+"                    value \"%2$s\" is not changed."
+msgstr ""
+"\"%1$s\" komutunda geçerli bir formül bulunamadı. Bir hesaplama yapılamadı. "
+"Özne değeri \"%2$s\" değiştirilmedi."
+
+#: Objects/Filtering/Commands/ActionCommands/Numeric/Calculate.php:163
+#, php-format
+msgid ""
+"The calculation cannot be performed in \"%1$s\" command because the value "
+"\"%2$s\" is not \n"
+"                    numeric. You can try to clear the thousands separators "
+"and change the decimal separator to \"%3$s\" to\n"
+"                    make the value numeric. If the value has characters "
+"other than numbers and a decimal separator, \n"
+"                    please clear them as well."
+msgstr ""
+"\"%2$s\" değeri sayısal olmadığı için \"%1$s\" komutunda bir hesaplama "
+"yapılamadı.  Binlik ayırıcıları kaldırıp ondalık ayırıcıyı da \"%3$s\" "
+"olarak değiştirerek değeri sayısal yapmayı deneyebilirsiniz. Değerde sayı ve "
+"ondalık ayırıcı dışında bir karakter varsa, lütfen onları da kaldırın."
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddCategories.php:34
+msgid "Add categories"
+msgstr "Kategori ekle"
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddCategories.php:56
+#: Test/General/GeneralPostTest.php:107
+msgid "Categories"
+msgstr "Kategoriler"
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddCategories.php:57
+#, php-format
+msgid ""
+"Enter the categories. Add a new item for each \n"
+"                    top-level category. You can add child categories to the "
+"top-level category by separating them with\n"
+"                    %1$s character. For example, %2$s puts the post under "
+"that category, while %3$s puts it under the \n"
+"                    last category after creating its parent categories."
+msgstr ""
+"Kategorileri girin. Her ana kategori için yeni bir öge ekleyin. Ana "
+"kategoriye eklenecek alt kategorileri %1$s karakteriyle ayırarak "
+"girebilirsiniz. Örneğin, %2$s değeri yazıyı belirtilen kategoriye eklerken, "
+"%3$s değeri, üst kategorileri oluşturduktan sonra, yazıyı en son kategoriye "
+"ekler."
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddCategories.php:66
+msgid "Category names..."
+msgstr "Kategori isimleri..."
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddCategories.php:70
+msgid "Delete other categories?"
+msgstr "Diğer kategorileri sil?"
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddCategories.php:71
+msgid ""
+"Check this if you want to delete other existing \n"
+"                    categories, if any exists."
+msgstr "Eğer varsa, diğer kategorileri silmek için işaretleyin."
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddCategories.php:101
+msgid ""
+"Previous categories are deleted, because the command is configured that way."
+msgstr "Önceki kategoriler silindi, çünkü komut bu şekilde ayarlandı."
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddCategories.php:105
+#, php-format
+msgid "The post now has these categories: %1$s"
+msgstr "Yazı şu an bu kategorilere sahip: %1$s"
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddCategories.php:111
+msgid "No change in the categories."
+msgstr "Kategorilerde bir değişiklik yapılmadı."
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddTags.php:32
+msgid "Add tags"
+msgstr "Etiket ekle"
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddTags.php:55
+#, php-format
+msgid ""
+"Define the tags that will be added to the \n"
+"                    tags of the post. To enter multiple tags, separate them "
+"with commas. For example, %1$s defines only \n"
+"                    one tag, while %2$s defines two tags."
+msgstr ""
+"Yazının etiketleri arasına eklenecek etiketleri girin. Birden fazla girmek "
+"için, virgül ile ayırın. Örneğin, %1$s yalnızca bir etiket tanımlarken, %2$s "
+"değeri iki adet tanımlar."
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddTags.php:65
+msgid "Delete other tags?"
+msgstr "Diğer etiketleri sil?"
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddTags.php:66
+msgid ""
+"Check this if you want to delete other existing \n"
+"                    tags, if any exists."
+msgstr "Eğer varsa, diğer etiketleri silmek için işaretleyin."
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddTags.php:96
+msgid "Previous tags are deleted, because the command is configured that way."
+msgstr "Önceki etiketler silindi, çünkü komut bu şekilde ayarlandı."
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddTags.php:100
+#, php-format
+msgid "The post now has these tags: %1$s"
+msgstr "Yazı şu an bu etiketlere sahip: %1$s"
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/AddTags.php:106
+msgid "No change in the tags."
+msgstr "Etiketlerde bir değişiklik yapılmadı."
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/SetAuthor.php:32
+msgid "Set author"
+msgstr "Yazar belirle"
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/SetAuthor.php:54
+#: Objects/SitePostTypeCreator.php:299
+msgid "Author"
+msgstr "Yazar"
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/SetAuthor.php:55
+msgid "Select the author"
+msgstr "Yazarı seç"
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/SetAuthor.php:73
+#, php-format
+msgid ""
+"The author is not set by \"%s\" command, because the given author ID is not "
+"valid."
+msgstr ""
+"Yazar, \"%s\" komutu tarafından belirlenemedi, çünkü belirtilen yazar ID'si "
+"geçerli değil."
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/SetAuthor.php:88
+#, php-format
+msgid "The post author is set as \"%s\"."
+msgstr "Yazının yazarı \"%s\" olarak belirlendi."
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/SetPostStatus.php:33
+msgid "Set post status"
+msgstr "Yazı durumu belirle"
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/SetPostStatus.php:55
+msgid "Post status"
+msgstr "Yazı durumu"
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/SetPostStatus.php:56
+msgid "Select the post status"
+msgstr "Yazı durumunu seç"
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/SetPostStatus.php:73
+#, php-format
+msgid ""
+"The post status is not set by \"%s\" command, because the given post status "
+"is not valid."
+msgstr ""
+"Yazı durumu \"%s\" komutu tarafından belirlenemedi, çünkü girilen yazı "
+"durumu geçerli değil."
+
+#: Objects/Filtering/Commands/ActionCommands/PostPage/SetPostStatus.php:88
+#, php-format
+msgid "The post status is set as \"%s\"."
+msgstr "Yazı durumu \"%s\" olarak belirlendi."
+
+#: Objects/Filtering/Commands/ActionCommands/Text/Base/AbstractTextLimitLengthCommand.php:103
+#, php-format
+msgid "This must be at least %d."
+msgstr "Bu en az %d olmalı."
+
+#: Objects/Filtering/Commands/ActionCommands/Text/Base/AbstractTextLimitLengthCommand.php:109
+msgid "End text"
+msgstr "Yazı sonu metni"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/Base/AbstractTextLimitLengthCommand.php:110
+msgid "A text that will be added to the end of the text when the text is cut."
+msgstr "Yazı kesildiğinde sonuna eklenecek metin."
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextFindReplace.php:32
+#: Objects/Filtering/Commands/ActionCommands/Text/TextFindReplace.php:42
+msgid "Find and replace"
+msgstr "Bul ve değiştir"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextFindReplace.php:43
+msgid "Find and replace anything in the value."
+msgstr "Değerin içerisinde herhangi bir şeyi bul ve değiştir."
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextLimitChars.php:27
+msgid "Limit characters"
+msgstr "Karakterleri sınırlandır"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextLimitChars.php:31
+msgid "Maximum character count"
+msgstr "Maksimum karakter sayısı"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextLimitChars.php:35
+msgid "Define the maximum number of characters that can be in the text."
+msgstr "Yazı içerisinde olabilecek maksimum karakter sayısını belirleyin."
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextLimitWords.php:27
+msgid "Limit words"
+msgstr "Kelimeleri sınırlandır"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextLimitWords.php:31
+msgid "Maximum word count"
+msgstr "Maksimum kelime sayısı"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextLimitWords.php:35
+msgid "Define the maximum number of words that can be in the text."
+msgstr "Yazı içerisinde olabilecek maksimum kelime sayısını belirleyin."
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextMakeCamelCase.php:25
+msgid "Make camel case"
+msgstr "Camel case yap"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextMakeKebabCase.php:25
+msgid "Make kebab case"
+msgstr "Kebab case yap"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextMakeLowerCase.php:25
+msgid "Make lower case"
+msgstr "Küçük harf yap"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextMakeSlug.php:25
+msgid "Make slug"
+msgstr "Slug yap"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextMakeSnakeCase.php:25
+msgid "Make snake case"
+msgstr "Snake case yap"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextMakeStudlyCase.php:25
+msgid "Make studly case"
+msgstr "Studly case yap"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextMakeTitleCase.php:25
+msgid "Make title case"
+msgstr "Title case yap"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextMakeUcFirst.php:27
+msgid "Make first letter upper case"
+msgstr "İlk harfi büyük harf yap"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextMakeUpperCase.php:25
+msgid "Make upper case"
+msgstr "Büyük harf yap"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextRemoveEmptyHtmlElements.php:31
+msgid "Remove empty HTML elements"
+msgstr "Boş HTML elementlerini kaldır"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextRemoveEmptyHtmlElements.php:41
+msgid "Remove comments?"
+msgstr "Yorumları kaldır?"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextRemoveEmptyHtmlElements.php:42
+msgid "Check this if the HTML comments should be removed."
+msgstr "HTML yorumlarını kaldırmak istiyorsanız, işaretleyin."
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextRemoveEmptyHtmlElements.php:46
+msgid "Excluded tag names"
+msgstr "Hariç tutulacak etiket isimleri"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextRemoveEmptyHtmlElements.php:48
+#, php-format
+msgid ""
+"Comma-separated tag names that should not be removed even if they are empty. "
+"E.g. %1$s.\n"
+"                        Note that HTML tags that should not have any content "
+"by default, such as %2$s, are already excluded."
+msgstr ""
+"Boş olsa bile kaldırılmaması gereken virgülle ayrılmış etiket isimleri. "
+"Örneğin, %1$s. Varsayılan olarak içeriğinin olmaması gereken HTML "
+"etiketleri, %2$s gibi, zaten hariç tutuluyor."
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextTemplate.php:34
+#: Objects/Filtering/Commands/ActionCommands/Text/TextTemplate.php:57
+#: storage/cache/6947f2040efebf695f4930b2041711c2b8efacde.php:4
+#: storage/cache/90340fcd75261a7e4a90d69e3fdb2bbe984e72d2.php:31
+msgid "Template"
+msgstr "Şablon"
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextTemplate.php:51
+msgid ""
+"Short codes that can be used in the template. You \n"
+"                    can hover over the short codes to see what they do. You "
+"can click to the short code buttons to copy \n"
+"                    the short codes. Then, you can paste the short codes "
+"into the template to include them. They will be \n"
+"                    replaced with their actual values."
+msgstr ""
+"Şablonda kullanılabilecek kısa kodlar. Ne yaptıklarını görmek için kısa "
+"kodların üzerine gelebilirsiniz. Kopyalamak için kısa kod butonlarına "
+"tıklayabilir, ardından da şablonun içerisine yapıştırabilirsiniz. Kısa "
+"kodlar asıl değerleriyle değiştirilecektir."
+
+#: Objects/Filtering/Commands/ActionCommands/Text/TextTemplate.php:58
+msgid ""
+"Enter your template. What you define here will be \n"
+"                    used as the new value of the text. The original value "
+"will be replaced with this template."
+msgstr ""
+"Şablonunuzu girin. Buraya girdiğiniz değer, yazının yeni değeri olarak "
+"belirlenir. Orijinal değer bu şablonla değiştirilir."
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/AbstractConditionCommand.php:119
+msgid ""
+"Command is not executed because it does not have any subject values that "
+"can \n"
+"                    be used to check the condition."
+msgstr ""
+"Koşulu test edebilmek için kullanılabilecek bir özneye sahip olmadığı için "
+"komut çalıştırılmadı."
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/AbstractConditionCommand.php:172
+msgid ""
+"Execution is stopped after first match, because it is configured that way."
+msgstr ""
+"Çalışma ilk eşleşmeden sonra durduruldu, çünkü komut bu şekilde ayarlandı."
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/AbstractConditionCommand.php:182
+msgid "The condition is met"
+msgstr "Koşul sağlandı"
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/AbstractConditionCommand.php:183
+msgid "The condition is not met"
+msgstr "Koşul sağlanmadı"
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/AbstractNumericConditionCommand.php:34
+msgid "Enter the value"
+msgstr "Değeri girin"
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/AbstractNumericConditionCommand.php:75
+#, php-format
+msgid ""
+"This condition is not met because the subject (\"%1$s\") and/or the option "
+"(\"%2$s\") value \n"
+"                    is not numeric. To compare two numbers, they both should "
+"be numeric. You can try to clear thousands \n"
+"                    separators and to use %3$s as the decimal separator. "
+"Please also clear any characters other than the\n"
+"                    numbers and the decimal separator."
+msgstr ""
+"Özne (\"%1$s\") ve/veya seçenek (\"%2$s\") değeri sayısal olmadığı için "
+"koşul sağlanmadı. İki sayının karşılaştırılabilmesi için ikisinin de sayısal "
+"olması gerekir. Binlik ayırıcıları kaldırıp ondalık ayırıcı için %3$s "
+"kullanmayı deneyebilirsiniz. Lütfen sayı ve ondalık ayırıcıdan farklı "
+"karakterleri de kaldırın."
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/AbstractTextConditionCommand.php:35
+#: Objects/Filtering/Property/Element/ElementTextProperty.php:28
+msgid "Text"
+msgstr "Yazı"
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/AbstractTextConditionCommand.php:103
+msgid "Case insensitive?"
+msgstr "Büyük-küçük harfe duyarsız?"
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/AbstractTextConditionCommand.php:104
+msgid "Check this if the texts should be compared in a case-insensitive way"
+msgstr ""
+"Yazıların büyük-küçük harfe duyarsız olarak karşılaştırılmasını "
+"istiyorsanız, işaretleyin"
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/Date/AbstractDateConditionCommand.php:131
+#, php-format
+msgid "Date \"%1$s\" could not be parsed in \"%2$s\" command."
+msgstr "\"%1$s\" tarihi \"%2$s\" komutunda işlenemedi."
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/Date/AbstractFixedDateConditionCommand.php:53
+#, php-format
+msgid ""
+"For the condition to be met, the following condition should be satisfied: "
+"%1$s"
+msgstr "Koşulun sağlanması için, şu koşulun sağlanması gerekir: %1$s"
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/Date/AbstractFixedDateConditionCommand.php:59
+#: Objects/SitePostTypeCreator.php:308 Test/General/GeneralPostTest.php:110
+#: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:165
+msgid "Date"
+msgstr "Tarih"
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/Date/AbstractRelativeDateConditionCommand.php:55
+#, php-format
+msgid ""
+"You can enter decimals. The value can be negative as well. For the condition "
+"to be met, the \n"
+"                following condition should be satisfied: %1$s"
+msgstr ""
+"Ondalık değer girebilirsiniz. Sayı negatif de olabilir. Koşulun sağlanması "
+"için, şu koşulun sağlanması gerekir: %1$s"
+
+#: Objects/Filtering/Commands/ConditionCommands/Base/Date/AbstractRelativeDateConditionCommand.php:62
+msgid "Hours"
+msgstr "Saat"
+
+#: Objects/Filtering/Commands/ConditionCommands/Crawling/CrawlingCommand.php:30
+msgid "Is crawling"
+msgstr "Kaydediyorsa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Crawling/FirstPageCommand.php:30
+msgid "Is first page"
+msgstr "İlk sayfaysa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Crawling/RecrawlingCommand.php:30
+msgid "Is recrawling"
+msgstr "Güncelliyorsa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsNewerThanFixed.php:25
+msgid "Is newer than fixed date"
+msgstr "Sabit tarihten daha yeniyse"
+
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsNewerThanFixed.php:29
+msgid "The subject date must be newer than this date."
+msgstr "Özne tarih, bu tarihten daha yeni olmalı."
+
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsNewerThanFixed.php:34
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsNewerThanRelative.php:35
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsOlderThanFixed.php:34
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsOlderThanRelative.php:35
+msgid "the subject date"
+msgstr "özne tarih"
+
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsNewerThanFixed.php:35
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsOlderThanFixed.php:35
+msgid "date given by you"
+msgstr "sizin tarihiniz"
+
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsNewerThanRelative.php:25
+msgid "Is newer than"
+msgstr "Daha yeniyse"
+
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsNewerThanRelative.php:29
+msgid ""
+"The subject date must be newer than this many hours when compared to the "
+"current time."
+msgstr ""
+"Şu anki zamanla karşılaştırıldığında, özne tarih bu kadar saatten daha yeni "
+"olmalı."
+
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsNewerThanRelative.php:34
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsOlderThanRelative.php:34
+msgid "now"
+msgstr "şu an"
+
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsNewerThanRelative.php:36
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsOlderThanRelative.php:36
+msgid "hours"
+msgstr "saat"
+
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsOlderThanFixed.php:25
+msgid "Is older than fixed date"
+msgstr "Sabit tarihten daha eskiyse"
+
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsOlderThanFixed.php:29
+msgid "The subject date must be older than this date."
+msgstr "Özne tarih, bu tarihten daha eski olmalı."
+
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsOlderThanRelative.php:25
+msgid "Is older than"
+msgstr "Daha eskiyse"
+
+#: Objects/Filtering/Commands/ConditionCommands/Date/DateIsOlderThanRelative.php:29
+msgid ""
+"The subject date must be older than this many hours when compared to the "
+"current time."
+msgstr ""
+"Şu anki zamanla karşılaştırıldığında, özne tarih bu kadar saatten daha eski "
+"olmalı."
+
+#: Objects/Filtering/Commands/ConditionCommands/Element/ElementDoesNotExist.php:29
+msgid "Does not exist"
+msgstr "Mevcut değilse"
+
+#: Objects/Filtering/Commands/ConditionCommands/Element/ElementExists.php:29
+msgid "Exists"
+msgstr "Mevcutsa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Error/AnyError.php:25
+msgid "Is error"
+msgstr "Hataysa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Error/HtmlError.php:26
+msgid "Is HTML error"
+msgstr "HTML hatasıysa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Error/RequestError.php:26
+msgid "Is request error"
+msgstr "İstek hatasıysa"
+
+#: Objects/Filtering/Commands/ConditionCommands/NumberComparison/EqualToCommand.php:24
+msgid "Equal to"
+msgstr "Eşitse"
+
+#: Objects/Filtering/Commands/ConditionCommands/NumberComparison/GreaterThanCommand.php:24
+msgid "Greater than"
+msgstr "Büyükse"
+
+#: Objects/Filtering/Commands/ConditionCommands/NumberComparison/GreaterThanOrEqualCommand.php:24
+msgid "Greater than or equal to"
+msgstr "Büyükse ya da eşitse"
+
+#: Objects/Filtering/Commands/ConditionCommands/NumberComparison/LessThanCommand.php:24
+msgid "Less than"
+msgstr "Küçükse"
+
+#: Objects/Filtering/Commands/ConditionCommands/NumberComparison/LessThanOrEqualCommand.php:24
+msgid "Less than or equal to"
+msgstr "Küçükse ya da eşitse"
+
+#: Objects/Filtering/Commands/ConditionCommands/NumberComparison/NotEqualToCommand.php:24
+msgid "Not equal to"
+msgstr "Eşit değilse"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextContains.php:25
+#: storage/cache/fe7d2ae11406dda66f4d5b6afa735a9ddec9393d.php:134
+msgid "Contains"
+msgstr "İçeriyorsa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextContains.php:29
+msgid "Enter the value that the text should contain"
+msgstr "Yazının içermesi gereken değeri girin"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextDoesNotContain.php:25
+msgid "Does not contain"
+msgstr "İçermiyorsa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextDoesNotContain.php:29
+msgid "Enter the value that the text should not contain"
+msgstr "Yazının içermemesi gereken değeri girin"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextDoesNotEndWith.php:25
+msgid "Does not end with"
+msgstr "Bununla bitmiyorsa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextDoesNotEndWith.php:29
+msgid "Enter the value that the text should not end with"
+msgstr "Yazının sonunda olmaması gereken değeri girin"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextDoesNotMatchRegex.php:25
+msgid "Does not match regex"
+msgstr "Düzenli ifadeyle eşleşmiyorsa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextDoesNotMatchRegex.php:29
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextMatchesRegex.php:29
+msgid "Regular expression"
+msgstr "Düzenli ifade"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextDoesNotMatchRegex.php:33
+msgid "Enter the regular expression that the text should not match."
+msgstr "Yazının eşleşmemesi gereken düzenli ifadeyi girin."
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextDoesNotStartWith.php:25
+msgid "Does not start with"
+msgstr "Bununla başlamıyorsa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextDoesNotStartWith.php:29
+msgid "Enter the value that the text should not start with"
+msgstr "Yazının başında olmaması gereken değeri girin"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextEndsWith.php:25
+msgid "Ends with"
+msgstr "Bununla bitiyorsa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextEndsWith.php:29
+msgid "Enter the value that the text should end with"
+msgstr "Yazının sonunda olması gereken değeri girin"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextIsLowerCase.php:29
+msgid "Is lower case"
+msgstr "Küçük harfse"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextIsNotLowerCase.php:29
+msgid "Is not lower case"
+msgstr "Küçük harf değilse"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextIsNotUpperCase.php:29
+msgid "Is not upper case"
+msgstr "Büyük harf değilse"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextIsUpperCase.php:29
+msgid "Is upper case"
+msgstr "Büyük harfse"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextMatchesRegex.php:25
+msgid "Matches regex"
+msgstr "Düzenli ifadeyle eşleşiyorsa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextMatchesRegex.php:33
+msgid "Enter the regular expression that the text should match."
+msgstr "Yazının eşleşmesi gereken düzenli ifadeyi girin."
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextStartsWith.php:25
+msgid "Starts with"
+msgstr "Bununla başlıyorsa"
+
+#: Objects/Filtering/Commands/ConditionCommands/Text/TextStartsWith.php:29
+msgid "Enter the value that the text should start with"
+msgstr "Yazının başında olması gereken değeri girin"
+
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:46
+msgid "Selectors"
+msgstr "Seçiciler"
+
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:48
+msgid ""
+"Enter one or more selectors that will be used to find the target element(s)."
+msgstr ""
+"Hedef elementleri bulmak için kullanılacak bir veya daha fazla seçici girin."
+
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:58
+msgid "Attribute name"
+msgstr "Öznitelik adı"
+
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:59
+msgid "Name of an attribute of the element(s)"
+msgstr "Elementlerin bir özniteliğinin adı"
+
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:71
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:86
+#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:64
+msgid "Formula"
+msgstr "Formül"
+
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:75
+#, php-format
+msgid ""
+"Enter the formulas that will be used to create the new value. If you enter "
+"more than \n"
+"                    one, a random one will be used. Use \"%1$s\" or \"%2$s\" "
+"to include the original value. For example, you \n"
+"                    can write %3$s to multiply the number by %4$s. You can "
+"use the following operators: %5$s"
+msgstr ""
+"Yeni değeri oluşturmak için kullanılacak formülleri girin. Birden fazla "
+"girerseniz, aralarından rastgele bir tanesi kullanılır. Orijinal değeri "
+"kullanmak için \"%1$s\" ya da \"%2$s\" girebilirsiniz. Örneğin, sayıyı %4$s "
+"ile çarpmak için %3$s yazabilirsiniz. Şu operatörleri kullanabilirsiniz: %5$s"
+
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:97
+msgid "Treat as HTML?"
+msgstr "HTML olarak işle?"
+
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:98
+msgid ""
+"Check this if the subject should be treated as HTML and \n"
+"                only the texts in the HTML code should be considered, not "
+"the HTML code itself."
+msgstr ""
+"Öznenin HTML olarak işlenmesini ve HTML kodunun değil, yalnızca HTML kodu "
+"içerisindeki yazıların dikkate alınmasını istiyorsanız, işaretleyin."
+
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:110
+msgid "Test text"
+msgstr "Test yazı"
+
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:111
+#: Objects/Guides/GuideTranslations.php:402
+msgid "Enter a test text"
+msgstr "Test metni girin"
+
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:123
+msgid "Test number"
+msgstr "Test sayı"
+
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:124
+msgid "Enter a test number"
+msgstr "Bir test sayısı girin"
+
+#: Objects/Filtering/Commands/Views/ViewDefinitionFactory.php:136
+msgid "Test date"
+msgstr "Test tarih"
+
+#: Objects/Filtering/Explaining/Loggers/AbstractCommandLogger.php:124
+#, php-format
+msgid "+%d item(s)..."
+msgstr "+%d öge..."
+
+#: Objects/Filtering/Explaining/Loggers/AbstractCommandLogger.php:147
+#, php-format
+msgid "+%1$d char(s)"
+msgstr "+%1$d karakter"
+
+#: Objects/Filtering/Filter/Filter.php:303
+msgid ""
+"This command is run after the filter condition's execution is finished. "
+"This \n"
+"                    command is run because its subject values are needed by "
+"an action command."
+msgstr ""
+"Bu komut, filtrenin koşulunun çalışması bittikten sonra, özne değerlerine "
+"bir eylem komutu tarafından ihtiyaç duyulduğu için çalıştırıldı."
+
+#: Objects/Filtering/Filter/Filter.php:409
+#, php-format
+msgid "Command with key \"%1$s\" does not exist."
+msgstr "Anahtarı \"%1$s\" olan bir komut bulunmuyor."
+
+#: Objects/Filtering/Filter/FilterCondition.php:225
+#, php-format
+msgid "Condition operator \"%s\" is not supported."
+msgstr "Koşul operatörü \"%s\" desteklenmiyor."
+
+#: Objects/Filtering/FilteringService.php:235
+#: Objects/Guides/GuideTranslations.php:207
+#: storage/cache/9594b0dd964b1a7930ce2bad983ce405f148972c.php:22
+#: storage/cache/98780646bde969762ca888206f6560caf5bcbd82.php:50
+#: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:104
+#: storage/cache/e98721460910d7069f2a29abc2d11383edd4276f.php:34
+msgid "Category"
+msgstr "Kategori"
+
+#: Objects/Filtering/FilteringService.php:242
+msgid "Special"
+msgstr "Özel"
+
+#: Objects/Filtering/FilteringService.php:249
+#: Objects/Filtering/SpecialFieldService.php:128 Services/PostService.php:423
+#: storage/cache/01fc217bbc83fff0339d099d3fddfcaf0bd98b85.php:21
+#: storage/cache/9594b0dd964b1a7930ce2bad983ce405f148972c.php:23
+#: storage/cache/e7728fa8aa876da1f418e16a3695f9b79c94c9c1.php:15
+msgid "Post"
+msgstr "Yazı"
+
+#: Objects/Filtering/FilteringUtils.php:104
+#, php-format
+msgid "Regular expression error at \"%s\" command"
+msgstr "\"%s\" komutunda düzenli ifade hatası"
+
+#: Objects/Filtering/Observers/FilterActionExecutor.php:67
+#, php-format
+msgid ""
+"The condition is executed by the event defined for the action part (%1$s), "
+"because the defined \n"
+"                action event (%1$s) is fired earlier than the defined "
+"condition event (%2$s)."
+msgstr ""
+"Koşul, eylem bölümü için tanımlanan olay tarafından (%1$s) çalıştırıldı, "
+"çünkü eylem olayı (%1$s) tanımlanan koşul olayından (%2$s) daha erken "
+"tetiklendi."
+
+#: Objects/Filtering/Property/Counts/CountProperty.php:34
+msgid "Count"
+msgstr "Adet"
+
+#: Objects/Filtering/Property/Element/ElementAttributeValueProperty.php:31
+msgid "Attribute value"
+msgstr "Öznitelik değeri"
+
+#: Objects/Filtering/Property/Element/ElementHtmlProperty.php:29
+msgid "HTML"
+msgstr "HTML"
+
+#: Objects/Filtering/Property/Element/ElementNumericAttributeValueProperty.php:26
+msgid "Numeric attribute value"
+msgstr "Sayısal öznitelik değeri"
+
+#: Objects/Filtering/Property/Element/ElementNumericTextProperty.php:26
+msgid "Numeric text"
+msgstr "Sayısal metin"
+
+#: Objects/Filtering/Property/Element/ElementTagNameProperty.php:28
+msgid "Tag name"
+msgstr "Etiket adı"
+
+#: Objects/Filtering/Property/Request/HttpStatusCodeProperty.php:28
+msgid "HTTP status code"
+msgstr "HTTP durum kodu"
+
+#: Objects/Filtering/Property/Request/HttpStatusCodeProperty.php:34
+#, php-format
+msgid ""
+"<a href=\"%1$s\" target=\"_blank\">HTTP status code</a> of the response "
+"retrieved for the request \n"
+"                made to the target site. E.g. <b>%2$d</b> is for not-found "
+"pages."
+msgstr ""
+"Hedef siteye yapılan isteğe gönderilen yanıtın <a href=\"%1$s\" target="
+"\"_blank\">HTTP durum kodu</a>. Örneğin, <b>%2$d</b> kodu, bulunamayan "
+"sayfalar içindir."
+
+#: Objects/Filtering/Property/Strings/Base/AbstractStringLengthProperty.php:90
+#, php-format
+msgid "The length of the text is %1$d."
+msgstr "Yazının uzunluğu %1$d."
+
+#: Objects/Filtering/Property/Strings/Base/AbstractStringLengthProperty.php:116
+#, php-format
+msgid "The length of the text inside the HTML code is %1$d."
+msgstr "HTML kodunun içindeki yazının uzunluğu %1$d."
+
+#: Objects/Filtering/Property/Strings/StringCharLengthProperty.php:26
+msgid "Character length"
+msgstr "Karakter uzunluğu"
+
+#: Objects/Filtering/Property/Strings/StringElementAttributeProperty.php:59
+msgid "Element attribute value"
+msgstr "Element öznitelik değeri"
+
+#: Objects/Filtering/Property/Strings/StringElementNumericAttributeProperty.php:26
+msgid "Element numeric attribute value"
+msgstr "Element sayısal öznitelik değeri"
+
+#: Objects/Filtering/Property/Strings/StringNumericValueProperty.php:27
+msgid "Numeric value"
+msgstr "Sayısal değer"
+
+#: Objects/Filtering/Property/Strings/StringWordLengthProperty.php:26
+msgid "Word length"
+msgstr "Kelime uzunluğu"
+
+#: Objects/Filtering/SpecialFieldService.php:142
+msgid "Element"
+msgstr "Element"
+
+#: Objects/Filtering/SpecialFieldService.php:158
+msgid "Crawling"
+msgstr "Tarama"
+
+#: Objects/Filtering/SpecialFieldService.php:172
+msgid "Notification"
+msgstr "Bildirim"
+
+#: Objects/Filtering/SpecialFieldService.php:183
+msgid "Request"
+msgstr "İstek"
+
 #: Objects/Guides/GuideTranslations.php:54
-#: storage/cache/32b0aa87d4102937c8f16593ae3ea0e5a597d796.php:5
 msgid "Guides"
 msgstr "Kullanım Kılavuzları"
 
 #: Objects/Guides/GuideTranslations.php:55
 msgid "Search guides..."
-msgstr "Kılavuzlarda ara…"
+msgstr "Kılavuzlarda ara..."
 
 #: Objects/Guides/GuideTranslations.php:88
 msgid "You can find out how to get it in the plugin's documentation."
@@ -1319,14 +3088,6 @@ msgstr ""
 "otomatik olarak bulabilmek için, eklenti, URL’si verilen sayfada yazı "
 "URL’lerini arayacak. Yani, içerisinde yazı URL’lerini barından bir sayfanın "
 "URL’sini girin."
-
-#: Objects/Guides/GuideTranslations.php:207
-#: storage/cache/9594b0dd964b1a7930ce2bad983ce405f148972c.php:22
-#: storage/cache/98780646bde969762ca888206f6560caf5bcbd82.php:50
-#: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:104
-#: storage/cache/e98721460910d7069f2a29abc2d11383edd4276f.php:34
-msgid "Category"
-msgstr "Kategori"
 
 #: Objects/Guides/GuideTranslations.php:208
 msgid ""
@@ -1981,10 +3742,6 @@ msgid ""
 "to this language."
 msgstr "İçeriğin hangi dile çevrileceğini seçin."
 
-#: Objects/Guides/GuideTranslations.php:402
-msgid "Enter a test text"
-msgstr "Test metni girin"
-
 #: Objects/Guides/GuideTranslations.php:403
 msgid ""
 "Enter a text in the original contents' language. We will use this text to "
@@ -2216,7 +3973,7 @@ msgstr "Yazıların öne çıkan görsellerini kaydetme"
 msgid "Learn how to save the featured images of the posts."
 msgstr "Yazıların öne çıkan görsellerini nasıl kaydedeceğinizi öğrenin."
 
-#: Objects/Informing/Information.php:156 Test/Base/AbstractGeneralTest.php:109
+#: Objects/Informing/Information.php:156 Test/Base/AbstractGeneralTest.php:118
 #: storage/cache/6947f2040efebf695f4930b2041711c2b8efacde.php:57
 #: storage/cache/b4b3d47091706552b5f766a00f61863fbb06f9f4.php:17
 msgid "Details"
@@ -2287,26 +4044,10 @@ msgstr "Dosyanın adı kullanılarak rastgele oluşturulmuş SHA1 sağlaması"
 msgid "Local URL of the file"
 msgstr "Dosyanın yerel URL’si"
 
-#: Objects/Page/AbstractPageHandler.php:106 Services/PostService.php:107
-#: Services/PostService.php:123
+#: Objects/Page/AbstractPageHandler.php:106 Services/PostService.php:108
+#: Services/PostService.php:124
 msgid "Data does not exist in your request. The request should include 'data'"
 msgstr "Yaptığınız istekte veri bulunamadı. İstek ‘data’ içermelidir"
-
-#: Objects/Settings/SettingService.php:168
-msgid "Publish"
-msgstr "Yayımlanmış"
-
-#: Objects/Settings/SettingService.php:169
-msgid "Draft"
-msgstr "Taslak"
-
-#: Objects/Settings/SettingService.php:170
-msgid "Pending"
-msgstr "İnceleme Bekliyor"
-
-#: Objects/Settings/SettingService.php:171
-msgid "Private"
-msgstr "Özel"
 
 #: Objects/SitePostTypeCreator.php:254
 msgid "Sites"
@@ -2324,11 +4065,6 @@ msgstr "Site"
 #: Objects/SitePostTypeCreator.php:257
 msgid "Content Crawler Site"
 msgstr "İçerik Toplayıcı Sitesi"
-
-#: Objects/SitePostTypeCreator.php:258
-#: storage/cache/4e030d94d4dc98ffdabda3c6817271fe857af7b8.php:33
-msgid "Add New"
-msgstr "Yeni Ekle"
 
 #: Objects/SitePostTypeCreator.php:260
 msgid "New Site"
@@ -2362,10 +4098,6 @@ msgstr "Çöpte site bulunamadı."
 msgid "A custom post type which stores sites to be crawled"
 msgstr "İçeriği toplanacak siteleri bulunduran özel yazı türü"
 
-#: Objects/SitePostTypeCreator.php:299
-msgid "Author"
-msgstr "Yazar"
-
 #: Objects/SitePostTypeCreator.php:300
 msgid "Active for scheduling"
 msgstr "Programlama için aktif"
@@ -2398,11 +4130,6 @@ msgstr "Son Yazı Güncelleme"
 #: Objects/SitePostTypeCreator.php:307
 msgid "Last Post Delete"
 msgstr "Son Yazı Silme"
-
-#: Objects/SitePostTypeCreator.php:308 Test/General/GeneralPostTest.php:105
-#: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:165
-msgid "Date"
-msgstr "Tarih"
 
 #: Objects/SitePostTypeCreator.php:378
 #: storage/cache/03557e0035dd641f3a931e1df7c35a537994fda2.php:60
@@ -2489,19 +4216,9 @@ msgstr "Site taslağı güncellendi."
 msgid "Enter site name here"
 msgstr "Site adını girin"
 
-#: Objects/SitePostTypeCreator.php:478
-#: storage/cache/9594b0dd964b1a7930ce2bad983ce405f148972c.php:43
-msgid "Settings"
-msgstr "Ayarlar"
-
 #: Objects/SitePostTypeCreator.php:488
 msgid "Simple Notes"
 msgstr "Basit Notlar"
-
-#: Objects/StringCalculator.php:70
-#: storage/cache/e47cdb17ea8038b49c8b85e018769cabb16d1689.php:23
-msgid "Value"
-msgstr "Değer"
 
 #: Objects/StringCalculator.php:70
 #, php-format
@@ -2512,16 +4229,16 @@ msgstr ""
 "Binlik basamak ayrıcılarını temizlemeyi ve ondalık ayrıcısını “%1$s” olarak "
 "belirlemeyi deneyebilirsiniz."
 
-#: Objects/Traits/FindAndReplaceTrait.php:60
+#: Objects/Traits/FindAndReplaceTrait.php:61
 msgid "An error occurred while replacing with the regular expression."
 msgstr "Düzenli ifadelerle değiştirme yaparken bir hata oluştu."
 
-#: Objects/Traits/FindAndReplaceTrait.php:95
+#: Objects/Traits/FindAndReplaceTrait.php:96
 #: storage/cache/b4b3d47091706552b5f766a00f61863fbb06f9f4.php:23
 msgid "Type"
 msgstr "Tür"
 
-#: Objects/Traits/FindAndReplaceTrait.php:96
+#: Objects/Traits/FindAndReplaceTrait.php:97
 #: storage/cache/49fc0eb60db78ca42d494717522fc7dd20008b63.php:23
 #: storage/cache/683c89e58d6f707052aad3fd8899c5b40e7a7698.php:16
 #: storage/cache/84e72f92e39b7d988c2e04751ee4b62624f654ff.php:22
@@ -2530,7 +4247,7 @@ msgstr "Tür"
 msgid "Find"
 msgstr "Bul"
 
-#: Objects/Traits/FindAndReplaceTrait.php:96
+#: Objects/Traits/FindAndReplaceTrait.php:97
 #: storage/cache/49fc0eb60db78ca42d494717522fc7dd20008b63.php:28
 #: storage/cache/683c89e58d6f707052aad3fd8899c5b40e7a7698.php:21
 #: storage/cache/84e72f92e39b7d988c2e04751ee4b62624f654ff.php:27
@@ -2539,11 +4256,11 @@ msgstr "Bul"
 msgid "Replace"
 msgstr "Değiştir"
 
-#: Objects/Transformation/Base/AbstractTransformationService.php:76
+#: Objects/Transformation/Base/AbstractTransformationService.php:78
 msgid "Select a service"
 msgstr "Bir servis seç"
 
-#: Objects/Transformation/Base/AbstractTransformationService.php:219
+#: Objects/Transformation/Base/AbstractTransformationService.php:221
 #, php-format
 msgid "Selected transformation service %1$s is not valid"
 msgstr "Seçilen dönüştürme servisi %1$s geçerli değil"
@@ -2619,44 +4336,44 @@ msgstr "Tüm karakter seti"
 msgid "Best character set"
 msgstr "En iyi karakter seti"
 
-#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:216
+#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:217
 msgid "Quota description"
 msgstr "Kota açıklaması"
 
-#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:217
+#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:218
 msgid "Requests made"
 msgstr "Yapılan istekler"
 
-#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:218
+#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:219
 msgid "Requests available"
 msgstr "Kalan istekler"
 
-#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:231
+#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:232
 #, php-format
 msgid "<b>Email:</b> %1$s, <b>API Key:</b> %2$s"
 msgstr "<b>Email:</b> %1$s, <b>API Anahtarı:</b> %2$s"
 
-#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:341
+#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:342
 msgid "API Response"
 msgstr "API Yanıtı"
 
-#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:378
+#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:379
 msgid "API action must be provided."
 msgstr "API aksiyonu sağlanmalıdır."
 
-#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:383
+#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:384
 msgid "You must provide email and API key"
 msgstr "Email ve API anahtarı girmelisiniz"
 
-#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:437
+#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:438
 msgid "Low"
 msgstr "Düşük"
 
-#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:438
+#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:439
 msgid "Medium"
 msgstr "Orta"
 
-#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:439
+#: Objects/Transformation/Spinning/Clients/SpinRewriterClient.php:440
 msgid "High"
 msgstr "Yüksek"
 
@@ -2791,12 +4508,17 @@ msgstr "Dili algıla"
 msgid "Languages could not be deleted from the database."
 msgstr "Diller veritabanından silinemedi."
 
+#: Objects/Value/ValueExtractor.php:158
+#, php-format
+msgid "%1$s method does not exist in %2$s"
+msgstr "%2$s içinde %1$s metodu bulunmuyor"
+
 #: PostDetail/Base/BasePostDetailSaver.php:108
 #, php-format
 msgid "The post has been found to be a duplicate by %1$s."
 msgstr "Yazı, %1$s tarafından, kopya olarak teşhis edildi."
 
-#: PostDetail/PostDetailsService.php:573
+#: PostDetail/PostDetailsService.php:574
 #, php-format
 msgid "Transformation error for %1$s. Message: %2$s - Class: %3$s"
 msgstr "%1$s için dönüştürme hatası. Mesaj: %2$s - Sınıf: %3$s"
@@ -2832,73 +4554,73 @@ msgstr ""
 "Kısa ismin uzunluğu %2$s sayısından büyük. Bu nedenle kısa isim kısaltıldı. "
 "Terim: “%1$s”, Kısaltılmış hali: “%3$s”"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:549
+#: PostDetail/WooCommerce/WooCommerceData.php:565
 msgid "Product Button Text"
 msgstr "Ürün Düğme Metni"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:550
+#: PostDetail/WooCommerce/WooCommerceData.php:566
 msgid "Product Media Title"
 msgstr "Ürün Ortam Başlığı"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:551
+#: PostDetail/WooCommerce/WooCommerceData.php:567
 msgid "Product Media Description"
 msgstr "Ürün Ortam Tanımı"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:552
+#: PostDetail/WooCommerce/WooCommerceData.php:568
 msgid "Product Media Caption"
 msgstr "Ürün Ortam Altyazısı"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:553
+#: PostDetail/WooCommerce/WooCommerceData.php:569
 msgid "Product Media Alternate Text"
 msgstr "Ürün Ortam Alternatif Metni"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:554
+#: PostDetail/WooCommerce/WooCommerceData.php:570
 msgid "Product Purchase Note"
 msgstr "Ürün Satın Alma Notu"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:555
+#: PostDetail/WooCommerce/WooCommerceData.php:571
 msgid "Product Attribute Name"
 msgstr "Ürün Nitelik İsmi"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:556
+#: PostDetail/WooCommerce/WooCommerceData.php:572
 msgid "Product Attribute Values"
 msgstr "Ürün Nitelik Değerleri"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:562
+#: PostDetail/WooCommerce/WooCommerceData.php:584
 #: PostDetail/WooCommerce/WooCommerceTester.php:64
 #: storage/cache/596ba7c1547e7a2785bbb66df79b576735f4e8fd.php:18
 msgid "Product URL"
 msgstr "Ürün Bağlantısı"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:563
+#: PostDetail/WooCommerce/WooCommerceData.php:585
 msgid "Product Regular Price"
 msgstr "Ürün Normal Fiyatı"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:564
+#: PostDetail/WooCommerce/WooCommerceData.php:586
 msgid "Product Sale Price"
 msgstr "Ürün İndirimli Satışa Fiyatı"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:565
+#: PostDetail/WooCommerce/WooCommerceData.php:587
 msgid "Product SKU"
 msgstr "Ürün Stok Kodu"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:566
+#: PostDetail/WooCommerce/WooCommerceData.php:588
 msgid "Product Stock Quantity"
 msgstr "Ürün Stok Miktarı"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:567
+#: PostDetail/WooCommerce/WooCommerceData.php:589
 msgid "Product Weight"
 msgstr "Ürün Ağırlığı"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:568
+#: PostDetail/WooCommerce/WooCommerceData.php:590
 msgid "Product Length"
 msgstr "Ürün Uzunluğu"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:569
+#: PostDetail/WooCommerce/WooCommerceData.php:591
 msgid "Product Width"
 msgstr "Ürün Genişliği"
 
-#: PostDetail/WooCommerce/WooCommerceData.php:570
+#: PostDetail/WooCommerce/WooCommerceData.php:592
 msgid "Product Height"
 msgstr "Ürün Yüksekliği"
 
@@ -2907,7 +4629,7 @@ msgstr "Ürün Yüksekliği"
 msgid "SKU"
 msgstr "Stok kodu (SKU)"
 
-#: PostDetail/WooCommerce/WooCommerceFactory.php:52
+#: PostDetail/WooCommerce/WooCommerceFactory.php:53
 #, php-format
 msgid ""
 "%1$s function does not exist. You can try to install one of the previous "
@@ -2916,7 +4638,7 @@ msgstr ""
 "%1$s fonksiyonu mevcut değil. WooCommerce’ün daha önceki versiyonlarından "
 "birini yüklemeyi deneyebilirsiniz."
 
-#: PostDetail/WooCommerce/WooCommerceFactory.php:134
+#: PostDetail/WooCommerce/WooCommerceFactory.php:135
 msgid ""
 "A suitable adapter factory could not be found for current WooCommerce "
 "version."
@@ -3154,51 +4876,44 @@ msgstr ""
 "WP İçerik Toplayıcı en az PHP <b>%1$s</b> versiyonuna gereksinim duyar. "
 "Sizin şu anki PHP versiyonunuz <b>%2$s</b>."
 
-#: Services/PostService.php:108
+#: Services/PostService.php:109
 msgid ""
 "Post ID does not exist in your request. The request should have 'post_id'."
 msgstr "Yaptığınız istekte yazı ID’si bulunamadı. İstek ‘post_id’ içermelidir."
 
-#: Services/PostService.php:411
-#: storage/cache/01fc217bbc83fff0339d099d3fddfcaf0bd98b85.php:21
-#: storage/cache/9594b0dd964b1a7930ce2bad983ce405f148972c.php:23
-#: storage/cache/e7728fa8aa876da1f418e16a3695f9b79c94c9c1.php:15
-msgid "Post"
-msgstr "Yazı"
-
-#: Services/PostService.php:519
+#: Services/PostService.php:531
 msgid "Settings could not be saved."
 msgstr "Seçenekler kaydedilemedi."
 
-#: Services/PostService.php:528
+#: Services/PostService.php:540
 msgid "Settings do not exist in the data."
 msgstr "Veride ayarlar bulunmuyor."
 
-#: Services/PostService.php:535
+#: Services/PostService.php:547
 msgid "Post ID does not exist."
 msgstr "Yazı ID’si mevcut değil."
 
-#: Services/PostService.php:770 Services/PostService.php:791
+#: Services/PostService.php:784 Services/PostService.php:805
 msgid "Prepared post title"
 msgstr "Düzenlenmiş yazı başlığı"
 
-#: Services/PostService.php:771
+#: Services/PostService.php:785
 msgid "Prepared post excerpt"
 msgstr "Düzenlenmiş yazı kısa açıklaması"
 
-#: Services/PostService.php:772
+#: Services/PostService.php:786
 msgid "Main post content"
 msgstr "Ana yazı içeriği"
 
-#: Services/PostService.php:773
+#: Services/PostService.php:787
 msgid "List items"
 msgstr "Liste maddeleri"
 
-#: Services/PostService.php:774
+#: Services/PostService.php:788
 msgid "Gallery items"
 msgstr "Galeri itemleri"
 
-#: Services/PostService.php:775
+#: Services/PostService.php:789
 #, php-format
 msgid ""
 "Full URL of the target page. You can use this to reference the source page. "
@@ -3207,31 +4922,31 @@ msgstr ""
 "Hedef sayfanın tam URL adresi. Bu adresi kaynak belirtirken "
 "kullanabilirsiniz. Örneğin: <a href=“%1$s”>Kaynak</a>"
 
-#: Services/PostService.php:783
+#: Services/PostService.php:797
 msgid "Original post title"
 msgstr "Orijinal yazı başlığı"
 
-#: Services/PostService.php:792
+#: Services/PostService.php:806
 msgid "Original post excerpt"
 msgstr "Orijinal yazı kısa açıklaması"
 
-#: Services/PostService.php:800
+#: Services/PostService.php:814
 msgid "List item title"
 msgstr "Liste maddesi başlığı"
 
-#: Services/PostService.php:801
+#: Services/PostService.php:815
 msgid "List item content"
 msgstr "Liste maddesi içeriği"
 
-#: Services/PostService.php:802
+#: Services/PostService.php:816
 msgid "The position of the item."
 msgstr "Maddenin sırası."
 
-#: Services/PostService.php:810
+#: Services/PostService.php:824
 msgid "Gallery item URL"
 msgstr "Galeri itemi URL’si"
 
-#: Services/PostService.php:819
+#: Services/PostService.php:833
 msgid "Found item"
 msgstr "Bulunan öğe"
 
@@ -3315,96 +5030,100 @@ msgstr "2 haftada bir"
 msgid "Once a month"
 msgstr "Ayda bir"
 
-#: Test/Base/AbstractGeneralTest.php:112
+#: Test/Base/AbstractGeneralTest.php:97 Test/Base/AbstractTest.php:115
+msgid "An error occurred during the test."
+msgstr "Test sırasında bir hata oluştu."
+
+#: Test/Base/AbstractGeneralTest.php:121
 msgid "Performance"
 msgstr "Performans"
 
-#: Test/Base/AbstractGeneralTest.php:236
+#: Test/Base/AbstractGeneralTest.php:246
 msgid "Time"
 msgstr "Süre"
 
-#: Test/Base/AbstractGeneralTest.php:237
+#: Test/Base/AbstractGeneralTest.php:247
 msgid "Memory Used"
 msgstr "Kullanılan Bellek"
 
-#: Test/Base/AbstractHtmlManipulationTest.php:114
+#: Test/Base/AbstractHtmlManipulationTest.php:115
 #, php-format
 msgid "Test results for %1$s with %2$s"
 msgstr "%1$s için %2$s ile test sonuçları"
 
-#: Test/Base/AbstractHtmlManipulationTest.php:117
-#: Test/Tests/FindReplaceInCustomMetaOrShortCodeTest.php:86
-msgid "and"
-msgstr "ve"
-
-#: Test/Base/AbstractHtmlManipulationTest.php:118
+#: Test/Base/AbstractHtmlManipulationTest.php:119
 #: Test/Tests/FindReplaceInCustomMetaOrShortCodeTest.php:87
 msgid "test code"
 msgstr "test kodu"
 
-#: Test/Base/AbstractHtmlManipulationTest.php:127
+#: Test/Base/AbstractHtmlManipulationTest.php:128
 msgid "URL and/or content must exist to conduct the test."
 msgstr "Testi yapabilmek için URL ve/ya içeriğin olması gerekli."
 
-#: Test/Base/AbstractHtmlManipulationTest.php:131
+#: Test/Base/AbstractHtmlManipulationTest.php:132
 msgid "You must provide a valid CSS selector."
 msgstr "Geçerli bir CSS seçici yazmalısınız."
 
-#: Test/Base/AbstractTest.php:166
+#: Test/Base/AbstractTest.php:180
 #, php-format
 msgid "JSON encoding error (%1$s)"
 msgstr "JSON kodlama hatası (%1$s)"
 
-#: Test/Base/AbstractTransformationTest.php:92
+#: Test/Base/AbstractTransformationTest.php:92 Utils.php:974
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
-#: Test/General/GeneralPostTest.php:51
+#: Test/General/GeneralPostTest.php:56
 msgid "Errors"
 msgstr "Hatalar"
 
-#: Test/General/GeneralPostTest.php:75
+#: Test/General/GeneralPostTest.php:80
 msgid "Styling can be different on front page depending on your theme."
 msgstr "Ön sayfadaki tasarım, temanıza bağlı olduğu için farklı görünebilir."
 
-#: Test/General/GeneralPostTest.php:102
-msgid "Categories"
-msgstr "Kategoriler"
-
-#: Test/General/GeneralPostTest.php:109
+#: Test/General/GeneralPostTest.php:114
 msgid "Meta Keywords As Tags"
 msgstr "Etiket Olarak Meta Anahtar Kelimeler"
 
-#: Test/General/GeneralPostTest.php:117
+#: Test/General/GeneralPostTest.php:122
 msgid "Prepared Post Tags"
 msgstr "Düzenlenmiş Etiketler"
 
-#: Test/General/GeneralPostTest.php:140
+#: Test/General/GeneralPostTest.php:145
 msgid "Custom Post Meta"
 msgstr "Özel Yazı Metası"
 
-#: Test/General/GeneralPostTest.php:158
+#: Test/General/GeneralPostTest.php:163
 msgid "Custom Post Taxonomies"
 msgstr "Özel Yazı Taksonomileri"
 
-#: Test/General/GeneralPostTest.php:167
+#: Test/General/GeneralPostTest.php:172
 #: storage/cache/18fd854ed3ef1c31ac0f1ef99974a9bdaa0a43c2.php:11
 #: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:255
 msgid "Featured Image"
 msgstr "Öne Çıkan Görsel"
 
-#: Test/General/GeneralPostTest.php:197
+#: Test/General/GeneralPostTest.php:202
 msgid "Attachments"
 msgstr "Ekler"
 
-#: Test/General/GeneralPostTest.php:207
+#: Test/General/GeneralPostTest.php:212
 msgid "Next Page URLs"
 msgstr "Sonraki Sayfa URL’leri"
 
-#: Test/Tests/CalculationTest.php:86 Test/Tests/ProxyTest.php:94
+#: Test/Tests/CalculationTest.php:86 Test/Tests/ProxyTest.php:95
 #, php-format
 msgid "Test results for %1$s:"
 msgstr "%1$s için test sonuçları:"
+
+#: Test/Tests/CommandTest.php:37
+msgid "The command cannot be found."
+msgstr "Komut bulunamadı."
+
+#: Test/Tests/CommandTest.php:52
+#, php-format
+msgid "Results of the test performed for %1$s command with the value %2$s"
+msgstr "%2$s değeri ile %1$s komutu için yapılan testin sonuçları"
 
 #: Test/Tests/FileCopyTest.php:45
 #, php-format
@@ -3432,12 +5151,12 @@ msgstr "(düzenli ifade olarak)"
 msgid "Test result for moving files to %1$s directory"
 msgstr "Dosyaları %1$s klasörüne taşıma testinin sonucu"
 
-#: Test/Tests/FileTemplateTest.php:80 Test/Tests/TemplateTest.php:66
+#: Test/Tests/FileTemplateTest.php:81 Test/Tests/TemplateTest.php:66
 #, php-format
 msgid "%2$s Test results for %1$s:"
 msgstr "%2$s %1$s için test sonuçları:"
 
-#: Test/Tests/FileTemplateTest.php:83
+#: Test/Tests/FileTemplateTest.php:84
 #, php-format
 msgid ""
 "Only %1$s and file short codes are replaced for testing purposes. Values of "
@@ -3478,7 +5197,7 @@ msgstr "URL için"
 msgid "For the test code"
 msgstr "Test kodu için"
 
-#: Test/Tests/ProxyTest.php:74
+#: Test/Tests/ProxyTest.php:75
 msgid "Success"
 msgstr "Başarılı"
 
@@ -3494,7 +5213,7 @@ msgstr "Dokümantasyon linkleri yenilenemedi"
 msgid "Results for refreshing documentation links"
 msgstr "Dokümantasyon linklerinin yenilenmesi için sonuçlar"
 
-#: Test/Tests/SelectorTest.php:160
+#: Test/Tests/SelectorTest.php:161
 #, php-format
 msgid "Test results for %1$s%2$s on %3$s:"
 msgstr "%1$s%2$s %3$s için test sonuçları:"
@@ -3519,11 +5238,11 @@ msgstr "Test amacıyla sadece %1$s kısa kodu değiştirildi."
 msgid "Translation test results for <b>%1$s</b>"
 msgstr "<b>%1$s</b> için çeviri test sonuçları"
 
-#: Utils.php:559
+#: Utils.php:562
 msgid "Passwords do not match."
 msgstr "Şifreler uyuşmuyor."
 
-#: Utils.php:626
+#: Utils.php:629
 #, php-format
 msgid ""
 "Length of the term is greater than %2$s. Therefore, it is shortened. Term: "
@@ -3532,7 +5251,7 @@ msgstr ""
 "Terimin uzunluğu %2$s sayısından büyük. Bu nedenle, kısaltıldı. Terim: "
 "“%1$s”, Kısaltılmış hali: “%3$s”"
 
-#: Utils.php:655
+#: Utils.php:658
 #, php-format
 msgid ""
 "Term \"%1$s\" could not be added to taxonomy \"%2$s\" (Args: %3$s). Message: "
@@ -3540,16 +5259,24 @@ msgid ""
 msgstr ""
 "Terim “%1$s”, “%2$s” taksonomisine eklenemedi (Argümanlar: %3$s). Mesaj: %4$s"
 
-#: Utils.php:714
+#: Utils.php:717
 #, php-format
 msgid "%1$s could not be separated using these separators: %2$s"
 msgstr "%1$s bu seçiciler kullanarak ayrılamadı: %2$s"
 
-#: Utils.php:906
+#: Utils.php:920
 msgid "(no title)"
 msgstr "(başlık yok)"
 
-#: WPCCrawler.php:131
+#: Utils.php:1179
+msgid "Dot"
+msgstr "Nokta"
+
+#: Utils.php:1180
+msgid "Comma"
+msgstr "Virgül"
+
+#: WPCCrawler.php:149
 msgid "Documentation"
 msgstr "Dokümantasyon"
 
@@ -3565,24 +5292,23 @@ msgstr "%s Lisans Ayarları"
 #: WPTSLMClient.php:243
 #, php-format
 msgid ""
-"Your %1$s license is not valid or it has expired. Please get a new license "
-"until %2$s to continue using %3$s."
+"The license key entered for %1$s is not valid or it could not be checked. "
+"Please verify your license until %2$s to continue using %3$s."
 msgstr ""
-"%1$s lisansınızın süresi doldu veya lisansınız geçerli değil. %3$s "
-"kullanmaya devam etmek için lütfen %2$s tarihine kadar yeni bir lisans "
-"edinin."
+"%1$s için girdiğiniz lisans anahtarı geçerli değil veya kontrol edilemedi. "
+"%3$s kullanmaya devam etmek için lütfen %2$s tarihine kadar lisansınızı "
+"girin."
 
 #: WPTSLMClient.php:246
 #, php-format
 msgid ""
-"Your %1$s license is not valid or it has expired. You did not provide a "
-"valid license. The features are disabled.\n"
-"                        Please get a valid/new license to continue using "
-"%2$s."
+"The license key entered for %1$s is not valid or it could not be checked. "
+"You did not verify your license. The features are disabled.\n"
+"                        Please verify your license to continue using %2$s."
 msgstr ""
-"%1$s lisansınız geçerli değil veya lisansınızın süresi dolu. Geçerli bir "
-"lisans sağlamadınız. Özellikler pasif hale getirildi. %2$s kullanmaya devam "
-"etmek için lütfen geçerli veya yeni bir lisans edinin."
+"%1$s için girdiğiniz lisans anahtarı geçerli değil veya kontrol edilemedi. "
+"Lisansınızı doğrulamadınız. Özellikler pasif hale getirildi. %2$s kullanmaya "
+"devam etmek için lütfen lisansınızı doğrulayın."
 
 #: WPTSLMClient.php:251
 #, php-format
@@ -3606,46 +5332,46 @@ msgstr "Bu uyarıyı her zaman göster"
 msgid "Hide this notice outside of %1$s pages"
 msgstr "%1$s sayfaları dışında bu uyarıyı gizle"
 
-#: WPTSLMClient.php:277
-#: storage/cache/b4b3d47091706552b5f766a00f61863fbb06f9f4.php:11
-msgid "Message"
-msgstr "Mesaj"
+#: WPTSLMClient.php:272
+#, php-format
+msgid "Current domain: %1$s"
+msgstr "Şu anki alan adı: %1$s"
 
-#: WPTSLMClient.php:284
+#: WPTSLMClient.php:288
 msgid "Complete the setup now."
 msgstr "Kurulumu şimdi tamamlayın."
 
-#: WPTSLMClient.php:426
+#: WPTSLMClient.php:430
 #, php-format
 msgid "You can save the settings in %s seconds."
 msgstr "Seçenekleri %s saniye içinde kaydedebilirsiniz."
 
-#: WPTSLMClient.php:438
+#: WPTSLMClient.php:442
 msgid "License validation failed."
 msgstr "Lisans doğrulaması başarısız oldu."
 
-#: WPTSLMClient.php:464
+#: WPTSLMClient.php:468
 #, php-format
 msgid "License Settings for %s"
 msgstr "%s için Lisans Ayarları"
 
-#: WPTSLMClient.php:467
+#: WPTSLMClient.php:471
 msgid "License settings updated."
 msgstr "Lisans ayarları güncellendi."
 
-#: WPTSLMClient.php:485
+#: WPTSLMClient.php:489
 msgid "License Key"
 msgstr "Lisans Anahtarı"
 
-#: WPTSLMClient.php:501
+#: WPTSLMClient.php:505
 msgid "How to find my license key?"
 msgstr "Lisans anahtarımı nasıl bulabilirim?"
 
-#: WPTSLMClient.php:514
+#: WPTSLMClient.php:518
 msgid "Deactivate on this domain"
 msgstr "Bu domainde pasifleştir"
 
-#: WPTSLMClient.php:777
+#: WPTSLMClient.php:782
 msgid ""
 "The license could not be checked with the server. Please try saving your "
 "license\n"
@@ -3656,30 +5382,34 @@ msgstr ""
 "dakika içinde tekrar kaydetmeyi deneyin. Uyarıyı görmeye devam ederseniz "
 "lütfen geliştirici ile iletişime geçin."
 
-#: helpers/translation.php:25
-msgid ""
-"You can write plain text or regular expressions. If you want to use "
-"delimiters, you can use \"/\".\n"
-"        If the expression does not start with \"/\", it is considered as it "
-"does not have delimiters. In that case, forward \n"
-"        slashes will be automatically added. You can test your regex <a href="
-"\"https://regex101.com/\" target=\"_blank\">here</a>."
-msgstr ""
-"Düz yazı veya düzenli ifade yazabilirsiniz. Ayırıcı kullanmak istiyorsanız, "
-"“/“ kullanabilirsiniz. Eğer düzenli ifade “/“ ile başlamıyorsa, ayırıcı "
-"kullanılmadığı varsayılacaktır. Bu durumda, bölü karakterleri otomatik "
-"olarak eklenecektir. Düzenli ifadelerinizi <a href=\"https://regex101.com/\" "
-"target=\"_blank\">buradan</a> test edebilirsiniz."
+#: helpers/translation.php:28
+msgid "You can write plain text or regular expressions."
+msgstr "Düz yazı veya düzenli ifade yazabilirsiniz."
 
 #: helpers/translation.php:36
+msgid ""
+"If you want to use delimiters, you can use \"/\". If the expression does not "
+"start with \"/\", it \n"
+"        is considered as it does not have delimiters. In that case, forward "
+"slashes will be automatically added. You \n"
+"        can test your regex <a href=\"https://regex101.com/\" target=\"_blank"
+"\">here</a>."
+msgstr ""
+"Ayırıcı kullanmak istiyorsanız, “/“ kullanabilirsiniz. Eğer düzenli ifade "
+"“/“ ile başlamıyorsa, ayırıcı kullanılmadığı varsayılacaktır. Bu durumda, "
+"bölü karakterleri otomatik olarak eklenecektir. Düzenli ifadelerinizi <a "
+"href=\"https://regex101.com/\" target=\"_blank\">buradan</a> test "
+"edebilirsiniz."
+
+#: helpers/translation.php:47
 msgid "If you give more than one selector, the first match will be used."
 msgstr "Birden fazla seçici girdiğinizde sadece ilk eşleşme kullanılacaktır."
 
-#: helpers/translation.php:45
+#: helpers/translation.php:56
 msgid "If you give more than one selector, all matches will be used."
 msgstr "Birden fazla seçici girdiğinizde tüm eşleşmeler kullanılacaktır."
 
-#: helpers/translation.php:54
+#: helpers/translation.php:65
 msgid ""
 "<b>Note that</b> saving images will increase the time  to save the posts, "
 "and hence memory usage."
@@ -3687,16 +5417,16 @@ msgstr ""
 "<b>Dikkat edin</b>, görselleri kaydetmek yazıların kaydedilme süresini ve "
 "hafıza kullanımını arttıracaktır."
 
-#: helpers/translation.php:63
+#: helpers/translation.php:74
 msgid "How to get it?"
 msgstr "Nasıl edinirim?"
 
-#: helpers/translation.php:79
+#: helpers/translation.php:90
 msgid "If you define more than one, a random one will be used."
 msgstr ""
 "Birden fazla tanımlarsanız, aralarından rastgele bir tanesi kullanılacaktır."
 
-#: helpers/translation.php:87
+#: helpers/translation.php:98
 #, php-format
 msgid ""
 "You can use <b>[%1$s]</b> short code with a dot key when the item is treated "
@@ -3719,7 +5449,7 @@ msgstr ""
 "i> düşünüldüğünde, <b>%6$s</b> almak için <b>[%1$s %7$s]</b> "
 "kullanabilirsiniz."
 
-#: helpers/translation.php:108
+#: helpers/translation.php:119
 msgid ""
 "The tests are conducted by creating a 1-byte temporary file that has the "
 "same name and extension\n"
@@ -3731,7 +5461,7 @@ msgstr ""
 "geçici bir dosya oluşturularak yapılır. Testler yapıldıktan sonra, geçici "
 "dosyalar silinir fakat oluşturulan klasörler <b>silinmez</b>."
 
-#: helpers/translation.php:118
+#: helpers/translation.php:129
 msgid ""
 "You can write 'text', 'html', or the name of another HTML attribute for the "
 "attribute input. \n"
@@ -3742,7 +5472,7 @@ msgstr ""
 "girebilirsiniz. ‘text’ girdiğinizde bulunan elementin yazısı, ‘html’ "
 "girdiğinizde ise bulunan elementin HTML kodu alınacaktır."
 
-#: helpers/translation.php:128
+#: helpers/translation.php:139
 #, php-format
 msgid ""
 "You can use wildcard character, which is %1$s, to indicate variable parts. "
@@ -3757,6 +5487,74 @@ msgstr ""
 "izin verilmeyecektir. Diğer taraftan, eğer %4$s ya da %5$s girerseniz, izin "
 "verilecektir. Genel arama karakterini alan adı içerisinde herhangi bir yerde "
 "kullanabilirsiniz."
+
+#: helpers/translation.php:159
+msgid ""
+"A filter is composed of \"if\" and \"then\" parts that contain commands. The "
+"\"if\" part defines the \n"
+"        conditions that should be met. If those conditions are met, the "
+"commands defined in the \"then\" part will be \n"
+"        executed. With a filter, you basically say \"if this condition is "
+"met, then do this\". You can define many \n"
+"        commands for both the \"if\" and \"then\" parts to create very "
+"complex rules to achieve your goal. The commands \n"
+"        defined in the \"if\" part are condition commands, while the ones "
+"defined in the \"then\" part are action commands. \n"
+"        The condition commands check if something is true, while the action "
+"commands perform some action. If you do not\n"
+"        define a condition, the action command will be executed no matter "
+"what."
+msgstr ""
+"Bir filtre, komutlar içeren \"eğer\" ve \"o halde\" bölümlerinden oluşur. "
+"\"Eğer\" bölümü, sağlanması gereken koşulları tanımlar. Koşullar sağlanırsa, "
+"\"o halde\" bölümünde tanımlı komutlar çalıştırılır. Bir filtre "
+"tanımladığınızda, \"eğer bu koşul sağlanıyorsa, o halde bunu yap\" dersiniz. "
+"Hedefinize ulaşmak için gereken karmaşık kuralları oluşturmak için, \"eğer\" "
+"ve \"o halde\" bölümlerine birçok komut girebilirsiniz. \"Eğer\" bölümünde "
+"tanımlanan komutlar koşul komutları, \"o halde\" bölümünde tanımlananlarsa "
+"eylem komutlarıdır. Koşul komutları bir şeyin doğru olup olmadığını test "
+"ederken, eylem komutları bir eylem gerçekleştirir. Bir koşul "
+"tanımlamazsanız, eylem komutları ne olursa olsun çalıştırılır."
+
+#: helpers/translation.php:177
+#, php-format
+msgid ""
+"Enter a date formatted as \"%1$s\" (without quotes), i.e. \"%2$s\". For "
+"example: %3$s. You can also \n"
+"            enter any time value supported by %4$s. If the date is not a "
+"fixed date, then the time of your server is \n"
+"            used as now, not the time of WordPress. It is recommended to "
+"enter a fixed date for reliability."
+msgstr ""
+"\"%1$s\" şeklinde yapılandırılmış (tırnaklar olmadan) bir tarih girin, diğer "
+"bir deyişle \"%2$s\". Örneğin: %3$s. %4$s tarafından desteklenen her tarihi "
+"girebilirsiniz. Tarih, sabit bir tarih değilse, sunucunuzun tarihi şu anki "
+"tarih olarak kullanılır, WordPress'in tarihi değil. Güvenilirlik açısından "
+"sabit bir tarih girmeniz önerilir."
+
+#: helpers/translation.php:183
+msgid "year"
+msgstr "yıl"
+
+#: helpers/translation.php:184
+msgid "month"
+msgstr "ay"
+
+#: helpers/translation.php:185
+msgid "day"
+msgstr "gün"
+
+#: helpers/translation.php:186
+msgid "hour"
+msgstr "saat"
+
+#: helpers/translation.php:187
+msgid "minute"
+msgstr "dakika"
+
+#: helpers/translation.php:188
+msgid "second"
+msgstr "saniye"
 
 #: storage/cache/01fc217bbc83fff0339d099d3fddfcaf0bd98b85.php:18
 #: storage/cache/03557e0035dd641f3a931e1df7c35a537994fda2.php:47
@@ -3781,9 +5579,9 @@ msgid "SEO"
 msgstr "SEO"
 
 #: storage/cache/01fc217bbc83fff0339d099d3fddfcaf0bd98b85.php:25
-#: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:232
+#: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:261
 #: storage/cache/c9a96485419da39fad8ca5ba222fcb6f26e35d0f.php:2
-#: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:846
+#: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:867
 msgid "Notifications"
 msgstr "Bildirimler"
 
@@ -3866,6 +5664,7 @@ msgstr "API anahtarınızı almak için buraya tıklayın."
 #: storage/cache/045cbc1f5b868eb4a26018551d943176552b764c.php:16
 #: storage/cache/446a4cfe1590747d44757e4a7ca2563c401d0f6f.php:57
 #: storage/cache/a7bfd996821dbe8acb5e44a7df6577cd72c578ee.php:24
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:50
 msgid "API Key"
 msgstr "API Anahtarı"
 
@@ -3873,7 +5672,7 @@ msgstr "API Anahtarı"
 msgid "API key retrieved from Yandex Translate."
 msgstr "Yandex Translate’ten edinilmiş API anahtarı."
 
-#: storage/cache/0540f4f535004bd128a23bccc23adef10442de2b.php:5
+#: storage/cache/0540f4f535004bd128a23bccc23adef10442de2b.php:6
 #: storage/cache/446a4cfe1590747d44757e4a7ca2563c401d0f6f.php:5
 #: views/general-settings/spinning/settings-spin_rewriter.blade.php:9
 #: views/general-settings/spinning/settings-turkce_spin.blade.php:10
@@ -3881,25 +5680,41 @@ msgstr "Yandex Translate’ten edinilmiş API anahtarı."
 msgid "For more information, visit %1$s page."
 msgstr "Daha fazla bilgi için, %1$s sayfasını ziyaret edin."
 
-#: storage/cache/0540f4f535004bd128a23bccc23adef10442de2b.php:5
+#: storage/cache/0540f4f535004bd128a23bccc23adef10442de2b.php:6
 #: storage/cache/446a4cfe1590747d44757e4a7ca2563c401d0f6f.php:5
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:8
 #: views/general-settings/spinning/settings-chimp_rewriter.blade.php:12
 #: views/general-settings/spinning/settings-spin_rewriter.blade.php:9
 #: views/general-settings/spinning/settings-turkce_spin.blade.php:10
 msgid "API documentation"
 msgstr "API dokümantasyonu"
 
-#: storage/cache/0540f4f535004bd128a23bccc23adef10442de2b.php:18
+#: storage/cache/0540f4f535004bd128a23bccc23adef10442de2b.php:19
 msgid "API Token"
 msgstr "API Tokeni"
 
-#: storage/cache/0540f4f535004bd128a23bccc23adef10442de2b.php:19
+#: storage/cache/0540f4f535004bd128a23bccc23adef10442de2b.php:20
 msgid "API token retrieved from Türkçe Spin."
 msgstr "Türkçe Spin’den alınmış API tokeni."
 
-#: storage/cache/0540f4f535004bd128a23bccc23adef10442de2b.php:20
+#: storage/cache/0540f4f535004bd128a23bccc23adef10442de2b.php:21
 msgid "API token..."
 msgstr "API tokeni..."
+
+#: storage/cache/057d7712c625a8aa3d3aae0cd6c23f402bd4df7c.php:2
+#: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:232
+#: storage/cache/9594b0dd964b1a7930ce2bad983ce405f148972c.php:25
+#: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:846
+msgid "Filters"
+msgstr "Filtreler"
+
+#: storage/cache/057d7712c625a8aa3d3aae0cd6c23f402bd4df7c.php:3
+msgid "Filters that will be applied in the post pages..."
+msgstr "Yazı sayfalarında uygulanacak filtreler..."
+
+#: storage/cache/057d7712c625a8aa3d3aae0cd6c23f402bd4df7c.php:11
+msgid "Define filters that will be applied for the post data."
+msgstr "Yazı verisine uygulanacak filtreleri tanımlayın."
 
 #: storage/cache/06a5addeca161c9fa60d68fa052b0801938fb55b.php:14
 msgid "Visual Inspector"
@@ -4235,21 +6050,21 @@ msgstr "Genel Ayarları Sıfırla"
 msgid "Reset the general settings to their defaults"
 msgstr "Genel ayarları varsayılanlarına sıfırla"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:2
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:6
 msgid "Main Settings"
 msgstr "Ana Ayarlar"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:3
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:7
 msgid ""
 "Set main page URL, scheduling options, duplicate post checking, cookies..."
 msgstr ""
 "Ana sayfa URL’si, programlama seçenekleri, kopya yazı kontrolü, çerezler…"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:14
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:18
 msgid "Site URL"
 msgstr "Site URL’si"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:15
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:19
 #, php-format
 msgid ""
 "Target site's URL that consists of its domain. E.g. %1$s. Do not include "
@@ -4262,11 +6077,11 @@ msgstr ""
 "bölümleri eklemeyin. Örneğin, %2$s yerine, %3$s yazın. URL %4$s ile "
 "başlamalıdır. Bu alanın doldurulması gerekir."
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:29
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:33
 msgid "Active for scheduling?"
 msgstr "Programlama için aktif?"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:30
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:34
 msgid ""
 "If you want to activate this site for crawling, check this. If you do not "
 "check this,\n"
@@ -4276,11 +6091,11 @@ msgstr ""
 "işaretleyin. İşaretlemezseniz bu site için yazılar otomatik olarak "
 "kaydedilmeyecek ve yazı URL’leri otomatik olarak toplanmayacaktır."
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:38
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:42
 msgid "Active for recrawling?"
 msgstr "Güncelleme için aktif?"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:39
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:43
 msgid ""
 "If you want to activate this site for post recrawling, check this. If you do "
 "not check this,\n"
@@ -4290,11 +6105,11 @@ msgstr ""
 "istiyorsanız, işaretleyin. Bunu işaretlemediğinizde yazılar "
 "güncellenmeyecektir."
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:47
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:51
 msgid "Active for post deleting?"
 msgstr "Yazı silme için aktif?"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:48
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:52
 msgid ""
 "If you want to activate this site for post deleting, check this. If you do "
 "not check\n"
@@ -4303,11 +6118,11 @@ msgstr ""
 "Bu siteyi yazılarının silinmesi için aktif hale getirmek istiyorsanız, "
 "işaretleyin. Bunu işaretlemediğinizde yazılar silinmeyecektir."
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:56
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:60
 msgid "Active for post translation?"
 msgstr "Yazı çevirisi için aktif?"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:57
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:61
 msgid ""
 "If you want to activate this site for post translation, check this. If you "
 "do not check\n"
@@ -4316,11 +6131,11 @@ msgstr ""
 "Bu siteyi yazılarının çevrilmesi için aktif hale getirmek istiyorsanız, "
 "işaretleyin. Bunu işaretlemediğinizde yazılar çevrilmeyecektir."
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:66
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:70
 msgid "Translatable Fields"
 msgstr "Çevrilebilir alanlar"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:67
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:71
 msgid ""
 "You can select which fields should be translated. If you select none, it "
 "means all\n"
@@ -4338,11 +6153,11 @@ msgstr ""
 "alanın değeri, çevirisi yapılmayan alanın değerinin içerisine çevirisi "
 "yapılmadan dahil edilecektir."
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:79
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:83
 msgid "Active for post spinning?"
 msgstr "Yazı spinleme için aktif?"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:80
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:84
 msgid ""
 "If you want to activate this site for post spinning, check this. If you do "
 "not check\n"
@@ -4351,11 +6166,11 @@ msgstr ""
 "Bu siteyi spinleme için aktif hale getirmek istiyorsanız, işaretleyin. Bunu "
 "işaretlemediğinizde yazılar spinlenmeyecektir."
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:89
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:93
 msgid "Spinnable Fields"
 msgstr "Spinlenebilir Alanlar"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:90
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:94
 msgid ""
 "You can select which fields should be spun. If you select none, it means "
 "all\n"
@@ -4384,11 +6199,11 @@ msgstr ""
 "limitliyorsa, lütfen spinlenebilir alanları seçerken bunu aklınızda "
 "bulundurun.</b>"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:116
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:120
 msgid "Check duplicate posts via"
 msgstr "Kopya yazıları şunlarla kontrol et"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:117
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:121
 msgid ""
 "Set how to decide whether a post is duplicate or not. Duplicate checking "
 "will be\n"
@@ -4400,11 +6215,11 @@ msgstr ""
 "Kopya yazı kontrolü şu sırada yapılacaktır: URL, başlık, içerik. Eğer "
 "bunlardan biri bulunursa, yazının kopya yazı olduğu belirlenir."
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:125
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:129
 msgid "Use custom general settings?"
 msgstr "Özelleştirilmiş genel ayarlar kullan?"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:126
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:130
 msgid ""
 "If you want to specify different settings for this site (not use general "
 "settings),\n"
@@ -4413,11 +6228,11 @@ msgstr ""
 "Bu site için genel ayarlardan farklı ayarlar belirlemek istiyorsanız, "
 "işaretleyin. Bu seçeneği işaretlediğinizde ayarlar sekmesi görünecektir."
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:134
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:138
 msgid "Cookies"
 msgstr "Çerezler"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:135
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:139
 msgid ""
 "You can provide cookies that will be attached to every request. For example, "
 "you can\n"
@@ -4427,23 +6242,23 @@ msgstr ""
 "yazıları oturum açmış bir kullanıcı tarafından almak için oturum çerezi "
 "girebilirsiniz."
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:137
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:141
 msgid "Cookie name"
 msgstr "Çerez adı"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:138
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:142
 msgid "Cookie content"
 msgstr "Çerez içeriği"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:142
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:148
 msgid "Settings Page"
 msgstr "Ayarlar Sayfası"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:147
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:153
 msgid "Use cache for test URLs"
 msgstr "Test URL’leri için önbellekleme kullan"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:148
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:154
 msgid ""
 "Check this if you want the plugin to cache the responses retrieved from the "
 "test URLs. By this\n"
@@ -4456,11 +6271,11 @@ msgstr ""
 "siteye gönderilen istek sayısını azaltabilirsiniz. Önbellekleme sadece "
 "burada, site ayarlarında, yapılan testler için uygulanacaktır."
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:156
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:162
 msgid "Fix tabs when page is scrolled down"
 msgstr "Sayfa aşağı kaydırıldığında sekmeleri sabitle"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:157
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:163
 msgid ""
 "Check this if you want to fix the tabs at the top of the page when the page "
 "is scrolled down."
@@ -4468,11 +6283,11 @@ msgstr ""
 "Sayfa aşağı kaydırıldığında sekmeleri sayfanın üstüne sabitlemek "
 "istiyorsanız, işaretleyin."
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:163
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:169
 msgid "Fix content navigation when page is scrolled down"
 msgstr "Sayfa aşağı kaydırıldığında içerik navigasyonunu sabitle"
 
-#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:164
+#: storage/cache/2acaae0b079580006d2d2ae916ee03a7fb1046b9.php:170
 msgid ""
 "Check this if you want to fix the content navigation at the top of the page "
 "when the page is\n"
@@ -4534,7 +6349,7 @@ msgstr "Dosya İşlemleri"
 #: storage/cache/35c23d125b6c791e3d75f27f52460d3e65a42da7.php:46
 #: storage/cache/562b9f505a362bd5d45a155580da302b76408198.php:2
 #: storage/cache/562b9f505a362bd5d45a155580da302b76408198.php:10
-#: storage/cache/9594b0dd964b1a7930ce2bad983ce405f148972c.php:25
+#: storage/cache/9594b0dd964b1a7930ce2bad983ce405f148972c.php:26
 msgid "Notes"
 msgstr "Notlar"
 
@@ -4554,9 +6369,10 @@ msgstr "Gönder"
 
 #: storage/cache/4349917658b4339969d66d5757491cbfdd0d6691.php:7
 msgid "Domain..."
-msgstr "Alan adı…"
+msgstr "Alan adı..."
 
 #: storage/cache/446a4cfe1590747d44757e4a7ca2563c401d0f6f.php:4
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:10
 #: views/general-settings/spinning/settings-chimp_rewriter.blade.php:14
 #: views/general-settings/spinning/settings-spin_rewriter.blade.php:8
 #, php-format
@@ -4650,12 +6466,14 @@ msgid "Reorder Paragraphs"
 msgstr "Paragrafları Yeniden Sırala"
 
 #: storage/cache/446a4cfe1590747d44757e4a7ca2563c401d0f6f.php:36
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:25
 #: views/general-settings/spinning/settings-chimp_rewriter.blade.php:29
 #: views/general-settings/spinning/settings-spin_rewriter.blade.php:40
 msgid "reorder paragraphs"
 msgstr "paragrafları yeniden sırala"
 
 #: storage/cache/446a4cfe1590747d44757e4a7ca2563c401d0f6f.php:48
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:41
 msgid "Email address"
 msgstr "Email adresi"
 
@@ -4664,15 +6482,17 @@ msgid "Email address that you used to register to Spin Rewriter."
 msgstr "Spin Rewriter’a kaydolmak için kullandığınız email adresi."
 
 #: storage/cache/446a4cfe1590747d44757e4a7ca2563c401d0f6f.php:50
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:43
 #: storage/cache/c9a96485419da39fad8ca5ba222fcb6f26e35d0f.php:32
 msgid "Email address..."
-msgstr "Email adresi…"
+msgstr "Email adresi..."
 
 #: storage/cache/446a4cfe1590747d44757e4a7ca2563c401d0f6f.php:58
 msgid "API key retrieved from Spin Rewriter."
 msgstr "Spin Rewriter’dan edinilmiş API anahtarı."
 
 #: storage/cache/446a4cfe1590747d44757e4a7ca2563c401d0f6f.php:59
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:52
 msgid "API key..."
 msgstr "API anahtarı…"
 
@@ -4689,6 +6509,7 @@ msgid "Text with spintax?"
 msgstr "Spintaxlı yazı?"
 
 #: storage/cache/446a4cfe1590747d44757e4a7ca2563c401d0f6f.php:81
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:153
 msgid ""
 "Check this if you want to get the spinning result in spin syntax, not human "
 "readable text."
@@ -4786,6 +6607,10 @@ msgstr "Yükseklik için CSS seçiciler."
 #: storage/cache/45ff4bd18dfb2a440a61f83ae6e495ca4730d6e7.php:39
 msgid "Select the shipping class."
 msgstr "Gönderim sınıfını seçin."
+
+#: storage/cache/47d1ebc448c4140f2eead52e93df71141bbe496c.php:22
+msgid "Loading..."
+msgstr "Yükleniyor..."
 
 #: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:6
 msgid "Category Page Settings"
@@ -5081,12 +6906,27 @@ msgstr ""
 "etiketler sayfanın HTML kodundan çıkarılacaktır. İçerik toplama işlemi sayfa "
 "gereksiz elemanlardan temizlendikten sonra yapılacaktır."
 
-#: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:237
-#: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:851
+#: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:238
+msgid ""
+"Define filters that are related to the requests made to crawl category pages."
+msgstr ""
+"Kategori sayfalarını taramak için yapılan isteklerle ilgili filtreleri "
+"tanımlayın."
+
+#: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:247
+msgid "Define filters that will be applied in the category pages."
+msgstr "Kategori sayfalarında uygulanacak filtreleri tanımlayın."
+
+#: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:256
+msgid "Define filters that will be applied to the category data."
+msgstr "Kategori verisine uygulanacak filtreleri tanımlayın."
+
+#: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:266
+#: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:872
 msgid "CSS selectors for empty value notification"
 msgstr "Boş değer bildirimi için stil seçicileri"
 
-#: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:238
+#: storage/cache/48bd251c18f91416f8606f6041444835038703f6.php:267
 msgid ""
 "Write CSS selectors and their attributes you want to retrieve. If the "
 "retrieved value\n"
@@ -5233,14 +7073,6 @@ msgstr "Sonuç yok"
 msgid "See unmodified results"
 msgstr "Değiştirilmemiş sonuçları gör"
 
-#: storage/cache/54cddf05740c42b72027edac6568545e8a38893b.php:44
-msgid "Used memory"
-msgstr "Kullanılan bellek"
-
-#: storage/cache/54cddf05740c42b72027edac6568545e8a38893b.php:46
-msgid "Elapsed time"
-msgstr "Geçen zaman"
-
 #: storage/cache/562b9f505a362bd5d45a155580da302b76408198.php:3
 msgid ""
 "You can write your notes about this site here. It is just for you to keep "
@@ -5259,10 +7091,6 @@ msgid ""
 msgstr ""
 "Ondalık ayırıcılarının WooCommerce için belirlediğiniz ondalık ayırıcıları "
 "ile aynı olduğundan emin olun."
-
-#: storage/cache/596ba7c1547e7a2785bbb66df79b576735f4e8fd.php:9
-msgid "Short codes"
-msgstr "Kısa kodlar"
 
 #: storage/cache/596ba7c1547e7a2785bbb66df79b576735f4e8fd.php:10
 msgid "Short codes that can be used in product URL and button text."
@@ -5325,6 +7153,37 @@ msgstr "Dilleri temizle"
 msgid "Taxonomy name"
 msgstr "Taksonomi ismi"
 
+#: storage/cache/5f4481b18565e893b16f2cb98f1ea98cde18e513.php:11
+#: views/form-items/combined/short-code-buttons-with-label-for-email-cmd.blade.php:12
+msgid "URL of the page being crawled"
+msgstr "Şu an taranan sayfanın URL'si"
+
+#: storage/cache/5f4481b18565e893b16f2cb98f1ea98cde18e513.php:16
+#: views/form-items/combined/short-code-buttons-with-label-for-email-cmd.blade.php:17
+#, php-format
+msgid "HTTP status code of the response of the crawl request. E.g. %s, etc."
+msgstr "Tarama isteğine gönderilen cevabın HTTP durum kodu. Örneğin, %s, vb."
+
+#: storage/cache/5f4481b18565e893b16f2cb98f1ea98cde18e513.php:21
+#: views/form-items/combined/short-code-buttons-with-label-for-email-cmd.blade.php:22
+msgid "Name of the site, defined by you"
+msgstr "Site adı (sizin tarafınızdan tanımlandı)"
+
+#: storage/cache/5f4481b18565e893b16f2cb98f1ea98cde18e513.php:26
+#: views/form-items/combined/short-code-buttons-with-label-for-email-cmd.blade.php:27
+msgid "ID of the site"
+msgstr "Sitenin ID'si"
+
+#: storage/cache/5f4481b18565e893b16f2cb98f1ea98cde18e513.php:31
+#: views/form-items/combined/short-code-buttons-with-label-for-email-cmd.blade.php:32
+msgid "The URL that displays the site edit page"
+msgstr "Site düzenleme sayfasını gösteren URL"
+
+#: storage/cache/5f4481b18565e893b16f2cb98f1ea98cde18e513.php:36
+#: views/form-items/combined/short-code-buttons-with-label-for-email-cmd.blade.php:37
+msgid "Current date and time"
+msgstr "Şu anki tarih ve zaman"
+
 #: storage/cache/62043f66b43a576b5ed3cb3096ef6f7b02fa8350.php:3
 msgid "Done."
 msgstr "Bitti."
@@ -5332,11 +7191,6 @@ msgstr "Bitti."
 #: storage/cache/62043f66b43a576b5ed3cb3096ef6f7b02fa8350.php:5
 msgid "Dismiss this notice."
 msgstr "Bu uyarıyı kapat."
-
-#: storage/cache/6947f2040efebf695f4930b2041711c2b8efacde.php:4
-#: storage/cache/90340fcd75261a7e4a90d69e3fdb2bbe984e72d2.php:31
-msgid "Template"
-msgstr "Şablon"
 
 #: storage/cache/6947f2040efebf695f4930b2041711c2b8efacde.php:8
 msgid "Go to details"
@@ -5411,55 +7265,39 @@ msgid ""
 "Define the decimal separator for the number that will be shown in your site."
 msgstr "Sitenizde gösterilecek numaranın ondalık ayırıcısını belirleyin."
 
-#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:33
-msgid "Dot"
-msgstr "Nokta"
-
-#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:34
-msgid "Comma"
-msgstr "Virgül"
-
-#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:41
+#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:38
 msgid "Use thousands separator in the result?"
 msgstr "Sonuçta binlik basamak ayırıcı kullan?"
 
-#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:42
+#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:39
 msgid "Check this if you want to use thousands separator in the result."
 msgstr "Sonuçta binlik basamak ayırıcı kullanmak istiyorsanız, işaretleyin."
 
-#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:48
+#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:45
 msgid "Remove item if it is not numeric?"
 msgstr "Sayısal değilse öğeyi kaldır?"
 
-#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:49
+#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:46
 msgid ""
 "Check this if you want to remove the item when its value is not numeric."
 msgstr ""
 "Öğenin değeri sayısal (nümerik) olmadığında öğeyi kaldırmak istiyorsanız, "
 "işaretleyin."
 
-#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:55
-msgid "Precision"
-msgstr "Hassasiyet"
-
-#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:56
+#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:53
 msgid "How many digits at max there can be after the decimal separator."
 msgstr "Ondalık ayırıcıdan sonra en fazla kaç hane olabileceğini belirler."
 
-#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:64
+#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:61
 msgid "Formulas"
 msgstr "Formüller"
 
-#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:65
+#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:62
 msgid ""
 "Enter the formulas. If you enter more than one, a random one will be used."
 msgstr ""
 "Formülleri girin. Birden fazla girerseniz, rastgele bir tanesi "
 "kullanılacaktır."
-
-#: storage/cache/6c3c6e6c0c675f2cf8c3d1fa418e071bd0eea26c.php:67
-msgid "Formula"
-msgstr "Formül"
 
 #: storage/cache/6d2954815ad2ca00623087c0bdb85cb6ab1ed654.php:15
 msgid "Client Secret"
@@ -5533,10 +7371,6 @@ msgstr ""
 "Ayarları yapıştırın ve içeri aktar butonuna tıklayın. Not: Bu tüm ayarları "
 "yeniden belirleyecektir."
 
-#: storage/cache/81e998b82ed1948ab5aaffec458cdda7e0164075.php:26
-msgid "Import"
-msgstr "İçeri Aktar"
-
 #: storage/cache/81e998b82ed1948ab5aaffec458cdda7e0164075.php:34
 #: storage/cache/fe631150b78c4e8ee55651f1a546fa34c7285497.php:20
 msgid "Export Settings"
@@ -5551,9 +7385,56 @@ msgstr ""
 "Ayarları buradan kopyalayabilir ve kopyaladığınız kodu ayarları başka bir "
 "seçenek kutusuna aktarmak için kullanabilirsiniz."
 
-#: storage/cache/884ed659f8ca462f297d7486ba661cbbb20b39f6.php:1
-msgid "Remove"
-msgstr "Kaldır"
+#: storage/cache/8e2d64795d54ffbe0fccf36b5f7de1ae2fd74f7d.php:2
+msgid ""
+"If there is a feature that you think it should be in WP Content Crawler, you "
+"can send it through this form.\n"
+"        Please provide a valid email address because a confirmation link "
+"will be sent to your email."
+msgstr ""
+"WP İçerik Toplayıcı'da olması gerektiğini düşündüğünüz bir özellik varsa, bu "
+"form aracılığıyla gönderebilirsiniz. Lütfen geçerli bir e-posta adresi "
+"girin, çünkü adresinize bir onay e-postası gönderilecek."
+
+#: storage/cache/8e2d64795d54ffbe0fccf36b5f7de1ae2fd74f7d.php:10
+msgid "Your email address"
+msgstr "Email adresiniz"
+
+#: storage/cache/8e2d64795d54ffbe0fccf36b5f7de1ae2fd74f7d.php:12
+msgid ""
+"Please enter your email address. Your request will be taken into account "
+"only when you click\n"
+"            the confirmation link sent to your email."
+msgstr ""
+"Lütfen e-posta adresinizi girin. İsteğiniz, sadece hesabınıza gönderilen "
+"onay e-postasındaki linke tıkladığınızda dikkate alınacak."
+
+#: storage/cache/8e2d64795d54ffbe0fccf36b5f7de1ae2fd74f7d.php:14
+msgid "Valid email address..."
+msgstr "Geçerli bir email adresi…"
+
+#: storage/cache/8e2d64795d54ffbe0fccf36b5f7de1ae2fd74f7d.php:20
+msgid "Feature request"
+msgstr "Özellik isteği"
+
+#: storage/cache/8e2d64795d54ffbe0fccf36b5f7de1ae2fd74f7d.php:21
+#, php-format
+msgid ""
+"Enter your feature request here. You can give as much detail as you want. "
+"Actually, the more\n"
+"            detail, the better. For example, along with your request, you "
+"can tell how it should work, what is its\n"
+"            expected behavior, etc. Please enter at least <b>%1$s "
+"characters</b>."
+msgstr ""
+"Özellik isteğinizi buraya girin. İstediğiniz kadar detay verebilirsiniz. "
+"Aslına bakarsanız, ne kadar detaylı olursa o kadar iyi. Örneğin, isteğinizle "
+"birlikte, özelliğin nasıl çalışması gerektiğini, beklenen davranış şeklini, "
+"vb. anlatabilirsiniz. Lütfen en az <b>%1$s karakter</b> girin."
+
+#: storage/cache/8e2d64795d54ffbe0fccf36b5f7de1ae2fd74f7d.php:24
+msgid "Feature request details..."
+msgstr "Özellik isteği detayları…"
 
 #: storage/cache/90340fcd75261a7e4a90d69e3fdb2bbe984e72d2.php:2
 msgid ""
@@ -5640,10 +7521,6 @@ msgstr "Durum"
 msgid "Image"
 msgstr "Görsel"
 
-#: storage/cache/98780646bde969762ca888206f6560caf5bcbd82.php:52
-msgid "Post URL"
-msgstr "Yazı URL’si"
-
 #: storage/cache/98780646bde969762ca888206f6560caf5bcbd82.php:54
 msgid "Remove all"
 msgstr "Hepsini kaldır"
@@ -5719,15 +7596,6 @@ msgstr "Test Türü"
 #: storage/cache/a48309acbfd0f1eda308afc48abaef5a2272fd84.php:37
 msgid "Full URL or URL without domain..."
 msgstr "Tam URL ya da domain hariç URL…"
-
-#: storage/cache/a48309acbfd0f1eda308afc48abaef5a2272fd84.php:42
-#: storage/cache/c10fa04c16afaacbb46b501721dfec5faa124da5.php:3
-msgid "Test"
-msgstr "Test"
-
-#: storage/cache/a4886dd63a96c09bdbbe36083ef8a5c7b34fbd90.php:33
-msgid "Not found"
-msgstr "Bulunamadı"
 
 #: storage/cache/a7bfd996821dbe8acb5e44a7df6577cd72c578ee.php:16
 msgid "Project ID"
@@ -5972,6 +7840,47 @@ msgstr "Çevrilecek yazı…"
 msgid "Done"
 msgstr "Tamam"
 
+#: storage/cache/b1be116300427c0a780e4ca4c44f6f86a8ea84ac.php:18
+msgid ""
+"This is a notification sent by a notification command that is defined in "
+"your site. Below, you can find\n"
+"certain details about the site and the request that triggered this "
+"notification."
+msgstr ""
+"Bu, sitenizde tanımlanmış bildirim komutu tarafından gönderilen bir "
+"bildirimdir. Bu bildirimi tetikleyen site ve istek hakkındaki çeşitli "
+"detayları aşağıda bulabilirsiniz."
+
+#: storage/cache/b1be116300427c0a780e4ca4c44f6f86a8ea84ac.php:22
+#: storage/cache/b7927e5b0691635963d364d9c1380211a14c6f75.php:29
+msgid "Site name"
+msgstr "Site adı"
+
+#: storage/cache/b1be116300427c0a780e4ca4c44f6f86a8ea84ac.php:23
+msgid "Status code"
+msgstr "Durum kodu"
+
+#: storage/cache/b1be116300427c0a780e4ca4c44f6f86a8ea84ac.php:24
+msgid "Request URL"
+msgstr "İstek URL'si"
+
+#: storage/cache/b1be116300427c0a780e4ca4c44f6f86a8ea84ac.php:25
+msgid "Date and time"
+msgstr "Tarih ve zaman"
+
+#: storage/cache/b1be116300427c0a780e4ca4c44f6f86a8ea84ac.php:27
+msgid "Edit site"
+msgstr "Siteyi düzenle"
+
+#: storage/cache/b1be116300427c0a780e4ca4c44f6f86a8ea84ac.php:28
+#: storage/cache/b7927e5b0691635963d364d9c1380211a14c6f75.php:31
+msgid "Admin dashboard"
+msgstr "Admin ana sayfası"
+
+#: storage/cache/b292cd87e9ac7c2d7e357400dbd240a3f35467a7.php:2
+msgid "Please click the following link to confirm your feature request"
+msgstr "Lütfen linke tıklayarak özellik isteğinizi onaylayın"
+
 #: storage/cache/b30228fec80e617bd16a5ac6297e366d1fc275e7.php:6
 msgid "Gallery Item"
 msgstr "Galeri İtemi"
@@ -5999,6 +7908,192 @@ msgstr "URL bulunamadı."
 #: storage/cache/b5d19300251990c910c3c8ec7714c27276b4c5cd.php:5
 msgid "Load languages"
 msgstr "Dilleri Yükle"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:9
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:13
+#, php-format
+msgid "For more information, visit %1$s section in %2$s."
+msgstr "Daha fazla bilgi için, %2$s içerisinde %1$s bölümünü ziyaret edin."
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:23
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:27
+msgid "Sentence rewrite"
+msgstr "Cümle yeniden yazma"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:23
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:27
+msgid "sentence rewrite"
+msgstr "cümle yeniden yazma"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:24
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:28
+msgid "Grammar check"
+msgstr "Dil bilgisi kontrolü"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:24
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:28
+msgid "grammar check"
+msgstr "dil bilgisi kontrolü"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:25
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:29
+msgid "Reorder paragraphs"
+msgstr "Paragrafları yeniden sırala"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:26
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:30
+msgid "Replace phrases with phrases"
+msgstr "İfadeleri ifadelerle değiştir"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:26
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:30
+msgid "replace phrases with phrases"
+msgstr "ifadeleri ifadelerle değiştir"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:27
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:31
+msgid "Spin within spin"
+msgstr "Spin içerisinde spin"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:27
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:31
+msgid "spin within spin"
+msgstr "spin içerisinde spin"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:28
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:32
+msgid "Spin tidy"
+msgstr "Spin toparlama"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:28
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:32
+msgid "spin tidy"
+msgstr "spin toparlama"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:29
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:33
+msgid "Exclude original"
+msgstr "Orijinali hariç tut"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:29
+#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:33
+msgid "exclude original"
+msgstr "orijinali hariç tut"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:42
+msgid "Email address that you used to register to Chimp Rewriter."
+msgstr "Chimp Rewriter’a kaydolmak için kullandığınız email adresi."
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:51
+msgid "API key retrieved from Chimp Rewriter."
+msgstr "Chimp Rewriter’dan edinilmiş API anahtarı."
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:59
+msgid "App ID"
+msgstr "App ID"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:60
+#, php-format
+msgid ""
+"App ID that will be sent to Chimp Rewriter. This can be %1$s characters at "
+"maximum.\n"
+"            For example, you can write your domain or the name of your site."
+msgstr ""
+"Chimp Rewriter'a gönderilecek App ID. Bu, en fazla %1$s karakter olabilir. "
+"Örneğin, alan adınızı veya sitenizin adını girebilirsiniz."
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:62
+msgid "App ID..."
+msgstr "App ID…"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:69
+msgid "Synonym Replacement Quality"
+msgstr "Eşanlam Değiştirme Kalitesi"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:70
+msgid "Select the synonym replacement quality."
+msgstr "Eşanlam değiştirme kalitesini seçin."
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:78
+msgid "Phrase Replacement Quality"
+msgstr "İfade Değiştirme Kalitesi"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:79
+msgid "Select the phrase replacement quality."
+msgstr "İfade değiştirme kalitesini seçin."
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:87
+msgid "POS Match"
+msgstr "POS Eşleşmesi"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:88
+msgid "Select the part of speech (POS) match for a spin."
+msgstr "Bir spin için sözcük türü (POS) eşleşmesi seçin."
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:96
+msgid "Language"
+msgstr "Dil"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:97
+msgid "Enter two-char language. This defaults to English."
+msgstr "2 karakterli dil kodu girin. Varsayılan İngilizcedir."
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:98
+msgid "Language code..."
+msgstr "Dil kodu…"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:113
+msgid "Replace frequency"
+msgstr "Değiştirme sıklığı"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:114
+#, php-format
+msgid "Controls the percentage of words that are spun. Minimum %1$s."
+msgstr "Spinlenen kelimelerin yüzdesini kontrol eder. Minimum %1$s."
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:124
+msgid "Maximum synonyms"
+msgstr "Maksimum eşanlam"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:125
+msgid "Maximum number of synonyms to be used for a word or a phrase."
+msgstr ""
+"Bir kelime veya ifade için kullanılabilecek maksimum eşanlamlı kelime sayısı"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:132
+msgid "Instant unique"
+msgstr "Anlık eşsizlik"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:133
+msgid "Check this to run an instance unique pass over the text."
+msgstr "Yazı üzerinde anlık eşsizlik taraması yapmak için işaretleyin."
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:144
+msgid "Maximum spin depth"
+msgstr "Maksimum spin derinliği"
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:145
+msgid ""
+"Define the maximum spin depth. This is only valid when getting a spintax."
+msgstr ""
+"Maksimum spin derinliğini belirleyin. Bu sadece spintax alındığında "
+"geçerlidir."
+
+#: storage/cache/b6360a47980428b2a889c02f7c89e20adc4651ff.php:152
+msgid "Get spintax?"
+msgstr "Spintax olarak al?"
+
+#: storage/cache/b7927e5b0691635963d364d9c1380211a14c6f75.php:2
+msgid "Empty CSS selectors are found at following URL"
+msgstr "Şu URL'de değerleri olmayan CSS seçiciler bulundu"
+
+#: storage/cache/b7927e5b0691635963d364d9c1380211a14c6f75.php:9
+msgid "CSS selectors with empty values"
+msgstr "Değerleri olmayan CSS seçiciler"
+
+#: storage/cache/b7927e5b0691635963d364d9c1380211a14c6f75.php:30
+msgid "Site settings"
+msgstr "Site ayarları"
 
 #: storage/cache/b81bd1d89b6151a86a9253794ad37c29828f5221.php:37
 #: storage/cache/e7728fa8aa876da1f418e16a3695f9b79c94c9c1.php:58
@@ -6273,6 +8368,11 @@ msgid ""
 msgstr ""
 "Yazıların eklerinin de yazılarla birlikte silinmesini istiyorsanız, "
 "işaretleyin."
+
+#: storage/cache/bfd8c63a16b146a0653146a2875e669ac910bac0.php:11
+#: views/form-items/combined/short-code-buttons-with-label-for-template-cmd.blade.php:12
+msgid "Value of the current item"
+msgstr "Şu anki ögenin değeri"
 
 #: storage/cache/c8d7d4467434b48703ea66b611e76ba806ca54c2.php:18
 #: views/site-settings/tab-templates.blade.php:18
@@ -6603,6 +8703,16 @@ msgid ""
 msgstr ""
 "<b>Meta açıklamada</b> bir şeyleri başka bir şeylerle değiştirmek "
 "istiyorsanız, bu seçeneği kullanabilirsiniz."
+
+#: storage/cache/c9078b08ca0af3aa65d91a9a4f3d5089291ce02a.php:3
+#: views/feature-request/main.blade.php:3
+msgid "Submit Feature Request"
+msgstr "Özellik İsteğini Gönder"
+
+#: storage/cache/c9078b08ca0af3aa65d91a9a4f3d5089291ce02a.php:4
+#: views/feature-request/main.blade.php:4
+msgid "A confirmation email will be sent after you hit the button."
+msgstr "Butona tıkladıktan sonra bir onay emaili gönderilecek."
 
 #: storage/cache/c9a96485419da39fad8ca5ba222fcb6f26e35d0f.php:3
 msgid "Set notification email addresses..."
@@ -8036,6 +10146,17 @@ msgstr ""
 
 #: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:852
 msgid ""
+"Define filters that are related to the requests made to crawl post pages."
+msgstr ""
+"Yazı sayfalarını taramak için yapılan isteklerle ilgili filtreleri "
+"tanımlayın."
+
+#: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:861
+msgid "Define filters that will be applied in the post pages."
+msgstr "Yazı sayfalarında uygulanacak filtreleri tanımlayın."
+
+#: storage/cache/dcb294adc82a4d1b45efc35c2cab5bd3c9b30a83.php:873
+msgid ""
 "Write CSS selectors and their attributes you want to retrieve. If the "
 "retrieved value\n"
 "                is empty, you will be notified via email. These CSS "
@@ -8593,10 +10714,6 @@ msgstr "Benzer"
 msgid "Similar (Specific)"
 msgstr "Benzer (özel)"
 
-#: storage/cache/fe7d2ae11406dda66f4d5b6afa735a9ddec9393d.php:134
-msgid "Contains"
-msgstr "İçeren"
-
 #: storage/cache/fe7d2ae11406dda66f4d5b6afa735a9ddec9393d.php:146
 msgid "Test via"
 msgstr "Şununla test et"
@@ -8649,70 +10766,17 @@ msgstr "Alternatif Seçiciler"
 msgid "All Used Selectors"
 msgstr "Kullanımda Olan Tüm Seçiciler"
 
-#: views/feature-request/main.blade.php:3
-msgid "Submit Feature Request"
-msgstr "Özellik İsteğini Gönder"
+#~ msgid "Publish"
+#~ msgstr "Yayımlanmış"
 
-#: views/feature-request/main.blade.php:4
-msgid "A confirmation email will be sent after you hit the button."
-msgstr "Butona tıkladıktan sonra bir onay emaili gönderilecek."
+#~ msgid "Draft"
+#~ msgstr "Taslak"
 
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:13
-#, php-format
-msgid "For more information, visit %1$s section in %2$s."
-msgstr "Daha fazla bilgi için, %2$s içerisinde %1$s bölümünü ziyaret edin."
+#~ msgid "Pending"
+#~ msgstr "İnceleme Bekliyor"
 
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:27
-msgid "Sentence rewrite"
-msgstr "Cümle yeniden yazma"
-
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:27
-msgid "sentence rewrite"
-msgstr "cümle yeniden yazma"
-
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:28
-msgid "Grammar check"
-msgstr "Dil bilgisi kontrolü"
-
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:28
-msgid "grammar check"
-msgstr "dil bilgisi kontrolü"
-
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:29
-msgid "Reorder paragraphs"
-msgstr "Paragrafları yeniden sırala"
-
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:30
-msgid "Replace phrases with phrases"
-msgstr "İfadeleri ifadelerle değiştir"
-
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:30
-msgid "replace phrases with phrases"
-msgstr "ifadeleri ifadelerle değiştir"
-
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:31
-msgid "Spin within spin"
-msgstr "Spin içerisinde spin"
-
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:31
-msgid "spin within spin"
-msgstr "spin içerisinde spin"
-
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:32
-msgid "Spin tidy"
-msgstr "Spin toparlama"
-
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:32
-msgid "spin tidy"
-msgstr "spin toparlama"
-
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:33
-msgid "Exclude original"
-msgstr "Orijinali hariç tut"
-
-#: views/general-settings/spinning/settings-chimp_rewriter.blade.php:33
-msgid "exclude original"
-msgstr "orijinali hariç tut"
+#~ msgid "Private"
+#~ msgstr "Özel"
 
 #~ msgid "Run count for post-crawling event"
 #~ msgstr "Yazı toplama fonksiyonunun çalışma sayısı"
@@ -8813,110 +10877,11 @@ msgstr "orijinali hariç tut"
 #~ "Ayarları buradan kopyalayabilir ve kopyaladığınız kodu, ayarları başka "
 #~ "bir siteye aktarmak için kullanabilirsiniz."
 
-#~ msgid "Please click the following link to confirm your feature request"
-#~ msgstr "Lütfen linke tıklayarak özellik isteğinizi onaylayın"
-
 #~ msgid "Google Cloud Translation Options"
 #~ msgstr "Google Cloud Translation Seçenekleri"
 
 #~ msgid "Microsoft Translator Text Options"
 #~ msgstr "Microsoft Translator Text Seçenekleri"
-
-#~ msgid "Your email address"
-#~ msgstr "Email adresiniz"
-
-#~ msgid "Valid email address..."
-#~ msgstr "Geçerli bir email adresi…"
-
-#~ msgid "Feature request"
-#~ msgstr "Özellik isteği"
-
-#~ msgid "Feature request details..."
-#~ msgstr "Özellik isteği detayları…"
-
-#~ msgid "Empty CSS selectors are found at following URL"
-#~ msgstr "Şu URL'de değerleri olmayan CSS seçiciler bulundu"
-
-#~ msgid "CSS selectors with empty values"
-#~ msgstr "Değerleri olmayan CSS seçiciler"
-
-#~ msgid "Site name"
-#~ msgstr "Site adı"
-
-#~ msgid "Admin dashboard"
-#~ msgstr "Admin ana sayfası"
-
-#~ msgid "Email address that you used to register to Chimp Rewriter."
-#~ msgstr "Chimp Rewriter’a kaydolmak için kullandığınız email adresi."
-
-#~ msgid "API key retrieved from Chimp Rewriter."
-#~ msgstr "Chimp Rewriter’dan edinilmiş API anahtarı."
-
-#~ msgid "App ID"
-#~ msgstr "App ID"
-
-#~ msgid "App ID..."
-#~ msgstr "App ID…"
-
-#~ msgid "Synonym Replacement Quality"
-#~ msgstr "Eşanlam Değiştirme Kalitesi"
-
-#~ msgid "Select the synonym replacement quality."
-#~ msgstr "Eşanlam değiştirme kalitesini seçin."
-
-#~ msgid "Phrase Replacement Quality"
-#~ msgstr "İfade Değiştirme Kalitesi"
-
-#~ msgid "Select the phrase replacement quality."
-#~ msgstr "İfade değiştirme kalitesini seçin."
-
-#~ msgid "POS Match"
-#~ msgstr "POS Eşleşmesi"
-
-#~ msgid "Select the part of speech (POS) match for a spin."
-#~ msgstr "Bir spin için sözcük türü (POS) eşleşmesi seçin."
-
-#~ msgid "Language"
-#~ msgstr "Dil"
-
-#~ msgid "Enter two-char language. This defaults to English."
-#~ msgstr "2 karakterli dil kodu girin. Varsayılan İngilizcedir."
-
-#~ msgid "Language code..."
-#~ msgstr "Dil kodu…"
-
-#~ msgid "Replace frequency"
-#~ msgstr "Değiştirme sıklığı"
-
-#, php-format
-#~ msgid "Controls the percentage of words that are spun. Minimum %1$s."
-#~ msgstr "Spinlenen kelimelerin yüzdesini kontrol eder. Minimum %1$s."
-
-#~ msgid "Maximum synonyms"
-#~ msgstr "Maksimum eşanlam"
-
-#~ msgid "Maximum number of synonyms to be used for a word or a phrase."
-#~ msgstr ""
-#~ "Bir kelime veya ifade için kullanılabilecek maksimum eşanlamlı kelime "
-#~ "sayısı"
-
-#~ msgid "Instant unique"
-#~ msgstr "Anlık eşsizlik"
-
-#~ msgid "Check this to run an instance unique pass over the text."
-#~ msgstr "Yazı üzerinde anlık eşsizlik taraması yapmak için işaretleyin."
-
-#~ msgid "Maximum spin depth"
-#~ msgstr "Maksimum spin derinliği"
-
-#~ msgid ""
-#~ "Define the maximum spin depth. This is only valid when getting a spintax."
-#~ msgstr ""
-#~ "Maksimum spin derinliğini belirleyin. Bu sadece spintax alındığında "
-#~ "geçerlidir."
-
-#~ msgid "Get spintax?"
-#~ msgstr "Spintax olarak al?"
 
 #~ msgid "spin withing spin"
 #~ msgstr "spin içerisinde spin"
@@ -9131,9 +11096,6 @@ msgstr "orijinali hariç tut"
 #~ msgid "Featured Image URL"
 #~ msgstr "Öne Çıkan Görsel URL’si"
 
-#~ msgid "Remove Links"
-#~ msgstr "Linkleri Kaldır"
-
 #~ msgid "Do not save files on this domain?"
 #~ msgstr "Bu domaindeki dosyaları kaydetme?"
 
@@ -9181,9 +11143,6 @@ msgstr "orijinali hariç tut"
 
 #~ msgid "No"
 #~ msgstr "Hayır"
-
-#~ msgid "Info"
-#~ msgstr "Bilgiler"
 
 #~ msgid "Load/refresh available languages."
 #~ msgstr "Mevcut dilleri yükle/yenile."

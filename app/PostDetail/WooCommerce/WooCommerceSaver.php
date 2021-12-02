@@ -23,7 +23,7 @@ use WPCCrawler\Objects\Informing\Informer;
 use WPCCrawler\Objects\Settings\Enums\SettingKey;
 use WPCCrawler\PostDetail\Base\BasePostDetailData;
 use WPCCrawler\PostDetail\Base\BasePostDetailSaver;
-use WPCCrawler\PostDetail\PostSaverData;
+use WPCCrawler\Objects\Crawling\Data\PostSaverData;
 use WPCCrawler\PostDetail\WooCommerce\Adapter\Factory\BaseWooAdapterFactory;
 use WPCCrawler\PostDetail\WooCommerce\Adapter\Interfaces\ExternalProductAdapter;
 use WPCCrawler\PostDetail\WooCommerce\Adapter\Interfaces\ProductAdapter;
@@ -213,7 +213,7 @@ class WooCommerceSaver extends BasePostDetailSaver {
         if (empty($this->getSaverData()->getGalleryAttachmentIds())) return;
 
         // Save the gallery as WooCommerce product gallery if the user wants.
-        $saveAsWooCommerceGallery = $this->getSaverData()->getPostSaver()->getSettingForCheckbox(SettingKey::POST_SAVE_IMAGES_AS_WOOCOMMERCE_GALLERY);
+        $saveAsWooCommerceGallery = $this->getSaverData()->getPostBot()->getSettingForCheckbox(SettingKey::POST_SAVE_IMAGES_AS_WOOCOMMERCE_GALLERY);
         if (!$saveAsWooCommerceGallery) return;
 
         // First get the images that are already set as WC gallery images if exists

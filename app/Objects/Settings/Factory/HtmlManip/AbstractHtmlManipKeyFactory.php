@@ -75,4 +75,14 @@ abstract class AbstractHtmlManipKeyFactory {
      */
     abstract public function getUnnecessaryElementSelectorsKey();
 
+    /**
+     * @return string The setting key storing page filters
+     */
+    abstract public function getPageFiltersKey();
+
+    /**
+     * @return string The setting key storing request filters
+     */
+    abstract public function getRequestFiltersKey();
+
 }

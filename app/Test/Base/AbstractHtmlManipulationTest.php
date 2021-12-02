@@ -12,7 +12,8 @@ namespace WPCCrawler\Test\Base;
 use Exception;
 use Illuminate\Contracts\View\View;
 use Symfony\Component\DomCrawler\Crawler;
-use WPCCrawler\Objects\Crawling\Bot\PostBot;
+use WPCCrawler\Objects\Crawling\Bot\AbstractBot;
+use WPCCrawler\Objects\Crawling\Bot\DummyBot;
 use WPCCrawler\Objects\Informing\Informer;
 use WPCCrawler\Objects\Traits\FindAndReplaceTrait;
 use WPCCrawler\Test\Data\TestData;
@@ -46,11 +47,11 @@ abstract class AbstractHtmlManipulationTest extends AbstractTest {
     protected abstract function getMessageLastPart();
 
     /**
-     * Returns a manipulated {@link Crawler}. {@link PostBot} is the bot that is used to get the data from the target
-     * URL and it can be used to manipulate the content.
+     * Returns a manipulated {@link Crawler}. {@link AbstractBot} is the bot that is used to get the data from the
+     * target URL and it can be used to manipulate the content.
      *
      * @param Crawler $crawler
-     * @param PostBot $bot
+     * @param AbstractBot $bot
      * @return Crawler
      */
     protected abstract function manipulate($crawler, $bot);
@@ -68,7 +69,7 @@ abstract class AbstractHtmlManipulationTest extends AbstractTest {
         if($selector) {
             if($url || $content) {
                 // Create a dummy bot to get the client.
-                $bot = new PostBot(
+                $bot = new DummyBot(
                     $this->getData()->getPostSettings(),
                     null,
                     $this->getData()->getUseUtf8(),
@@ -83,7 +84,7 @@ abstract class AbstractHtmlManipulationTest extends AbstractTest {
                     $this->isFromCache = $bot->isLatestResponseFromCache();
 
                     // Apply the manipulation options
-                    $this->applyHtmlManipulationOptions($crawler, $this->getLastHtmlManipulationStep(), $url);
+                    $this->applyHtmlManipulationOptions($bot, $crawler, $this->getLastHtmlManipulationStep(), $url);
 
                     if($crawler) $this->manipulateAndAddResults($crawler, $bot, $results, $selector,$attr);
                 }
@@ -105,7 +106,7 @@ abstract class AbstractHtmlManipulationTest extends AbstractTest {
                     $dummyCrawler = $bot->createDummyCrawler($content);
 
                     // Apply the manipulation options
-                    $this->applyHtmlManipulationOptions($dummyCrawler, $this->getLastHtmlManipulationStep(), "http://site.com/");
+                    $this->applyHtmlManipulationOptions($bot, $dummyCrawler, $this->getLastHtmlManipulationStep(), "http://site.com/");
 
                     if($dummyCrawler) $this->manipulateAndAddResults($dummyCrawler, $bot, $results, $selector,$attr);
                 }
@@ -137,11 +138,11 @@ abstract class AbstractHtmlManipulationTest extends AbstractTest {
     }
 
     /**
-     * @param Crawler $crawler
-     * @param PostBot $bot
-     * @param array   $results
-     * @param string  $selector
-     * @param string  $attr
+     * @param Crawler     $crawler
+     * @param AbstractBot $bot
+     * @param array       $results
+     * @param string      $selector
+     * @param string      $attr
      */
     private function manipulateAndAddResults($crawler, $bot, &$results, &$selector, &$attr) {
         $crawler = $this->manipulate($crawler, $bot);

@@ -71,6 +71,9 @@ class SettingKey {
     const CATEGORY_FIND_REPLACE_ELEMENT_HTML         = '_category_find_replace_element_html';      // array    An array including what to find and with what to replace for specified elements' HTML
     const TEST_URL_CATEGORY                          = '_test_url_category';                       // string   Holds a test URL for the user to conduct tests on category pages
     const CATEGORY_NOTIFY_EMPTY_VALUE_SELECTORS      = '_category_notify_empty_value_selectors';   // array    CSS selectors to be used to notify the user via email when one of the selector's value is empty/not found
+    const CATEGORY_REQUEST_FILTERS                   = '_category_request_filters';                // string   JSON string that stores the filters that target crawl requests made for category pages
+    const CATEGORY_PAGE_FILTERS                      = '_category_page_filters';                   // string   JSON string that stores the filters that target category pages
+    const CATEGORY_DATA_FILTERS                      = '_category_data_filters';                   // string   JSON string that stores the filters that target category page data (e.g. collected URLs)
 
     // Post tab
     const TEST_URL_POST                              = '_test_url_post';                           // string   Holds a test URL for the user to conduct tests on post pages
@@ -88,7 +91,7 @@ class SettingKey {
     const TEST_FIND_REPLACE_DATE                     = '_test_find_replace_date';                   // string   A date which is used to conduct find-replace test
     const POST_FIND_REPLACE_DATE                     = '_post_find_replace_date';                   // array    An array including what to find and with what to replace for dates
     const POST_DATE_ADD_MINUTES                      = '_post_date_add_minutes';                    // int      How many minutes that should be added to the final date
-    const POST_CUSTOM_CONTENT_SHORTCODE_SELECTORS    = '_post_custom_content_shortcode_selectors';  // array    An array holding selectors with custom attributes and customly-defined shortcodes
+    const POST_CUSTOM_CONTENT_SHORTCODE_SELECTORS    = '_post_custom_content_shortcode_selectors';  // array    An array holding selectors with custom attributes and custom-defined shortcodes
     const POST_FIND_REPLACE_CUSTOM_SHORT_CODE        = '_post_find_replace_custom_short_code';      // array    An array including what to find and with what to replace for specified custom short codes
     const POST_TAG_SELECTORS                         = '_post_tag_selectors';                       // array    Selectors for post tag
     const POST_SLUG_SELECTORS                        = '_post_slug_selectors';                      // array    Selectors for post slug
@@ -135,6 +138,9 @@ class SettingKey {
 
     const POST_UNNECESSARY_ELEMENT_SELECTORS         = '_post_unnecessary_element_selectors';       // array    Selectors for the elements to be removed from the content
 
+    const POST_REQUEST_FILTERS                       = '_post_request_filters';                     // string   JSON string that stores the filters that target crawl requests made for post pages
+    const POST_PAGE_FILTERS                          = '_post_page_filters';                        // string   JSON string that stores the filters that target post pages
+
     // Templates tab
     const POST_TEMPLATE_MAIN                         = '_post_template_main';                       // string   Main template for the post
     const POST_TEMPLATE_TITLE                        = '_post_template_title';                      // string   Title template for the post
@@ -155,6 +161,9 @@ class SettingKey {
     const POST_FIND_REPLACE_META_DESCRIPTION         = '_post_find_replace_meta_description';       // array    An array including what to find and with what to replace for meta description
     const POST_FIND_REPLACE_CUSTOM_SHORTCODES        = '_post_find_replace_custom_shortcodes';      // array    An array including what to find and with what to replace for the data of custom short codes
     const TEMPLATE_UNNECESSARY_ELEMENT_SELECTORS     = '_template_unnecessary_element_selectors';   // array    Selectors for the elements to be removed from the template
+
+    // Filters tab
+    const POST_DATA_FILTERS                          = '_post_data_filters';                        // string   JSON string that stores the filters that targets post data
 
     // Notes tab
     const NOTES                                      = '_notes';                                    // string   A setting for the user to keep notes about the site (this is rich text editor).
@@ -257,7 +266,7 @@ class SettingKey {
     const WPCC_RUN_COUNT_POST_CRAWL                                 = '_wpcc_run_count_post_crawl';                   // int      How many times post crawling event should be run for each interval
     const WPCC_RUN_COUNT_POST_RECRAWL                               = '_wpcc_run_count_post_recrawl';                 // int      How many times post recrawling event should be run for each interval
     const WPCC_MAX_RECRAWL_COUNT                                    = '_wpcc_max_recrawl_count';                      // int      Maximum number of times a post can be recrawled
-    const WPCC_MIN_TIME_BETWEEN_TWO_RECRAWLS_IN_MIN                 = '_wpcc_min_time_between_two_recrawls_in_min';   // int      Minimum time in minutes that should pass after the last recrawl so that a post is sutaible for recrawling again
+    const WPCC_MIN_TIME_BETWEEN_TWO_RECRAWLS_IN_MIN                 = '_wpcc_min_time_between_two_recrawls_in_min';   // int      Minimum time in minutes that should pass after the last recrawl so that a post is suitable for recrawling again
     const WPCC_RECRAWL_POSTS_NEWER_THAN_IN_MIN                      = '_wpcc_recrawl_posts_newer_than_in_min';        // int      Time in minutes that will be used to find new posts for recrawling event. E.g. if this is 1 month in minutes, posts older than 1 month won't be recrawled.
 
     const WPCC_IS_DELETING_POSTS_ACTIVE                             = '_wpcc_is_deleting_posts_active';               // bool     If true, post deleting is active
@@ -392,7 +401,7 @@ class SettingKey {
     const WPCC_TOOLS_CATEGORY_URLS                              = '_category_urls';                             // array    URLs of the categories from which the post URLs should be extracted
     const WPCC_TOOLS_MAX_POSTS_TO_BE_CRAWLED                    = '_max_posts_to_be_crawled';                   // int      Maximum number of posts that should be crawled before pausing
     const WPCC_TOOLS_MAX_PARALLEL_CRAWLING_COUNT                = '_max_parallel_crawling_count';               // int      Maximum number of posts that can crawled in parallel
-    const WPCC_TOOLS_MANUAL_CRAWLING_TOOL_CLEAR_AFTER_SUBMIT    = '_manual_crawling_tool_clear_after_submit';   // bool     When checked, indicates that URLs entered into the manual crawlin tool should be cleared
+    const WPCC_TOOLS_MANUAL_CRAWLING_TOOL_CLEAR_AFTER_SUBMIT    = '_manual_crawling_tool_clear_after_submit';   // bool     When checked, indicates that URLs entered into the manual crawling tool should be cleared
 
     // Manual recrawling tool
     const WPCC_TOOLS_RECRAWL_POST_ID                            = '_wpcc_tools_recrawl_post_id';                // int      ID of the post that should be recrawled

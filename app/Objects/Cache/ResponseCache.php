@@ -44,9 +44,7 @@ class ResponseCache {
         $this->fs = Factory::fileSystem();
 
         // Create the cache dir path
-        $this->cacheDir = preg_replace("/\/+/", "/", WP_CONTENT_CRAWLER_PATH . DIRECTORY_SEPARATOR
-            . Environment::appDirName() . DIRECTORY_SEPARATOR
-            . Environment::relativeResponseCacheDir());
+        $this->cacheDir = Factory::assetManager()->appPath(Environment::relativeResponseCacheDir());
     }
 
     /**

@@ -17,8 +17,10 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\DomCrawler\Crawler;
 use WP_Post;
 use WPCCrawler\Environment;
@@ -26,7 +28,13 @@ use WPCCrawler\Factory;
 use WPCCrawler\Objects\Cache\ResponseCache;
 use WPCCrawler\Objects\Enums\InformationMessage;
 use WPCCrawler\Objects\Enums\InformationType;
+use WPCCrawler\Objects\Events\Base\AbstractCrawlingEvent;
+use WPCCrawler\Objects\Events\EventService;
 use WPCCrawler\Objects\File\MediaFile;
+use WPCCrawler\Objects\Filtering\Explaining\Explainers\FilterSettingExplainer;
+use WPCCrawler\Objects\Filtering\Explaining\FilterExplainingService;
+use WPCCrawler\Objects\Filtering\Filter\FilterList;
+use WPCCrawler\Objects\Filtering\FilterDependencyProvider\FilterDependencyProvider;
 use WPCCrawler\Objects\Informing\Information;
 use WPCCrawler\Objects\Informing\Informer;
 use WPCCrawler\Objects\OptionsBox\OptionsBoxService;
@@ -37,6 +45,7 @@ use WPCCrawler\Objects\Traits\FindAndReplaceTrait;
 use WPCCrawler\Objects\Traits\SettingsTrait;
 use WPCCrawler\Objects\Traits\ShortCodeReplacer;
 use WPCCrawler\Utils;
+use WPCCrawler\WPCCrawler;
 
 abstract class AbstractBot {
 
@@ -112,7 +121,7 @@ abstract class AbstractBot {
     /** @var int */
     private $siteId;
 
-    /** @var WP_Post */
+    /** @var WP_Post The site (WP Content Crawler site) which is being crawled */
     private $site;
 
     /** @var string Stores the content of the latest response */
@@ -123,6 +132,18 @@ abstract class AbstractBot {
 
     /** @var bool */
     private $isResponseCacheEnabled = false;
+
+    /**
+     * @var Response|null Stores the response of the latest request. If the response was retrieved from the cache, this
+     *      will be null.
+     */
+    private $latestResponse = null;
+
+    /**
+     * @var Exception|null Exception thrown for the latest request. If no exception is thrown for the latest request,
+     *      this is null.
+     */
+    private $latestRequestException = null;
 
     /**
      * @param array     $settings              Settings for the site to be crawled
@@ -177,6 +198,18 @@ abstract class AbstractBot {
     }
 
     /**
+     * @return Crawler|null
+     * @since 1.11.0
+     */
+    public abstract function getCrawler();
+
+    /**
+     * @param Crawler|null
+     * @since 1.11.0
+     */
+    public abstract function setCrawler($crawler): void;
+
+    /**
      * Prepares proxies
      */
     public function prepareProxies() {
@@ -197,11 +230,11 @@ abstract class AbstractBot {
         // Prepare proxy lists
         foreach ($this->proxyList as $proxy) {
             // If the proxy is for http, add it into httpProxies.
-            if (starts_with($proxy, $http)) {
+            if (Str::startsWith($proxy, $http)) {
                 $this->httpProxies[] = $proxy;
 
                 // If the proxy is for https, add it into httpsProxies.
-            } else if (starts_with($proxy, $https)) {
+            } else if (Str::startsWith($proxy, $https)) {
                 $this->httpsProxies[] = $proxy;
 
                 // Otherwise, add them to both.
@@ -348,7 +381,7 @@ abstract class AbstractBot {
      */
     public function request($url, $method = "GET", $findAndReplaces = null) {
         $proxyList = $this->preparedProxyList;
-        $protocol = starts_with($url, "https") ? "https" : "http";
+        $protocol = Str::startsWith($url, "https") ? "https" : "http";
         $proxyUrl = $proxyList && isset($proxyList[0]) ? $proxyList[0] : false;
         $tryCount = 0;
 
@@ -391,6 +424,7 @@ abstract class AbstractBot {
 
             } catch (ConnectException $e) {
                 // If the URL cannot be fetched, try another proxy, if exists.
+                $this->latestRequestException = $e;
                 $tryCount++;
 
                 // Break the loop if there is no proxy list or it is empty.
@@ -413,6 +447,7 @@ abstract class AbstractBot {
 
             } catch (RequestException $e) {
                 // If the URL cannot be fetched, then just return null.
+                $this->latestRequestException = $e;
 
                 Informer::add(Information::fromInformationMessage(
                     InformationMessage::REQUEST_ERROR,
@@ -424,6 +459,7 @@ abstract class AbstractBot {
 
             } catch (InvalidArgumentException $e) {
                 // If the HTML could not be retrieved, then just return null.
+                $this->latestRequestException = $e;
 
                 Informer::add(Information::fromInformationMessage(
                     InformationMessage::HTML_COULD_NOT_BE_RETRIEVED_ERROR,
@@ -434,6 +470,7 @@ abstract class AbstractBot {
 
             } catch (Exception $e) {
                 // If there is an error, return null.
+                $this->latestRequestException = $e;
 
                 Informer::add(Information::fromInformationMessage(
                     InformationMessage::ERROR,
@@ -481,6 +518,9 @@ abstract class AbstractBot {
      * @since 1.8.0
      */
     protected function getResponseText($method, $url, $proxyUrl, $protocol) {
+        $this->latestResponse         = null;
+        $this->latestRequestException = null;
+
         // If caching is enabled, try to get the response from cache.
         $this->isLatestResponseFromCache = false;
         if ($this->isResponseCacheEnabled) {
@@ -508,7 +548,7 @@ abstract class AbstractBot {
         $this->getClient()->request($method, $url);
 
         // Get the response and its HTTP status code
-        $response = $this->getClient()->getInternalResponse();
+        $this->latestResponse = $this->getClient()->getInternalResponse();
 
         /**
          * Fires just after a request is made.
@@ -517,9 +557,9 @@ abstract class AbstractBot {
          * @param string $url
          * @since 1.6.3
          */
-        do_action('wpcc/after_request', $this, $url, $response);
+        do_action('wpcc/after_request', $this, $url, $this->latestResponse);
 
-        $status = $response->getStatusCode();
+        $status = $this->latestResponse->getStatusCode();
 
         switch($status) {
             // Do not proceed if the target URL is not found.
@@ -542,7 +582,7 @@ abstract class AbstractBot {
             return false;
         }
 
-        $content = $response->getContent();
+        $content = $this->latestResponse->getContent();
 
         // If caching enabled, cache the response.
         if ($this->isResponseCacheEnabled) ResponseCache::getInstance()->save($method, $url, $content);
@@ -561,8 +601,8 @@ abstract class AbstractBot {
     /**
      * First, makes the replacements provided, then replaces relative URLs in a crawler's HTML with direct URLs.
      *
-     * @param Crawler $crawler Crawler for the page for which the replacements will be done
-     * @param array $findAndReplaces An array of arrays. Inner array should have:
+     * @param Crawler $crawler               Crawler for the page for which the replacements will be done
+     * @param array|null $findAndReplaces    An array of arrays. Inner array should have:
      *      "regex":    bool    If this key exists, then search will be performed as regular expression. If not, a
      *      normal search will be done.
      *      "find":     string  What to find
@@ -733,10 +773,59 @@ abstract class AbstractBot {
      *                                key.
      */
     public function removeElementsFromCrawler(&$crawler, $selectors = []) {
-        if(empty($selectors) || !$crawler) return;
+        $results = $this->getElementsFromCrawler($crawler, $selectors);
+        if (!$results) return;
+
+        foreach($results as $node) {
+            $this->removeNode($node);
+        }
+
+    }
+
+    /**
+     * Immediately apply all filters of a filter setting
+     *
+     * @param string                   $settingKey Key of the setting that stores filters
+     * @param FilterDependencyProvider $provider   Provider that will inject the dependencies
+     * @since 1.11.0
+     */
+    public function applyFilterSetting(string $settingKey, FilterDependencyProvider $provider) {
+        $list = FilterList::fromJson($this->getSetting($settingKey, null));
+        if (!$list) return;
+
+        $list->applyAll($provider);
+    }
+
+    /**
+     * Remove a node from its document
+     *
+     * @param Crawler $node
+     * @since 1.11.0
+     */
+    public function removeNode($node) {
+        try {
+            foreach ($node as $child) {
+                $child->parentNode->removeChild($child);
+            }
+
+        } catch(Exception $e) {
+            Informer::addError($e->getMessage())->setException($e)->addAsLog();
+        }
+    }
+
+    /**
+     * @param Crawler      $crawler   The crawler from which the elements will be retrieved
+     * @param array|string $selectors A selector or an array of selectors for the elements to be retrieved. This can
+     *                                also be an array of arrays, where each inner array contains the selector in
+     *                                "selector" key.
+     * @return Crawler[]|null
+     */
+    public function getElementsFromCrawler(&$crawler, $selectors = []): ?array {
+        if(empty($selectors) || !$crawler) return null;
 
         if(!is_array($selectors)) $selectors = [$selectors];
 
+        $results = [];
         foreach ($selectors as $selectorData) {
             if (!$selectorData) continue;
 
@@ -748,15 +837,15 @@ abstract class AbstractBot {
 
             // Remove each item found by the selector
             try {
-                $crawler->filter($selector)->each(function ($node, $i) {
-                    foreach ($node as $child) {
-                        $child->parentNode->removeChild($child);
-                    }
+                $crawler->filter($selector)->each(function ($node) use (&$results) {
+                    $results[] = $node;
                 });
             } catch(Exception $e) {
                 Informer::addError($selector . " - " . $e->getMessage())->setException($e)->addAsLog();
             }
         }
+
+        return $results ?: null;
     }
 
     /**
@@ -1406,10 +1495,94 @@ abstract class AbstractBot {
     }
 
     /**
+     * @return WP_Post|null See {@link $site}
+     * @since 1.11.0
+     */
+    public function getSite(): ?WP_Post {
+        $this->loadSiteIfPossible();
+        return $this->site;
+    }
+
+    /**
      * @return string See {@link $latestResponseContent}
      */
     public function getLatestResponseContent() {
         return $this->latestResponseContent;
+    }
+
+    /**
+     * @return Response|null See {@link $latestResponse}
+     * @since 1.11.0
+     */
+    public function getLatestResponse(): ?Response {
+        return $this->latestResponse;
+    }
+
+    /**
+     * @return Exception|null See {@link $latestRequestException}
+     * @since 1.11.0
+     */
+    public function getLatestRequestException(): ?Exception {
+        return $this->latestRequestException;
+    }
+
+    /*
+     * PROTECTED METHODS
+     */
+
+    /**
+     * Trigger an {@link AbstractCrawlingEvent}
+     *
+     * @param string $eventClass Class name of an {@link AbstractCrawlingEvent}
+     * @return $this
+     * @throws Exception See {@link AbstractCrawlingEvent::notify()}
+     * @since 1.11.0
+     */
+    protected function triggerEvent(string $eventClass): self {
+        $event = EventService::getInstance()->getEvent($eventClass);
+        if (is_a($event, AbstractCrawlingEvent::class)) {
+            $event->notify();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Initialize filters defined in a filter setting. This creates the filters and registers them to their events so
+     * that they will be executed when the events are triggered.
+     *
+     * @param string                   $settingKey               Key of the setting that stores the filter details. One
+     *                                                           of the constants defined in {@link SettingKey}.
+     * @param string                   $defaultConditionEventCls Name of an {@link AbstractEvent} class that is
+     *                                                           registered in {@link EventService}. This will be
+     *                                                           provided to {@link FilterList::subscribeAll()}.
+     * @param FilterDependencyProvider $provider                 Provider that will inject the dependencies
+     * @param string|null              $name                     Name of the setting. This will be used when explaining
+     *                                                           the filter setting.
+     * @since 1.11.0
+     */
+    protected function initializeFilterSetting(string $settingKey, string $defaultConditionEventCls,
+                                               FilterDependencyProvider $provider, ?string $name = null) {
+        $list = FilterList::fromJson($this->getSetting($settingKey, null));
+        if (!$list) return;
+
+        // If this is a test, add the filter list to the filter explaining service so that the explanations of the
+        // filters will be added to the response.
+        if (WPCCrawler::isDoingGeneralTest()) {
+            FilterExplainingService::getInstance()->addFilterSettingExplainer(new FilterSettingExplainer(
+                $name ?: _wpcc('(No name)'),
+                $list
+            ));
+        }
+
+        $defaultConditionEvent = EventService::getInstance()->getEvent($defaultConditionEventCls);
+        if (!$defaultConditionEvent) {
+            Informer::addError(_wpcc('Filters could not be registered because the default event does not exist.'))
+                ->addAsLog();
+            return;
+        }
+
+        $list->subscribeAll($provider, $defaultConditionEvent);
     }
 
     /*

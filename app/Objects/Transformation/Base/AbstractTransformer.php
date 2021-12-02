@@ -14,6 +14,7 @@ namespace WPCCrawler\Objects\Transformation\Base;
 use Exception;
 use WPCCrawler\Objects\Settings\SettingsImpl;
 use WPCCrawler\Objects\Transformation\Interfaces\Transformable;
+use WPCCrawler\Objects\Transformation\Objects\TransformableFieldList;
 use WPCCrawler\Objects\Value\ValueExtractor;
 use WPCCrawler\Objects\Value\ValueSetter;
 
@@ -33,8 +34,9 @@ abstract class AbstractTransformer {
 
     /**
      * @var array An array of transformable fields that will be used instead of the value retrieved from
-     *            {@link Transformable::getTransformableFields()}. If this is empty or not valid, transformable fields
-     *            will be retrieved from the {@link Transformable} instance.
+     *            {@link Transformable::getTransformableFields()} by calling
+     *            {@link TransformableFieldList::toAssociativeArray()}. If this is empty or not valid, transformable
+     *            fields will be retrieved from the {@link Transformable} instance.
      */
     private $customTransformableFields = [];
 
@@ -84,7 +86,7 @@ abstract class AbstractTransformer {
         $extractor = new ValueExtractor();
 
         // Get which fields should be transformed
-        $transformableFields = $this->useCustomFields ? $this->customTransformableFields : $this->transformable->getTransformableFields();
+        $transformableFields = $this->useCustomFields ? $this->customTransformableFields : $this->transformable->getTransformableFields()->toAssociativeArray();
 
         $texts = $extractor->fillAndFlatten($this->transformable, $transformableFields, $separator);
 
@@ -174,7 +176,7 @@ abstract class AbstractTransformer {
         $this->useCustomFields = true;
 
         // Get the original fields
-        $originalFields = $this->transformable->getTransformableFields();
+        $originalFields = $this->transformable->getTransformableFields()->toAssociativeArray();
         $result = [];
 
         // Get the transformable fields defined in the settings.

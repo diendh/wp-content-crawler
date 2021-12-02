@@ -11,6 +11,7 @@ namespace WPCCrawler\Test\Tests;
 
 use Exception;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use WPCCrawler\Objects\Enums\ShortCodeName;
 use WPCCrawler\Objects\File\FileService;
 use WPCCrawler\Objects\File\MediaFile;
@@ -61,7 +62,7 @@ class FileTemplateTest extends AbstractFileTest {
         }
 
         // Get if this template is for file name
-        $isForName = str_contains($data->get('formItemDotKey', ''), 'templates_file_name');
+        $isForName = Str::contains($data->get('formItemDotKey', ''), 'templates_file_name');
 
         foreach($data->getTestData() as $val) {
             if (!is_a($val, MediaFile::class)) continue;

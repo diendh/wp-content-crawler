@@ -9,6 +9,8 @@
 namespace WPCCrawler\Objects\Traits;
 
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use WPCCrawler\Factory;
 
 trait ShortCodeReplacer {
@@ -76,7 +78,7 @@ trait ShortCodeReplacer {
                     if (is_callable($scValue)) {
                         // Check if the subject has this short code because retrieving the value is a costly operation.
                         // If the subject does not have the short code, no need to compute the value for the short code.
-                        if(!str_contains($subject, $openingBracket . $scName . $closingBracket)) continue;
+                        if(!Str::contains($subject, $openingBracket . $scName . $closingBracket)) continue;
 
                         // Get the value of the short code
                         $scValue = call_user_func($scValue);
@@ -84,7 +86,7 @@ trait ShortCodeReplacer {
 
                     // If the value is an array, make it a string.
                     if (is_array($scValue)) {
-                        $scValue = implode('', array_values(array_flatten($scValue)));
+                        $scValue = implode('', array_values(Arr::flatten($scValue)));
                     }
 
                     $this->replaceShortCode($subject, $scName, $scValue, $openingBracket, $closingBracket);

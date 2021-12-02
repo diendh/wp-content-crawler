@@ -1,3 +1,7 @@
+<?php
+/** @var array $settings */
+?>
+
 <div class="wcc-settings-title">
     <h3>{{ _wpcc('Main Settings') }}</h3>
     <span>{{ _wpcc('Set main page URL, scheduling options, duplicate post checking, cookies...') }}</span>
@@ -136,6 +140,8 @@
             provide a session cookie to crawl a site by a logged-in user.'),
         'keyPlaceholder'    => _wpcc('Cookie name'),
         'valuePlaceholder'  => _wpcc('Cookie content'),
+        'hasExportButton'   => true,
+        'hasImportButton'   => true,
     ])
 
     {{-- SECTION: SETTINGS PAGE --}}
